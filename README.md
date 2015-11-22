@@ -1,2 +1,2 @@
-# FramerGesturesGalore
-A FramerJS project to demonstrate gestures capabilities (by using HammerJS)
+# framer-gestures.framer
+A FramerJS project to demonstrate gesture recognition capabilities (by using HammerJS)
