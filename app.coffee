@@ -21,7 +21,7 @@ rootLayer = new Layer
 	width: Screen.width
 	height: Screen.height
 	backgroundColor: "#28affa"
-rootLayer.title = "Framer new gestures"
+rootLayer.title = "Framer gestures"
 
 # Create ScrollComponent
 menuScroll = new ScrollComponent
@@ -106,6 +106,3 @@ for i in [0..menuItems.length - 1]
 
 navigationComponent = new NavigationComponent
     rootLayer: rootLayer
-
-# secondLayer = menuItems[2].layerGenerator()
-# navigationComponent.push(secondLayer)
