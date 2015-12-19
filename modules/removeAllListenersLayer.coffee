@@ -72,7 +72,7 @@ exports.createLayer = ->
 	# Remove all listeners after 10 seconds
 	Utils.delay 10.0, ->
 		for ev in eventsToListen
-			layerA.removeAllListeners()
+			layerA.removeAllListeners(ev)
 		eventNameLayer.animateStop()
 		eventNameLayer.html = "All listeners have been removed"
 		eventNameLayer.opacity = 1.0

@@ -46,39 +46,41 @@
 
 	var Defaults, Framer, _;
 	
-	_ = __webpack_require__(3)._;
+	_ = __webpack_require__(1)._;
 	
 	Framer = {};
 	
 	Framer._ = _;
 	
-	Framer.Utils = __webpack_require__(2);
+	Framer.Utils = __webpack_require__(4);
 	
-	Framer.Layer = (__webpack_require__(15)).Layer;
+	Framer.Color = (__webpack_require__(9)).Color;
 	
-	Framer.BackgroundLayer = (__webpack_require__(34)).BackgroundLayer;
+	Framer.Layer = (__webpack_require__(12)).Layer;
 	
-	Framer.VideoLayer = (__webpack_require__(35)).VideoLayer;
+	Framer.BackgroundLayer = (__webpack_require__(32)).BackgroundLayer;
 	
-	Framer.Events = (__webpack_require__(26)).Events;
+	Framer.VideoLayer = (__webpack_require__(33)).VideoLayer;
 	
-	Framer.Animation = (__webpack_require__(17)).Animation;
+	Framer.Events = (__webpack_require__(14)).Events;
 	
-	Framer.AnimationGroup = (__webpack_require__(36)).AnimationGroup;
+	Framer.Animation = (__webpack_require__(16)).Animation;
 	
-	Framer.Screen = (__webpack_require__(6)).Screen;
+	Framer.AnimationGroup = (__webpack_require__(34)).AnimationGroup;
 	
-	Framer.Canvas = (__webpack_require__(37)).Canvas;
+	Framer.Screen = (__webpack_require__(5)).Screen;
 	
-	Framer.print = (__webpack_require__(38)).print;
+	Framer.Canvas = (__webpack_require__(35)).Canvas;
 	
-	Framer.ScrollComponent = (__webpack_require__(39)).ScrollComponent;
+	Framer.print = (__webpack_require__(36)).print;
 	
-	Framer.PageComponent = (__webpack_require__(40)).PageComponent;
+	Framer.ScrollComponent = (__webpack_require__(42)).ScrollComponent;
 	
-	Framer.SliderComponent = (__webpack_require__(41)).SliderComponent;
+	Framer.PageComponent = (__webpack_require__(43)).PageComponent;
 	
-	Framer.DeviceComponent = (__webpack_require__(42)).DeviceComponent;
+	Framer.SliderComponent = (__webpack_require__(44)).SliderComponent;
+	
+	Framer.DeviceComponent = (__webpack_require__(45)).DeviceComponent;
 	
 	Framer.DeviceView = Framer.DeviceComponent;
 	
@@ -86,33 +88,35 @@
 	  _.extend(window, Framer);
 	}
 	
-	Framer.Context = (__webpack_require__(1)).Context;
+	Framer.Context = (__webpack_require__(37)).Context;
 	
-	Framer.Config = (__webpack_require__(10)).Config;
+	Framer.Config = (__webpack_require__(13)).Config;
 	
-	Framer.EventEmitter = (__webpack_require__(8)).EventEmitter;
+	Framer.EventEmitter = (__webpack_require__(7)).EventEmitter;
 	
-	Framer.BaseClass = (__webpack_require__(7)).BaseClass;
+	Framer.BaseClass = (__webpack_require__(6)).BaseClass;
 	
-	Framer.LayerStyle = (__webpack_require__(24)).LayerStyle;
+	Framer.LayerStyle = (__webpack_require__(23)).LayerStyle;
 	
-	Framer.AnimationLoop = (__webpack_require__(43)).AnimationLoop;
+	Framer.AnimationLoop = (__webpack_require__(46)).AnimationLoop;
 	
-	Framer.LinearAnimator = (__webpack_require__(18)).LinearAnimator;
+	Framer.LinearAnimator = (__webpack_require__(17)).LinearAnimator;
 	
-	Framer.BezierCurveAnimator = (__webpack_require__(20)).BezierCurveAnimator;
+	Framer.BezierCurveAnimator = (__webpack_require__(19)).BezierCurveAnimator;
 	
-	Framer.SpringDHOAnimator = (__webpack_require__(23)).SpringDHOAnimator;
+	Framer.SpringDHOAnimator = (__webpack_require__(22)).SpringDHOAnimator;
 	
-	Framer.SpringRK4Animator = (__webpack_require__(21)).SpringRK4Animator;
+	Framer.SpringRK4Animator = (__webpack_require__(20)).SpringRK4Animator;
 	
-	Framer.LayerDraggable = (__webpack_require__(27)).LayerDraggable;
+	Framer.LayerDraggable = (__webpack_require__(25)).LayerDraggable;
 	
-	Framer.Importer = (__webpack_require__(44)).Importer;
+	Framer.Importer = (__webpack_require__(47)).Importer;
 	
-	Framer.Debug = (__webpack_require__(45)).Debug;
+	Framer.Debug = (__webpack_require__(48)).Debug;
 	
-	Framer.Extras = __webpack_require__(46);
+	Framer.Extras = __webpack_require__(49);
+	
+	Framer.Version = __webpack_require__(52);
 	
 	Framer.Loop = new Framer.AnimationLoop();
 	
@@ -132,7 +136,7 @@
 	  Framer.Extras.MobileScrollFix.enable();
 	}
 	
-	Defaults = (__webpack_require__(16)).Defaults;
+	Defaults = (__webpack_require__(15)).Defaults;
 	
 	Defaults.setup();
 	
@@ -143,1313 +147,11 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BaseClass, Config, Counter, EventManager, Utils, _,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-	
-	Utils = __webpack_require__(2);
-	
-	_ = __webpack_require__(3)._;
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	Config = __webpack_require__(10).Config;
-	
-	EventManager = __webpack_require__(11).EventManager;
-	
-	Counter = 1;
-	
-	exports.Context = (function(superClass) {
-	  extend(Context, superClass);
-	
-	  function Context(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this._appendRootElement = bind(this._appendRootElement, this);
-	    Context.__super__.constructor.apply(this, arguments);
-	    Counter++;
-	    options = _.defaults(options, {
-	      contextName: null,
-	      parentLayer: null,
-	      name: null
-	    });
-	    if (!options.name) {
-	      throw Error("Contexts need a name");
-	    }
-	    this._parentLayer = options.parentLayer;
-	    this._name = options.name;
-	    this.reset();
-	  }
-	
-	  Context.prototype.reset = function() {
-	    var animation, i, len, ref, ref1, ref2, ref3;
-	    if ((ref = this.eventManager) != null) {
-	      ref.reset();
-	    }
-	    this.eventManager = new EventManager;
-	    if (this._rootElement) {
-	      if (this._rootElement.parentNode) {
-	        this._rootElement.parentNode.removeChild(this._rootElement);
-	      } else {
-	        this._rootElement.__cancelAppendChild = true;
-	      }
-	    }
-	    this._createRootElement();
-	    if ((ref1 = this._delayTimers) != null) {
-	      ref1.map(function(timer) {
-	        return window.clearTimeout(timer);
-	      });
-	    }
-	    if ((ref2 = this._delayIntervals) != null) {
-	      ref2.map(function(timer) {
-	        return window.clearInterval(timer);
-	      });
-	    }
-	    if (this._animationList) {
-	      ref3 = this._animationList;
-	      for (i = 0, len = ref3.length; i < len; i++) {
-	        animation = ref3[i];
-	        animation.stop(false);
-	      }
-	    }
-	    this._layerList = [];
-	    this._animationList = [];
-	    this._delayTimers = [];
-	    this._delayIntervals = [];
-	    this._layerIdCounter = 1;
-	    return this.emit("reset", this);
-	  };
-	
-	  Context.prototype.destroy = function() {
-	    this.reset();
-	    if (this._rootElement.parentNode) {
-	      this._rootElement.parentNode.removeChild(this._rootElement);
-	    }
-	    return Utils.domCompleteCancel(this._appendRootElement);
-	  };
-	
-	  Context.prototype.getRootElement = function() {
-	    return this._rootElement;
-	  };
-	
-	  Context.prototype.getLayers = function() {
-	    return _.clone(this._layerList);
-	  };
-	
-	  Context.prototype.addLayer = function(layer) {
-	    if (indexOf.call(this._layerList, layer) >= 0) {
-	      return;
-	    }
-	    this._layerList.push(layer);
-	    return null;
-	  };
-	
-	  Context.prototype.removeLayer = function(layer) {
-	    this._layerList = _.without(this._layerList, layer);
-	    return null;
-	  };
-	
-	  Context.prototype.layerCount = function() {
-	    return this._layerList.length;
-	  };
-	
-	  Context.prototype.nextLayerId = function() {
-	    return this._layerIdCounter++;
-	  };
-	
-	  Context.prototype._createRootElement = function() {
-	    this._rootElement = document.createElement("div");
-	    this._rootElement.id = "FramerContextRoot-" + this._name;
-	    this._rootElement.classList.add("framerContext");
-	    if (this._parentLayer) {
-	      return this._appendRootElement();
-	    } else {
-	      return Utils.domComplete(this._appendRootElement);
-	    }
-	  };
-	
-	  Context.prototype._appendRootElement = function() {
-	    var parentElement, ref;
-	    parentElement = (ref = this._parentLayer) != null ? ref._element : void 0;
-	    if (parentElement == null) {
-	      parentElement = document.body;
-	    }
-	    return parentElement.appendChild(this._rootElement);
-	  };
-	
-	  Context.prototype.run = function(f) {
-	    var previousContext;
-	    previousContext = Framer.CurrentContext;
-	    Framer.CurrentContext = this;
-	    f();
-	    return Framer.CurrentContext = previousContext;
-	  };
-	
-	  Context.define("width", {
-	    get: function() {
-	      if (this._parentLayer) {
-	        return this._parentLayer.width;
-	      }
-	      return window.innerWidth;
-	    }
-	  });
-	
-	  Context.define("height", {
-	    get: function() {
-	      if (this._parentLayer) {
-	        return this._parentLayer.height;
-	      }
-	      return window.innerHeight;
-	    }
-	  });
-	
-	  return Context;
-	
-	})(BaseClass);
+	exports._ = __webpack_require__(2);
 
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Screen, Utils, _, __domComplete, __domReady, _textSizeNode,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-	  slice = [].slice;
-	
-	_ = __webpack_require__(3)._;
-	
-	Screen = __webpack_require__(6).Screen;
-	
-	Utils = {};
-	
-	Utils.reset = function() {
-	  return Framer.CurrentContext.reset();
-	};
-	
-	Utils.getValue = function(value) {
-	  if (_.isFunction(value)) {
-	    return value();
-	  }
-	  return value;
-	};
-	
-	Utils.getValueForKeyPath = function(obj, key) {
-	  var len, m, ref, ref1, result;
-	  result = obj;
-	  if (ref = !".", indexOf.call(key, ref) >= 0) {
-	    return obj[key];
-	  }
-	  ref1 = key.split(".");
-	  for (m = 0, len = ref1.length; m < len; m++) {
-	    key = ref1[m];
-	    result = result[key];
-	  }
-	  return result;
-	};
-	
-	Utils.setValueForKeyPath = function(obj, path, val) {
-	  var field, fields, i, n, result;
-	  fields = path.split('.');
-	  result = obj;
-	  i = 0;
-	  n = fields.length;
-	  while (i < n && result !== void 0) {
-	    field = fields[i];
-	    if (i === n - 1) {
-	      result[field] = val;
-	    } else {
-	      if (typeof result[field] === 'undefined' || !_.isObject(result[field])) {
-	        result[field] = {};
-	      }
-	      result = result[field];
-	    }
-	    i++;
-	  }
-	};
-	
-	Utils.valueOrDefault = function(value, defaultValue) {
-	  if (value === (void 0) || value === null) {
-	    value = defaultValue;
-	  }
-	  return value;
-	};
-	
-	Utils.arrayNext = function(arr, item) {
-	  return arr[arr.indexOf(item) + 1] || _.first(arr);
-	};
-	
-	Utils.arrayPrev = function(arr, item) {
-	  return arr[arr.indexOf(item) - 1] || _.last(arr);
-	};
-	
-	Utils.sum = function(arr) {
-	  return _.reduce(arr, function(a, b) {
-	    return a + b;
-	  });
-	};
-	
-	Utils.average = function(arr) {
-	  return Utils.sum(arr) / arr.length;
-	};
-	
-	Utils.mean = Utils.average;
-	
-	Utils.median = function(x) {
-	  var sorted;
-	  if (x.length === 0) {
-	    return null;
-	  }
-	  sorted = x.slice().sort(function(a, b) {
-	    return a - b;
-	  });
-	  if (sorted.length % 2 === 1) {
-	    return sorted[(sorted.length - 1) / 2];
-	  } else {
-	    return (sorted[(sorted.length / 2) - 1] + sorted[sorted.length / 2]) / 2;
-	  }
-	};
-	
-	if (window.requestAnimationFrame == null) {
-	  window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-	}
-	
-	if (window.requestAnimationFrame == null) {
-	  window.requestAnimationFrame = function(f) {
-	    return Utils.delay(1 / 60, f);
-	  };
-	}
-	
-	if (window.performance) {
-	  Utils.getTime = function() {
-	    return window.performance.now() / 1000;
-	  };
-	} else {
-	  Utils.getTime = function() {
-	    return Date.now() / 1000;
-	  };
-	}
-	
-	Utils.delay = function(time, f) {
-	  var timer;
-	  timer = setTimeout(f, time * 1000);
-	  Framer.CurrentContext._delayTimers.push(timer);
-	  return timer;
-	};
-	
-	Utils.interval = function(time, f) {
-	  var timer;
-	  timer = setInterval(f, time * 1000);
-	  Framer.CurrentContext._delayIntervals.push(timer);
-	  return timer;
-	};
-	
-	Utils.debounce = function(threshold, fn, immediate) {
-	  var timeout;
-	  if (threshold == null) {
-	    threshold = 0.1;
-	  }
-	  timeout = null;
-	  threshold *= 1000;
-	  return function() {
-	    var args, delayed, obj;
-	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-	    obj = this;
-	    delayed = function() {
-	      if (!immediate) {
-	        fn.apply(obj, args);
-	      }
-	      return timeout = null;
-	    };
-	    if (timeout) {
-	      clearTimeout(timeout);
-	    } else if (immediate) {
-	      fn.apply(obj, args);
-	    }
-	    return timeout = setTimeout(delayed, threshold);
-	  };
-	};
-	
-	Utils.throttle = function(delay, fn) {
-	  var timer;
-	  if (delay === 0) {
-	    return fn;
-	  }
-	  delay *= 1000;
-	  timer = false;
-	  return function() {
-	    if (timer) {
-	      return;
-	    }
-	    timer = true;
-	    if (delay !== -1) {
-	      setTimeout((function() {
-	        return timer = false;
-	      }), delay);
-	    }
-	    return fn.apply(null, arguments);
-	  };
-	};
-	
-	Utils.memoize = function(fn) {
-	  return function() {
-	    var args, currentArg, hash, i;
-	    args = Array.prototype.slice.call(arguments);
-	    hash = "";
-	    i = args.length;
-	    currentArg = null;
-	    while (i--) {
-	      currentArg = args[i];
-	      hash += (currentArg === Object(currentArg) ? JSON.stringify(currentArg) : currentArg);
-	      fn.memoize || (fn.memoize = {});
-	    }
-	    if (hash in fn.memoize) {
-	      return fn.memoize[hash];
-	    } else {
-	      return fn.memoize[hash] = fn.apply(this, args);
-	    }
-	  };
-	};
-	
-	Utils.randomColor = function(alpha) {
-	  var c;
-	  if (alpha == null) {
-	    alpha = 1.0;
-	  }
-	  c = function() {
-	    return parseInt(Math.random() * 255);
-	  };
-	  return "rgba(" + (c()) + ", " + (c()) + ", " + (c()) + ", " + alpha + ")";
-	};
-	
-	Utils.randomChoice = function(arr) {
-	  return arr[Math.floor(Math.random() * arr.length)];
-	};
-	
-	Utils.randomNumber = function(a, b) {
-	  if (a == null) {
-	    a = 0;
-	  }
-	  if (b == null) {
-	    b = 1;
-	  }
-	  return Utils.mapRange(Math.random(), 0, 1, a, b);
-	};
-	
-	Utils.defineEnum = function(names, offset, geometric) {
-	  var Enum, i, j, len, m, name;
-	  if (names == null) {
-	    names = [];
-	  }
-	  if (offset == null) {
-	    offset = 0;
-	  }
-	  if (geometric == null) {
-	    geometric = 0;
-	  }
-	  Enum = {};
-	  for (i = m = 0, len = names.length; m < len; i = ++m) {
-	    name = names[i];
-	    j = i;
-	    j = !offset ? j : j + offset;
-	    j = !geometric ? j : Math.pow(geometric, j);
-	    Enum[Enum[name] = j] = name;
-	  }
-	  return Enum;
-	};
-	
-	Utils.labelLayer = function(layer, text, style) {
-	  if (style == null) {
-	    style = {};
-	  }
-	  style = _.extend({
-	    font: "10px/1em Menlo",
-	    lineHeight: layer.height + "px",
-	    textAlign: "center",
-	    color: "#fff"
-	  }, style);
-	  layer.style = style;
-	  return layer.html = text;
-	};
-	
-	Utils.stringify = function(obj) {
-	  try {
-	    if (_.isObject(obj)) {
-	      return JSON.stringify(obj);
-	    }
-	  } catch (_error) {
-	    "";
-	  }
-	  if (obj === null) {
-	    return "null";
-	  }
-	  if (obj === void 0) {
-	    return "undefined";
-	  }
-	  if (obj.toString) {
-	    return obj.toString();
-	  }
-	  return obj;
-	};
-	
-	Utils.inspectObjectType = function(item) {
-	  var className, extract, ref, ref1, ref2;
-	  if ((((ref = item.constructor) != null ? ref.name : void 0) != null) && ((ref1 = item.constructor) != null ? ref1.name : void 0) !== "Object") {
-	    return item.constructor.name;
-	  }
-	  extract = function(str) {
-	    var match, regex;
-	    if (!str) {
-	      return null;
-	    }
-	    regex = /\[object (\w+)\]/;
-	    match = regex.exec(str);
-	    if (match) {
-	      return match[1];
-	    }
-	    return null;
-	  };
-	  className = extract(item.toString());
-	  if (className) {
-	    return className;
-	  }
-	  className = extract((ref2 = item.constructor) != null ? ref2.toString() : void 0);
-	  if (className) {
-	    return className.replace("Constructor", "");
-	  }
-	  return item;
-	};
-	
-	Utils.inspect = function(item, max, l) {
-	  var code, limit, objectInfo, objectType;
-	  if (max == null) {
-	    max = 5;
-	  }
-	  if (l == null) {
-	    l = 0;
-	  }
-	  if (item === null) {
-	    return "null";
-	  }
-	  if (item === void 0) {
-	    return "undefined";
-	  }
-	  if (_.isFunction(item.toInspect)) {
-	    return item.toInspect();
-	  }
-	  if (_.isString(item)) {
-	    return "\"" + item + "\"";
-	  }
-	  if (_.isNumber(item)) {
-	    return "" + item;
-	  }
-	  if (_.isFunction(item)) {
-	    code = item.toString().slice("function ".length).replace(/\n/g, "").replace(/\s+/g, " ");
-	    limit = 50;
-	    if (code.length > limit && l > 0) {
-	      code = (_.trimRight(code.slice(0, +limit + 1 || 9e9))) + "… }";
-	    }
-	    return "<Function " + code + ">";
-	  }
-	  if (_.isArray(item)) {
-	    if (l > max) {
-	      return "[...]";
-	    }
-	    return "[" + _.map(item, function(i) {
-	      return Utils.inspect(i, max, l + 1);
-	    }).join(", ") + "]";
-	  }
-	  if (_.isObject(item)) {
-	    objectType = Utils.inspectObjectType(item);
-	    if (/HTML\w+?Element/.test(objectType)) {
-	      return "<" + objectType + ">";
-	    }
-	    if (l > max) {
-	      objectInfo = "{...}";
-	    } else {
-	      objectInfo = "{" + _.map(item, function(v, k) {
-	        return k + ":" + (Utils.inspect(v, max, l + 1));
-	      }).join(", ") + "}";
-	    }
-	    if (objectType === "Object") {
-	      return objectInfo;
-	    }
-	    return "<" + objectType + " " + objectInfo + ">";
-	  }
-	  return "" + item;
-	};
-	
-	Utils.uuid = function() {
-	  var chars, digit, m, output, r, random;
-	  chars = "0123456789abcdefghijklmnopqrstuvwxyz".split("");
-	  output = new Array(36);
-	  random = 0;
-	  for (digit = m = 1; m <= 32; digit = ++m) {
-	    if (random <= 0x02) {
-	      random = 0x2000000 + (Math.random() * 0x1000000) | 0;
-	    }
-	    r = random & 0xf;
-	    random = random >> 4;
-	    output[digit] = chars[digit === 19 ? (r & 0x3) | 0x8 : r];
-	  }
-	  return output.join("");
-	};
-	
-	Utils.arrayFromArguments = function(args) {
-	  if (_.isArray(args[0])) {
-	    return args[0];
-	  }
-	  return Array.prototype.slice.call(args);
-	};
-	
-	Utils.cycle = function() {
-	  var args, curr;
-	  args = Utils.arrayFromArguments(arguments);
-	  curr = -1;
-	  return function() {
-	    curr++;
-	    if (curr >= args.length) {
-	      curr = 0;
-	    }
-	    return args[curr];
-	  };
-	};
-	
-	Utils.toggle = Utils.cycle;
-	
-	Utils.isWebKit = function() {
-	  return window.WebKitCSSMatrix !== void 0;
-	};
-	
-	Utils.webkitVersion = function() {
-	  var regexp, result, version;
-	  version = -1;
-	  regexp = /AppleWebKit\/([\d.]+)/;
-	  result = regexp.exec(navigator.userAgent);
-	  if (result) {
-	    version = parseFloat(result[1]);
-	  }
-	  return version;
-	};
-	
-	Utils.isChrome = function() {
-	  return /chrome/.test(navigator.userAgent.toLowerCase());
-	};
-	
-	Utils.isSafari = function() {
-	  return /safari/.test(navigator.userAgent.toLowerCase());
-	};
-	
-	Utils.isTouch = function() {
-	  return window.ontouchstart === null;
-	};
-	
-	Utils.isDesktop = function() {
-	  return Utils.deviceType() === "desktop";
-	};
-	
-	Utils.isPhone = function() {
-	  return Utils.deviceType() === "phone";
-	};
-	
-	Utils.isTablet = function() {
-	  return Utils.deviceType() === "tablet";
-	};
-	
-	Utils.isMobile = function() {
-	  return Utils.isPhone() || Utils.isTablet();
-	};
-	
-	Utils.isFileUrl = function(url) {
-	  return _.startsWith(url, "file://");
-	};
-	
-	Utils.isRelativeUrl = function(url) {
-	  return !/^([a-zA-Z]{1,8}:\/\/).*$/.test(url);
-	};
-	
-	Utils.isLocalServerUrl = function(url) {
-	  return url.indexOf("127.0.0.1") !== -1 || url.indexOf("localhost") !== -1;
-	};
-	
-	Utils.isLocalUrl = function(url) {
-	  if (Utils.isFileUrl(url)) {
-	    return true;
-	  }
-	  if (Utils.isLocalServerUrl(url)) {
-	    return true;
-	  }
-	  return false;
-	};
-	
-	Utils.isLocalAssetUrl = function(url, baseUrl) {
-	  if (baseUrl == null) {
-	    baseUrl = window.location.href;
-	  }
-	  if (Utils.isLocalUrl(url)) {
-	    return true;
-	  }
-	  if (Utils.isRelativeUrl(url) && Utils.isLocalUrl(baseUrl)) {
-	    return true;
-	  }
-	  return false;
-	};
-	
-	Utils.isFramerStudio = function() {
-	  return navigator.userAgent.indexOf("FramerStudio") !== -1;
-	};
-	
-	Utils.devicePixelRatio = function() {
-	  return window.devicePixelRatio;
-	};
-	
-	Utils.isJP2Supported = function() {
-	  return Utils.isWebKit() && !Utils.isChrome();
-	};
-	
-	Utils.deviceType = function() {
-	  if (/(tablet)|(iPad)|(Nexus 9)/i.test(navigator.userAgent)) {
-	    return "tablet";
-	  }
-	  if (/(mobi)/i.test(navigator.userAgent)) {
-	    return "phone";
-	  }
-	  return "desktop";
-	};
-	
-	Utils.pathJoin = function() {
-	  return Utils.arrayFromArguments(arguments).join("/");
-	};
-	
-	Utils.round = function(value, decimals) {
-	  var d;
-	  if (decimals == null) {
-	    decimals = 0;
-	  }
-	  d = Math.pow(10, decimals);
-	  return Math.round(value * d) / d;
-	};
-	
-	Utils.clamp = function(value, a, b) {
-	  var max, min;
-	  min = Math.min(a, b);
-	  max = Math.max(a, b);
-	  if (value < min) {
-	    value = min;
-	  }
-	  if (value > max) {
-	    value = max;
-	  }
-	  return value;
-	};
-	
-	Utils.mapRange = function(value, fromLow, fromHigh, toLow, toHigh) {
-	  return toLow + (((value - fromLow) / (fromHigh - fromLow)) * (toHigh - toLow));
-	};
-	
-	Utils.modulate = function(value, rangeA, rangeB, limit) {
-	  var fromHigh, fromLow, result, toHigh, toLow;
-	  if (limit == null) {
-	    limit = false;
-	  }
-	  fromLow = rangeA[0], fromHigh = rangeA[1];
-	  toLow = rangeB[0], toHigh = rangeB[1];
-	  result = toLow + (((value - fromLow) / (fromHigh - fromLow)) * (toHigh - toLow));
-	  if (limit === true) {
-	    if (toLow < toHigh) {
-	      if (result < toLow) {
-	        return toLow;
-	      }
-	      if (result > toHigh) {
-	        return toHigh;
-	      }
-	    } else {
-	      if (result > toLow) {
-	        return toLow;
-	      }
-	      if (result < toHigh) {
-	        return toHigh;
-	      }
-	    }
-	  }
-	  return result;
-	};
-	
-	Utils.parseFunction = function(str) {
-	  var result;
-	  result = {
-	    name: "",
-	    args: []
-	  };
-	  if (_.endsWith(str, ")")) {
-	    result.name = str.split("(")[0];
-	    result.args = str.split("(")[1].split(",").map(function(a) {
-	      return _.trim(_.trimRight(a, ")"));
-	    });
-	  } else {
-	    result.name = str;
-	  }
-	  return result;
-	};
-	
-	__domComplete = [];
-	
-	__domReady = false;
-	
-	if (typeof document !== "undefined" && document !== null) {
-	  document.onreadystatechange = (function(_this) {
-	    return function(event) {
-	      var f, results;
-	      if (document.readyState === "complete") {
-	        __domReady = true;
-	        results = [];
-	        while (__domComplete.length) {
-	          results.push(f = __domComplete.shift()());
-	        }
-	        return results;
-	      }
-	    };
-	  })(this);
-	}
-	
-	Utils.domComplete = function(f) {
-	  if (document.readyState === "complete") {
-	    return f();
-	  } else {
-	    return __domComplete.push(f);
-	  }
-	};
-	
-	Utils.domCompleteCancel = function(f) {
-	  return __domComplete = _.without(__domComplete, f);
-	};
-	
-	Utils.domValidEvent = function(element, eventName) {
-	  if (!eventName) {
-	    return;
-	  }
-	  return typeof element["on" + (eventName.toLowerCase())] !== "undefined";
-	};
-	
-	Utils.domLoadScript = function(url, callback) {
-	  var head, script;
-	  script = document.createElement("script");
-	  script.type = "text/javascript";
-	  script.src = url;
-	  script.onload = callback;
-	  head = document.getElementsByTagName("head")[0];
-	  head.appendChild(script);
-	  return script;
-	};
-	
-	Utils.domLoadData = function(path, callback) {
-	  var request;
-	  request = new XMLHttpRequest();
-	  request.addEventListener("load", function() {
-	    return callback(null, request.responseText);
-	  }, false);
-	  request.addEventListener("error", function() {
-	    return callback(true, null);
-	  }, false);
-	  request.open("GET", path, true);
-	  return request.send(null);
-	};
-	
-	Utils.domLoadJSON = function(path, callback) {
-	  return Utils.domLoadData(path, function(err, data) {
-	    return callback(err, JSON.parse(data));
-	  });
-	};
-	
-	Utils.domLoadDataSync = function(path) {
-	  var e, handleError, ref, request;
-	  request = new XMLHttpRequest();
-	  request.open("GET", path, false);
-	  try {
-	    request.send(null);
-	  } catch (_error) {
-	    e = _error;
-	    console.debug("XMLHttpRequest.error", e);
-	  }
-	  handleError = function() {
-	    throw Error("Utils.domLoadDataSync: " + path + " -> [" + request.status + " " + request.statusText + "]");
-	  };
-	  request.onerror = handleError;
-	  if ((ref = request.status) !== 200 && ref !== 0) {
-	    handleError();
-	  }
-	  if (!request.responseText) {
-	    handleError();
-	  }
-	  return request.responseText;
-	};
-	
-	Utils.domLoadJSONSync = function(path) {
-	  return JSON.parse(Utils.domLoadDataSync(path));
-	};
-	
-	Utils.domLoadScriptSync = function(path) {
-	  var scriptData;
-	  scriptData = Utils.domLoadDataSync(path);
-	  eval(scriptData);
-	  return scriptData;
-	};
-	
-	Utils.insertCSS = function(css) {
-	  var styleElement;
-	  styleElement = document.createElement("style");
-	  styleElement.type = "text/css";
-	  styleElement.innerHTML = css;
-	  return Utils.domComplete(function() {
-	    return document.body.appendChild(styleElement);
-	  });
-	};
-	
-	Utils.loadImage = function(url, callback, context) {
-	  var element;
-	  element = new Image;
-	  if (context == null) {
-	    context = Framer.CurrentContext;
-	  }
-	  context.eventManager.wrap(element).addEventListener("load", function(event) {
-	    return callback();
-	  });
-	  context.eventManager.wrap(element).addEventListener("error", function(event) {
-	    return callback(true);
-	  });
-	  return element.src = url;
-	};
-	
-	Utils.pointZero = function(args) {
-	  if (args == null) {
-	    args = {};
-	  }
-	  return _.defaults(args, {
-	    x: 0,
-	    y: 0
-	  });
-	};
-	
-	Utils.pointMin = function() {
-	  var point, points;
-	  points = Utils.arrayFromArguments(arguments);
-	  return point = {
-	    x: _.min(points.map(function(size) {
-	      return size.x;
-	    })),
-	    y: _.min(points.map(function(size) {
-	      return size.y;
-	    }))
-	  };
-	};
-	
-	Utils.pointMax = function() {
-	  var point, points;
-	  points = Utils.arrayFromArguments(arguments);
-	  return point = {
-	    x: _.max(points.map(function(size) {
-	      return size.x;
-	    })),
-	    y: _.max(points.map(function(size) {
-	      return size.y;
-	    }))
-	  };
-	};
-	
-	Utils.pointDistance = function(pointA, pointB) {
-	  var distance;
-	  return distance = {
-	    x: Math.abs(pointB.x - pointA.x),
-	    y: Math.abs(pointB.y - pointA.y)
-	  };
-	};
-	
-	Utils.pointInvert = function(point) {
-	  return point = {
-	    x: 0 - point.x,
-	    y: 0 - point.y
-	  };
-	};
-	
-	Utils.pointTotal = function(point) {
-	  return point.x + point.y;
-	};
-	
-	Utils.pointAbs = function(point) {
-	  return point = {
-	    x: Math.abs(point.x),
-	    y: Math.abs(point.y)
-	  };
-	};
-	
-	Utils.pointInFrame = function(point, frame) {
-	  if (point.x < Utils.frameGetMinX(frame) || point.x > Utils.frameGetMaxX(frame)) {
-	    return false;
-	  }
-	  if (point.y < Utils.frameGetMinY(frame) || point.y > Utils.frameGetMaxY(frame)) {
-	    return false;
-	  }
-	  return true;
-	};
-	
-	Utils.sizeZero = function(args) {
-	  if (args == null) {
-	    args = {};
-	  }
-	  return _.defaults(args, {
-	    width: 0,
-	    height: 0
-	  });
-	};
-	
-	Utils.sizeMin = function() {
-	  var size, sizes;
-	  sizes = Utils.arrayFromArguments(arguments);
-	  return size = {
-	    width: _.min(sizes.map(function(size) {
-	      return size.width;
-	    })),
-	    height: _.min(sizes.map(function(size) {
-	      return size.height;
-	    }))
-	  };
-	};
-	
-	Utils.sizeMax = function() {
-	  var size, sizes;
-	  sizes = Utils.arrayFromArguments(arguments);
-	  return size = {
-	    width: _.max(sizes.map(function(size) {
-	      return size.width;
-	    })),
-	    height: _.max(sizes.map(function(size) {
-	      return size.height;
-	    }))
-	  };
-	};
-	
-	Utils.rectZero = function(args) {
-	  if (args == null) {
-	    args = {};
-	  }
-	  return _.defaults(args, {
-	    top: 0,
-	    right: 0,
-	    bottom: 0,
-	    left: 0
-	  });
-	};
-	
-	Utils.parseRect = function(args) {
-	  if (_.isArray(args) && _.isNumber(args[0])) {
-	    if (args.length === 1) {
-	      return Utils.parseRect({
-	        top: args[0]
-	      });
-	    }
-	    if (args.length === 2) {
-	      return Utils.parseRect({
-	        top: args[0],
-	        right: args[1]
-	      });
-	    }
-	    if (args.length === 3) {
-	      return Utils.parseRect({
-	        top: args[0],
-	        right: args[1],
-	        bottom: args[2]
-	      });
-	    }
-	    if (args.length === 4) {
-	      return Utils.parseRect({
-	        top: args[0],
-	        right: args[1],
-	        bottom: args[2],
-	        left: args[3]
-	      });
-	    }
-	  }
-	  if (_.isArray(args) && _.isObject(args[0])) {
-	    return args[0];
-	  }
-	  if (_.isObject(args)) {
-	    return args;
-	  }
-	  return {};
-	};
-	
-	Utils.frameGetMinX = function(frame) {
-	  return frame.x;
-	};
-	
-	Utils.frameSetMinX = function(frame, value) {
-	  return frame.x = value;
-	};
-	
-	Utils.frameGetMidX = function(frame) {
-	  if (frame.width === 0) {
-	    return 0;
-	  } else {
-	    return frame.x + (frame.width / 2.0);
-	  }
-	};
-	
-	Utils.frameSetMidX = function(frame, value) {
-	  return frame.x = frame.width === 0 ? 0 : value - (frame.width / 2.0);
-	};
-	
-	Utils.frameGetMaxX = function(frame) {
-	  if (frame.width === 0) {
-	    return 0;
-	  } else {
-	    return frame.x + frame.width;
-	  }
-	};
-	
-	Utils.frameSetMaxX = function(frame, value) {
-	  return frame.x = frame.width === 0 ? 0 : value - frame.width;
-	};
-	
-	Utils.frameGetMinY = function(frame) {
-	  return frame.y;
-	};
-	
-	Utils.frameSetMinY = function(frame, value) {
-	  return frame.y = value;
-	};
-	
-	Utils.frameGetMidY = function(frame) {
-	  if (frame.height === 0) {
-	    return 0;
-	  } else {
-	    return frame.y + (frame.height / 2.0);
-	  }
-	};
-	
-	Utils.frameSetMidY = function(frame, value) {
-	  return frame.y = frame.height === 0 ? 0 : value - (frame.height / 2.0);
-	};
-	
-	Utils.frameGetMaxY = function(frame) {
-	  if (frame.height === 0) {
-	    return 0;
-	  } else {
-	    return frame.y + frame.height;
-	  }
-	};
-	
-	Utils.frameSetMaxY = function(frame, value) {
-	  return frame.y = frame.height === 0 ? 0 : value - frame.height;
-	};
-	
-	Utils.frameZero = function(args) {
-	  if (args == null) {
-	    args = {};
-	  }
-	  return _.defaults(args, {
-	    top: 0,
-	    right: 0,
-	    bottom: 0,
-	    left: 0
-	  });
-	};
-	
-	Utils.frameSize = function(frame) {
-	  var size;
-	  return size = {
-	    width: frame.width,
-	    height: frame.height
-	  };
-	};
-	
-	Utils.framePoint = function(frame) {
-	  var point;
-	  return point = {
-	    x: frame.x,
-	    y: frame.y
-	  };
-	};
-	
-	Utils.frameMerge = function() {
-	  var frame, frames;
-	  frames = Utils.arrayFromArguments(arguments);
-	  frame = {
-	    x: _.min(frames.map(Utils.frameGetMinX)),
-	    y: _.min(frames.map(Utils.frameGetMinY))
-	  };
-	  frame.width = _.max(frames.map(Utils.frameGetMaxX)) - frame.x;
-	  frame.height = _.max(frames.map(Utils.frameGetMaxY)) - frame.y;
-	  return frame;
-	};
-	
-	Utils.framePointForOrigin = function(frame, originX, originY) {
-	  return frame = {
-	    x: frame.x + (originX * frame.width),
-	    y: frame.y + (originY * frame.height),
-	    width: frame.width,
-	    height: frame.height
-	  };
-	};
-	
-	Utils.frameInset = function(frame, inset) {
-	  return frame = {
-	    x: frame.x + inset.left,
-	    y: frame.y + inset.top,
-	    width: frame.width - inset.left - inset.right,
-	    height: frame.height - inset.top - inset.bottom
-	  };
-	};
-	
-	Utils.frameSortByAbsoluteDistance = function(point, frames, originX, originY) {
-	  var distance;
-	  if (originX == null) {
-	    originX = 0;
-	  }
-	  if (originY == null) {
-	    originY = 0;
-	  }
-	  distance = function(frame) {
-	    var result;
-	    result = Utils.pointDistance(point, Utils.framePointForOrigin(frame, originX, originY));
-	    result = Utils.pointAbs(result);
-	    result = Utils.pointTotal(result);
-	    return result;
-	  };
-	  return frames.sort(function(a, b) {
-	    return distance(a) - distance(b);
-	  });
-	};
-	
-	Utils.pointInPolygon = function(point, vs) {
-	  var i, inside, intersect, j, x, xi, xj, y, yi, yj;
-	  x = point[0];
-	  y = point[1];
-	  inside = false;
-	  i = 0;
-	  j = vs.length - 1;
-	  while (i < vs.length) {
-	    xi = vs[i][0];
-	    yi = vs[i][1];
-	    xj = vs[j][0];
-	    yj = vs[j][1];
-	    intersect = ((yi > y && y !== yj) && yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi;
-	    if (intersect) {
-	      inside = !inside;
-	    }
-	    j = i++;
-	  }
-	  return inside;
-	};
-	
-	Utils.pointAngle = function(p1, p2) {
-	  return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
-	};
-	
-	Utils.convertPoint = function(input, layerA, layerB, context) {
-	  var layer, len, len1, m, o, point, superLayersA, superLayersB;
-	  if (context == null) {
-	    context = false;
-	  }
-	  point = _.defaults(input, {
-	    x: 0,
-	    y: 0
-	  });
-	  superLayersA = (layerA != null ? layerA.superLayers(context) : void 0) || [];
-	  superLayersB = (layerB != null ? layerB.superLayers(context) : void 0) || [];
-	  if (layerB) {
-	    superLayersB.push(layerB);
-	  }
-	  for (m = 0, len = superLayersA.length; m < len; m++) {
-	    layer = superLayersA[m];
-	    point.x += layer.x;
-	    point.y += layer.y;
-	  }
-	  for (o = 0, len1 = superLayersB.length; o < len1; o++) {
-	    layer = superLayersB[o];
-	    point.x -= layer.x;
-	    point.y -= layer.y;
-	  }
-	  return point;
-	};
-	
-	Utils.globalLayers = function(importedLayers) {
-	  var layer, layerName;
-	  for (layerName in importedLayers) {
-	    layer = importedLayers[layerName];
-	    layerName = layerName.replace(/\s/g, "");
-	    if (window.hasOwnProperty(layerName) && !window.Framer._globalWarningGiven) {
-	      print("Warning: Cannot make layer '" + layerName + "' a global, a variable with that name already exists");
-	    } else {
-	      window[layerName] = layer;
-	    }
-	  }
-	  return window.Framer._globalWarningGiven = true;
-	};
-	
-	_textSizeNode = null;
-	
-	Utils.textSize = function(text, style, constraints) {
-	  var frame, rect, shouldCreateNode;
-	  if (style == null) {
-	    style = {};
-	  }
-	  if (constraints == null) {
-	    constraints = {};
-	  }
-	  shouldCreateNode = !_textSizeNode;
-	  if (shouldCreateNode) {
-	    _textSizeNode = document.createElement("div");
-	    _textSizeNode.id = "_textSizeNode";
-	  }
-	  _textSizeNode.removeAttribute("style");
-	  _textSizeNode.innerHTML = text;
-	  style = _.extend(_.clone(style), {
-	    position: "fixed",
-	    display: "inline",
-	    visibility: "hidden",
-	    top: "-10000px",
-	    left: "-10000px"
-	  });
-	  delete style.width;
-	  delete style.height;
-	  delete style.bottom;
-	  delete style.right;
-	  if (constraints.width) {
-	    style.width = constraints.width + "px";
-	  }
-	  if (constraints.height) {
-	    style.height = constraints.height + "px";
-	  }
-	  _.extend(_textSizeNode.style, style);
-	  if (shouldCreateNode) {
-	    if (!window.document.body) {
-	      document.write(_textSizeNode.outerHTML);
-	      _textSizeNode = document.getElementById("_textSizeNode");
-	    } else {
-	      window.document.body.appendChild(_textSizeNode);
-	    }
-	  }
-	  rect = _textSizeNode.getBoundingClientRect();
-	  return frame = {
-	    width: rect.right - rect.left,
-	    height: rect.bottom - rect.top
-	  };
-	};
-	
-	_.extend(exports, Utils);
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports._ = __webpack_require__(4);
-
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -13688,11 +12390,11 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module), (function() { return this; }())))
 
 /***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/* 3 */
+/***/ function(module, exports) {
 
 	module.exports = function(module) {
 		if(!module.webpackPolyfill) {
@@ -13707,14 +12409,1140 @@
 
 
 /***/ },
-/* 6 */
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Screen, Utils, _, __domComplete, __domReady, _textSizeNode,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+	  slice = [].slice;
+	
+	_ = __webpack_require__(1)._;
+	
+	Screen = __webpack_require__(5).Screen;
+	
+	Utils = {};
+	
+	Utils.reset = function() {
+	  return Framer.CurrentContext.reset();
+	};
+	
+	Utils.getValue = function(value) {
+	  if (_.isFunction(value)) {
+	    return value();
+	  }
+	  return value;
+	};
+	
+	Utils.getValueForKeyPath = function(obj, key) {
+	  var len, m, ref, ref1, result;
+	  result = obj;
+	  if (ref = !".", indexOf.call(key, ref) >= 0) {
+	    return obj[key];
+	  }
+	  ref1 = key.split(".");
+	  for (m = 0, len = ref1.length; m < len; m++) {
+	    key = ref1[m];
+	    result = result[key];
+	  }
+	  return result;
+	};
+	
+	Utils.setValueForKeyPath = function(obj, path, val) {
+	  var field, fields, i, n, result;
+	  fields = path.split('.');
+	  result = obj;
+	  i = 0;
+	  n = fields.length;
+	  while (i < n && result !== void 0) {
+	    field = fields[i];
+	    if (i === n - 1) {
+	      result[field] = val;
+	    } else {
+	      if (typeof result[field] === 'undefined' || !_.isObject(result[field])) {
+	        result[field] = {};
+	      }
+	      result = result[field];
+	    }
+	    i++;
+	  }
+	};
+	
+	Utils.valueOrDefault = function(value, defaultValue) {
+	  if (value === (void 0) || value === null) {
+	    value = defaultValue;
+	  }
+	  return value;
+	};
+	
+	Utils.arrayNext = function(arr, item) {
+	  return arr[arr.indexOf(item) + 1] || _.first(arr);
+	};
+	
+	Utils.arrayPrev = function(arr, item) {
+	  return arr[arr.indexOf(item) - 1] || _.last(arr);
+	};
+	
+	Utils.sum = function(arr) {
+	  return _.reduce(arr, function(a, b) {
+	    return a + b;
+	  });
+	};
+	
+	Utils.average = function(arr) {
+	  return Utils.sum(arr) / arr.length;
+	};
+	
+	Utils.mean = Utils.average;
+	
+	Utils.median = function(x) {
+	  var sorted;
+	  if (x.length === 0) {
+	    return null;
+	  }
+	  sorted = x.slice().sort(function(a, b) {
+	    return a - b;
+	  });
+	  if (sorted.length % 2 === 1) {
+	    return sorted[(sorted.length - 1) / 2];
+	  } else {
+	    return (sorted[(sorted.length / 2) - 1] + sorted[sorted.length / 2]) / 2;
+	  }
+	};
+	
+	if (window.requestAnimationFrame == null) {
+	  window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+	}
+	
+	if (window.requestAnimationFrame == null) {
+	  window.requestAnimationFrame = function(f) {
+	    return Utils.delay(1 / 60, f);
+	  };
+	}
+	
+	if (window.performance) {
+	  Utils.getTime = function() {
+	    return window.performance.now() / 1000;
+	  };
+	} else {
+	  Utils.getTime = function() {
+	    return Date.now() / 1000;
+	  };
+	}
+	
+	Utils.delay = function(time, f) {
+	  var timer;
+	  timer = setTimeout(f, time * 1000);
+	  Framer.CurrentContext.addTimer(timer);
+	  return timer;
+	};
+	
+	Utils.interval = function(time, f) {
+	  var timer;
+	  timer = setInterval(f, time * 1000);
+	  Framer.CurrentContext.addInterval(timer);
+	  return timer;
+	};
+	
+	Utils.debounce = function(threshold, fn, immediate) {
+	  var timeout;
+	  if (threshold == null) {
+	    threshold = 0.1;
+	  }
+	  timeout = null;
+	  threshold *= 1000;
+	  return function() {
+	    var args, delayed, obj;
+	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	    obj = this;
+	    delayed = function() {
+	      if (!immediate) {
+	        fn.apply(obj, args);
+	      }
+	      return timeout = null;
+	    };
+	    if (timeout) {
+	      clearTimeout(timeout);
+	    } else if (immediate) {
+	      fn.apply(obj, args);
+	    }
+	    return timeout = setTimeout(delayed, threshold);
+	  };
+	};
+	
+	Utils.throttle = function(delay, fn) {
+	  var timer;
+	  if (delay === 0) {
+	    return fn;
+	  }
+	  delay *= 1000;
+	  timer = false;
+	  return function() {
+	    if (timer) {
+	      return;
+	    }
+	    timer = true;
+	    if (delay !== -1) {
+	      setTimeout((function() {
+	        return timer = false;
+	      }), delay);
+	    }
+	    return fn.apply(null, arguments);
+	  };
+	};
+	
+	Utils.memoize = function(fn) {
+	  return function() {
+	    var args, currentArg, hash, i;
+	    args = Array.prototype.slice.call(arguments);
+	    hash = "";
+	    i = args.length;
+	    currentArg = null;
+	    while (i--) {
+	      currentArg = args[i];
+	      hash += (currentArg === Object(currentArg) ? JSON.stringify(currentArg) : currentArg);
+	      fn.memoize || (fn.memoize = {});
+	    }
+	    if (hash in fn.memoize) {
+	      return fn.memoize[hash];
+	    } else {
+	      return fn.memoize[hash] = fn.apply(this, args);
+	    }
+	  };
+	};
+	
+	Utils.randomColor = function(alpha) {
+	  if (alpha == null) {
+	    alpha = 1.0;
+	  }
+	  return Color.random(alpha);
+	};
+	
+	Utils.randomChoice = function(arr) {
+	  return arr[Math.floor(Math.random() * arr.length)];
+	};
+	
+	Utils.randomNumber = function(a, b) {
+	  if (a == null) {
+	    a = 0;
+	  }
+	  if (b == null) {
+	    b = 1;
+	  }
+	  return Utils.mapRange(Math.random(), 0, 1, a, b);
+	};
+	
+	Utils.defineEnum = function(names, offset, geometric) {
+	  var Enum, i, j, len, m, name;
+	  if (names == null) {
+	    names = [];
+	  }
+	  if (offset == null) {
+	    offset = 0;
+	  }
+	  if (geometric == null) {
+	    geometric = 0;
+	  }
+	  Enum = {};
+	  for (i = m = 0, len = names.length; m < len; i = ++m) {
+	    name = names[i];
+	    j = i;
+	    j = !offset ? j : j + offset;
+	    j = !geometric ? j : Math.pow(geometric, j);
+	    Enum[Enum[name] = j] = name;
+	  }
+	  return Enum;
+	};
+	
+	Utils.labelLayer = function(layer, text, style) {
+	  if (style == null) {
+	    style = {};
+	  }
+	  style = _.extend({
+	    font: "10px/1em Menlo",
+	    lineHeight: layer.height + "px",
+	    textAlign: "center",
+	    color: "#fff"
+	  }, style);
+	  layer.style = style;
+	  return layer.html = text;
+	};
+	
+	Utils.stringify = function(obj) {
+	  try {
+	    if (_.isObject(obj)) {
+	      return JSON.stringify(obj);
+	    }
+	  } catch (_error) {
+	    "";
+	  }
+	  if (obj === null) {
+	    return "null";
+	  }
+	  if (obj === void 0) {
+	    return "undefined";
+	  }
+	  if (obj.toString) {
+	    return obj.toString();
+	  }
+	  return obj;
+	};
+	
+	Utils.inspectObjectType = function(item) {
+	  var className, extract, ref, ref1, ref2;
+	  if ((((ref = item.constructor) != null ? ref.name : void 0) != null) && ((ref1 = item.constructor) != null ? ref1.name : void 0) !== "Object") {
+	    return item.constructor.name;
+	  }
+	  extract = function(str) {
+	    var match, regex;
+	    if (!str) {
+	      return null;
+	    }
+	    regex = /\[object (\w+)\]/;
+	    match = regex.exec(str);
+	    if (match) {
+	      return match[1];
+	    }
+	    return null;
+	  };
+	  className = extract(item.toString());
+	  if (className) {
+	    return className;
+	  }
+	  className = extract((ref2 = item.constructor) != null ? ref2.toString() : void 0);
+	  if (className) {
+	    return className.replace("Constructor", "");
+	  }
+	  return item;
+	};
+	
+	Utils.inspect = function(item, max, l) {
+	  var code, limit, objectInfo, objectType;
+	  if (max == null) {
+	    max = 5;
+	  }
+	  if (l == null) {
+	    l = 0;
+	  }
+	  if (item === null) {
+	    return "null";
+	  }
+	  if (item === void 0) {
+	    return "undefined";
+	  }
+	  if (_.isFunction(item.toInspect)) {
+	    return item.toInspect();
+	  }
+	  if (_.isString(item)) {
+	    return "\"" + item + "\"";
+	  }
+	  if (_.isNumber(item)) {
+	    return "" + item;
+	  }
+	  if (_.isFunction(item)) {
+	    code = item.toString().slice("function ".length).replace(/\n/g, "").replace(/\s+/g, " ");
+	    limit = 50;
+	    if (code.length > limit && l > 0) {
+	      code = (_.trimRight(code.slice(0, +limit + 1 || 9e9))) + "… }";
+	    }
+	    return "<Function " + code + ">";
+	  }
+	  if (_.isArray(item)) {
+	    if (l > max) {
+	      return "[...]";
+	    }
+	    return "[" + _.map(item, function(i) {
+	      return Utils.inspect(i, max, l + 1);
+	    }).join(", ") + "]";
+	  }
+	  if (_.isObject(item)) {
+	    objectType = Utils.inspectObjectType(item);
+	    if (/HTML\w+?Element/.test(objectType)) {
+	      return "<" + objectType + ">";
+	    }
+	    if (l > max) {
+	      objectInfo = "{...}";
+	    } else {
+	      objectInfo = "{" + _.map(item, function(v, k) {
+	        return k + ":" + (Utils.inspect(v, max, l + 1));
+	      }).join(", ") + "}";
+	    }
+	    if (objectType === "Object") {
+	      return objectInfo;
+	    }
+	    return "<" + objectType + " " + objectInfo + ">";
+	  }
+	  return "" + item;
+	};
+	
+	Utils.uuid = function() {
+	  var chars, digit, m, output, r, random;
+	  chars = "0123456789abcdefghijklmnopqrstuvwxyz".split("");
+	  output = new Array(36);
+	  random = 0;
+	  for (digit = m = 1; m <= 32; digit = ++m) {
+	    if (random <= 0x02) {
+	      random = 0x2000000 + (Math.random() * 0x1000000) | 0;
+	    }
+	    r = random & 0xf;
+	    random = random >> 4;
+	    output[digit] = chars[digit === 19 ? (r & 0x3) | 0x8 : r];
+	  }
+	  return output.join("");
+	};
+	
+	Utils.arrayFromArguments = function(args) {
+	  if (_.isArray(args[0])) {
+	    return args[0];
+	  }
+	  return Array.prototype.slice.call(args);
+	};
+	
+	Utils.cycle = function() {
+	  var args, curr;
+	  args = Utils.arrayFromArguments(arguments);
+	  curr = -1;
+	  return function() {
+	    curr++;
+	    if (curr >= args.length) {
+	      curr = 0;
+	    }
+	    return args[curr];
+	  };
+	};
+	
+	Utils.toggle = Utils.cycle;
+	
+	Utils.isWebKit = function() {
+	  return window.WebKitCSSMatrix !== void 0;
+	};
+	
+	Utils.webkitVersion = function() {
+	  var regexp, result, version;
+	  version = -1;
+	  regexp = /AppleWebKit\/([\d.]+)/;
+	  result = regexp.exec(navigator.userAgent);
+	  if (result) {
+	    version = parseFloat(result[1]);
+	  }
+	  return version;
+	};
+	
+	Utils.isChrome = function() {
+	  return /chrome/.test(navigator.userAgent.toLowerCase());
+	};
+	
+	Utils.isSafari = function() {
+	  return /safari/.test(navigator.userAgent.toLowerCase());
+	};
+	
+	Utils.isTouch = function() {
+	  return window.ontouchstart === null;
+	};
+	
+	Utils.isDesktop = function() {
+	  return Utils.deviceType() === "desktop";
+	};
+	
+	Utils.isPhone = function() {
+	  return Utils.deviceType() === "phone";
+	};
+	
+	Utils.isTablet = function() {
+	  return Utils.deviceType() === "tablet";
+	};
+	
+	Utils.isMobile = function() {
+	  return Utils.isPhone() || Utils.isTablet();
+	};
+	
+	Utils.isFileUrl = function(url) {
+	  return _.startsWith(url, "file://");
+	};
+	
+	Utils.isRelativeUrl = function(url) {
+	  return !/^([a-zA-Z]{1,8}:\/\/).*$/.test(url);
+	};
+	
+	Utils.isLocalServerUrl = function(url) {
+	  return url.indexOf("127.0.0.1") !== -1 || url.indexOf("localhost") !== -1;
+	};
+	
+	Utils.isLocalUrl = function(url) {
+	  if (Utils.isFileUrl(url)) {
+	    return true;
+	  }
+	  if (Utils.isLocalServerUrl(url)) {
+	    return true;
+	  }
+	  return false;
+	};
+	
+	Utils.isLocalAssetUrl = function(url, baseUrl) {
+	  if (baseUrl == null) {
+	    baseUrl = window.location.href;
+	  }
+	  if (Utils.isLocalUrl(url)) {
+	    return true;
+	  }
+	  if (Utils.isRelativeUrl(url) && Utils.isLocalUrl(baseUrl)) {
+	    return true;
+	  }
+	  return false;
+	};
+	
+	Utils.isFramerStudio = function() {
+	  return navigator.userAgent.indexOf("FramerStudio") !== -1;
+	};
+	
+	Utils.devicePixelRatio = function() {
+	  return window.devicePixelRatio;
+	};
+	
+	Utils.isJP2Supported = function() {
+	  return Utils.isWebKit() && !Utils.isChrome();
+	};
+	
+	Utils.deviceType = function() {
+	  if (/(tablet)|(iPad)|(Nexus 9)/i.test(navigator.userAgent)) {
+	    return "tablet";
+	  }
+	  if (/(mobi)/i.test(navigator.userAgent)) {
+	    return "phone";
+	  }
+	  return "desktop";
+	};
+	
+	Utils.pathJoin = function() {
+	  return Utils.arrayFromArguments(arguments).join("/");
+	};
+	
+	Utils.round = function(value, decimals) {
+	  var d;
+	  if (decimals == null) {
+	    decimals = 0;
+	  }
+	  d = Math.pow(10, decimals);
+	  return Math.round(value * d) / d;
+	};
+	
+	Utils.clamp = function(value, a, b) {
+	  var max, min;
+	  min = Math.min(a, b);
+	  max = Math.max(a, b);
+	  if (value < min) {
+	    value = min;
+	  }
+	  if (value > max) {
+	    value = max;
+	  }
+	  return value;
+	};
+	
+	Utils.mapRange = function(value, fromLow, fromHigh, toLow, toHigh) {
+	  return toLow + (((value - fromLow) / (fromHigh - fromLow)) * (toHigh - toLow));
+	};
+	
+	Utils.modulate = function(value, rangeA, rangeB, limit) {
+	  var fromHigh, fromLow, result, toHigh, toLow;
+	  if (limit == null) {
+	    limit = false;
+	  }
+	  fromLow = rangeA[0], fromHigh = rangeA[1];
+	  toLow = rangeB[0], toHigh = rangeB[1];
+	  result = toLow + (((value - fromLow) / (fromHigh - fromLow)) * (toHigh - toLow));
+	  if (limit === true) {
+	    if (toLow < toHigh) {
+	      if (result < toLow) {
+	        return toLow;
+	      }
+	      if (result > toHigh) {
+	        return toHigh;
+	      }
+	    } else {
+	      if (result > toLow) {
+	        return toLow;
+	      }
+	      if (result < toHigh) {
+	        return toHigh;
+	      }
+	    }
+	  }
+	  return result;
+	};
+	
+	Utils.parseFunction = function(str) {
+	  var result;
+	  result = {
+	    name: "",
+	    args: []
+	  };
+	  if (_.endsWith(str, ")")) {
+	    result.name = str.split("(")[0];
+	    result.args = str.split("(")[1].split(",").map(function(a) {
+	      return _.trim(_.trimRight(a, ")"));
+	    });
+	  } else {
+	    result.name = str;
+	  }
+	  return result;
+	};
+	
+	__domComplete = [];
+	
+	__domReady = false;
+	
+	if (typeof document !== "undefined" && document !== null) {
+	  document.onreadystatechange = (function(_this) {
+	    return function(event) {
+	      var f, results;
+	      if (document.readyState === "complete") {
+	        __domReady = true;
+	        results = [];
+	        while (__domComplete.length) {
+	          results.push(f = __domComplete.shift()());
+	        }
+	        return results;
+	      }
+	    };
+	  })(this);
+	}
+	
+	Utils.domComplete = function(f) {
+	  if (document.readyState === "complete") {
+	    return f();
+	  } else {
+	    return __domComplete.push(f);
+	  }
+	};
+	
+	Utils.domCompleteCancel = function(f) {
+	  return __domComplete = _.without(__domComplete, f);
+	};
+	
+	Utils.domValidEvent = function(element, eventName) {
+	  if (!eventName) {
+	    return;
+	  }
+	  return typeof element["on" + (eventName.toLowerCase())] !== "undefined";
+	};
+	
+	Utils.domLoadScript = function(url, callback) {
+	  var head, script;
+	  script = document.createElement("script");
+	  script.type = "text/javascript";
+	  script.src = url;
+	  script.onload = callback;
+	  head = document.getElementsByTagName("head")[0];
+	  head.appendChild(script);
+	  return script;
+	};
+	
+	Utils.domLoadData = function(path, callback) {
+	  var request;
+	  request = new XMLHttpRequest();
+	  request.addEventListener("load", function() {
+	    return callback(null, request.responseText);
+	  }, false);
+	  request.addEventListener("error", function() {
+	    return callback(true, null);
+	  }, false);
+	  request.open("GET", path, true);
+	  return request.send(null);
+	};
+	
+	Utils.domLoadJSON = function(path, callback) {
+	  return Utils.domLoadData(path, function(err, data) {
+	    return callback(err, JSON.parse(data));
+	  });
+	};
+	
+	Utils.domLoadDataSync = function(path) {
+	  var e, handleError, ref, request;
+	  request = new XMLHttpRequest();
+	  request.open("GET", path, false);
+	  try {
+	    request.send(null);
+	  } catch (_error) {
+	    e = _error;
+	    console.debug("XMLHttpRequest.error", e);
+	  }
+	  handleError = function() {
+	    throw Error("Utils.domLoadDataSync: " + path + " -> [" + request.status + " " + request.statusText + "]");
+	  };
+	  request.onerror = handleError;
+	  if ((ref = request.status) !== 200 && ref !== 0) {
+	    handleError();
+	  }
+	  if (!request.responseText) {
+	    handleError();
+	  }
+	  return request.responseText;
+	};
+	
+	Utils.domLoadJSONSync = function(path) {
+	  return JSON.parse(Utils.domLoadDataSync(path));
+	};
+	
+	Utils.domLoadScriptSync = function(path) {
+	  var scriptData;
+	  scriptData = Utils.domLoadDataSync(path);
+	  eval(scriptData);
+	  return scriptData;
+	};
+	
+	Utils.insertCSS = function(css) {
+	  var styleElement;
+	  styleElement = document.createElement("style");
+	  styleElement.type = "text/css";
+	  styleElement.innerHTML = css;
+	  return Utils.domComplete(function() {
+	    return document.body.appendChild(styleElement);
+	  });
+	};
+	
+	Utils.loadImage = function(url, callback, context) {
+	  var element;
+	  element = new Image;
+	  if (context == null) {
+	    context = Framer.CurrentContext;
+	  }
+	  context.domEventManager.wrap(element).addEventListener("load", function(event) {
+	    return callback();
+	  });
+	  context.domEventManager.wrap(element).addEventListener("error", function(event) {
+	    return callback(true);
+	  });
+	  return element.src = url;
+	};
+	
+	Utils.pointZero = function(args) {
+	  if (args == null) {
+	    args = {};
+	  }
+	  return _.defaults(args, {
+	    x: 0,
+	    y: 0
+	  });
+	};
+	
+	Utils.pointMin = function() {
+	  var point, points;
+	  points = Utils.arrayFromArguments(arguments);
+	  return point = {
+	    x: _.min(points.map(function(size) {
+	      return size.x;
+	    })),
+	    y: _.min(points.map(function(size) {
+	      return size.y;
+	    }))
+	  };
+	};
+	
+	Utils.pointMax = function() {
+	  var point, points;
+	  points = Utils.arrayFromArguments(arguments);
+	  return point = {
+	    x: _.max(points.map(function(size) {
+	      return size.x;
+	    })),
+	    y: _.max(points.map(function(size) {
+	      return size.y;
+	    }))
+	  };
+	};
+	
+	Utils.pointDistance = function(pointA, pointB) {
+	  var distance;
+	  return distance = {
+	    x: Math.abs(pointB.x - pointA.x),
+	    y: Math.abs(pointB.y - pointA.y)
+	  };
+	};
+	
+	Utils.pointInvert = function(point) {
+	  return point = {
+	    x: 0 - point.x,
+	    y: 0 - point.y
+	  };
+	};
+	
+	Utils.pointTotal = function(point) {
+	  return point.x + point.y;
+	};
+	
+	Utils.pointAbs = function(point) {
+	  return point = {
+	    x: Math.abs(point.x),
+	    y: Math.abs(point.y)
+	  };
+	};
+	
+	Utils.pointInFrame = function(point, frame) {
+	  if (point.x < Utils.frameGetMinX(frame) || point.x > Utils.frameGetMaxX(frame)) {
+	    return false;
+	  }
+	  if (point.y < Utils.frameGetMinY(frame) || point.y > Utils.frameGetMaxY(frame)) {
+	    return false;
+	  }
+	  return true;
+	};
+	
+	Utils.sizeZero = function(args) {
+	  if (args == null) {
+	    args = {};
+	  }
+	  return _.defaults(args, {
+	    width: 0,
+	    height: 0
+	  });
+	};
+	
+	Utils.sizeMin = function() {
+	  var size, sizes;
+	  sizes = Utils.arrayFromArguments(arguments);
+	  return size = {
+	    width: _.min(sizes.map(function(size) {
+	      return size.width;
+	    })),
+	    height: _.min(sizes.map(function(size) {
+	      return size.height;
+	    }))
+	  };
+	};
+	
+	Utils.sizeMax = function() {
+	  var size, sizes;
+	  sizes = Utils.arrayFromArguments(arguments);
+	  return size = {
+	    width: _.max(sizes.map(function(size) {
+	      return size.width;
+	    })),
+	    height: _.max(sizes.map(function(size) {
+	      return size.height;
+	    }))
+	  };
+	};
+	
+	Utils.rectZero = function(args) {
+	  if (args == null) {
+	    args = {};
+	  }
+	  return _.defaults(args, {
+	    top: 0,
+	    right: 0,
+	    bottom: 0,
+	    left: 0
+	  });
+	};
+	
+	Utils.parseRect = function(args) {
+	  if (_.isArray(args) && _.isNumber(args[0])) {
+	    if (args.length === 1) {
+	      return Utils.parseRect({
+	        top: args[0]
+	      });
+	    }
+	    if (args.length === 2) {
+	      return Utils.parseRect({
+	        top: args[0],
+	        right: args[1]
+	      });
+	    }
+	    if (args.length === 3) {
+	      return Utils.parseRect({
+	        top: args[0],
+	        right: args[1],
+	        bottom: args[2]
+	      });
+	    }
+	    if (args.length === 4) {
+	      return Utils.parseRect({
+	        top: args[0],
+	        right: args[1],
+	        bottom: args[2],
+	        left: args[3]
+	      });
+	    }
+	  }
+	  if (_.isArray(args) && _.isObject(args[0])) {
+	    return args[0];
+	  }
+	  if (_.isObject(args)) {
+	    return args;
+	  }
+	  return {};
+	};
+	
+	Utils.frameGetMinX = function(frame) {
+	  return frame.x;
+	};
+	
+	Utils.frameSetMinX = function(frame, value) {
+	  return frame.x = value;
+	};
+	
+	Utils.frameGetMidX = function(frame) {
+	  if (frame.width === 0) {
+	    return 0;
+	  } else {
+	    return frame.x + (frame.width / 2.0);
+	  }
+	};
+	
+	Utils.frameSetMidX = function(frame, value) {
+	  return frame.x = frame.width === 0 ? 0 : value - (frame.width / 2.0);
+	};
+	
+	Utils.frameGetMaxX = function(frame) {
+	  if (frame.width === 0) {
+	    return 0;
+	  } else {
+	    return frame.x + frame.width;
+	  }
+	};
+	
+	Utils.frameSetMaxX = function(frame, value) {
+	  return frame.x = frame.width === 0 ? 0 : value - frame.width;
+	};
+	
+	Utils.frameGetMinY = function(frame) {
+	  return frame.y;
+	};
+	
+	Utils.frameSetMinY = function(frame, value) {
+	  return frame.y = value;
+	};
+	
+	Utils.frameGetMidY = function(frame) {
+	  if (frame.height === 0) {
+	    return 0;
+	  } else {
+	    return frame.y + (frame.height / 2.0);
+	  }
+	};
+	
+	Utils.frameSetMidY = function(frame, value) {
+	  return frame.y = frame.height === 0 ? 0 : value - (frame.height / 2.0);
+	};
+	
+	Utils.frameGetMaxY = function(frame) {
+	  if (frame.height === 0) {
+	    return 0;
+	  } else {
+	    return frame.y + frame.height;
+	  }
+	};
+	
+	Utils.frameSetMaxY = function(frame, value) {
+	  return frame.y = frame.height === 0 ? 0 : value - frame.height;
+	};
+	
+	Utils.frameZero = function(args) {
+	  if (args == null) {
+	    args = {};
+	  }
+	  return _.defaults(args, {
+	    top: 0,
+	    right: 0,
+	    bottom: 0,
+	    left: 0
+	  });
+	};
+	
+	Utils.frameSize = function(frame) {
+	  var size;
+	  return size = {
+	    width: frame.width,
+	    height: frame.height
+	  };
+	};
+	
+	Utils.framePoint = function(frame) {
+	  var point;
+	  return point = {
+	    x: frame.x,
+	    y: frame.y
+	  };
+	};
+	
+	Utils.frameMerge = function() {
+	  var frame, frames;
+	  frames = Utils.arrayFromArguments(arguments);
+	  frame = {
+	    x: _.min(frames.map(Utils.frameGetMinX)),
+	    y: _.min(frames.map(Utils.frameGetMinY))
+	  };
+	  frame.width = _.max(frames.map(Utils.frameGetMaxX)) - frame.x;
+	  frame.height = _.max(frames.map(Utils.frameGetMaxY)) - frame.y;
+	  return frame;
+	};
+	
+	Utils.framePointForOrigin = function(frame, originX, originY) {
+	  return frame = {
+	    x: frame.x + (originX * frame.width),
+	    y: frame.y + (originY * frame.height),
+	    width: frame.width,
+	    height: frame.height
+	  };
+	};
+	
+	Utils.frameInset = function(frame, inset) {
+	  return frame = {
+	    x: frame.x + inset.left,
+	    y: frame.y + inset.top,
+	    width: frame.width - inset.left - inset.right,
+	    height: frame.height - inset.top - inset.bottom
+	  };
+	};
+	
+	Utils.frameSortByAbsoluteDistance = function(point, frames, originX, originY) {
+	  var distance;
+	  if (originX == null) {
+	    originX = 0;
+	  }
+	  if (originY == null) {
+	    originY = 0;
+	  }
+	  distance = function(frame) {
+	    var result;
+	    result = Utils.pointDistance(point, Utils.framePointForOrigin(frame, originX, originY));
+	    result = Utils.pointAbs(result);
+	    result = Utils.pointTotal(result);
+	    return result;
+	  };
+	  return frames.sort(function(a, b) {
+	    return distance(a) - distance(b);
+	  });
+	};
+	
+	Utils.pointInPolygon = function(point, vs) {
+	  var i, inside, intersect, j, x, xi, xj, y, yi, yj;
+	  x = point[0];
+	  y = point[1];
+	  inside = false;
+	  i = 0;
+	  j = vs.length - 1;
+	  while (i < vs.length) {
+	    xi = vs[i][0];
+	    yi = vs[i][1];
+	    xj = vs[j][0];
+	    yj = vs[j][1];
+	    intersect = ((yi > y && y !== yj) && yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi;
+	    if (intersect) {
+	      inside = !inside;
+	    }
+	    j = i++;
+	  }
+	  return inside;
+	};
+	
+	Utils.pointAngle = function(p1, p2) {
+	  return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+	};
+	
+	Utils.convertPoint = function(input, layerA, layerB, context) {
+	  var layer, len, len1, m, o, point, superLayersA, superLayersB;
+	  if (context == null) {
+	    context = false;
+	  }
+	  point = _.defaults(input, {
+	    x: 0,
+	    y: 0
+	  });
+	  superLayersA = (layerA != null ? layerA.superLayers(context) : void 0) || [];
+	  superLayersB = (layerB != null ? layerB.superLayers(context) : void 0) || [];
+	  if (layerB) {
+	    superLayersB.push(layerB);
+	  }
+	  for (m = 0, len = superLayersA.length; m < len; m++) {
+	    layer = superLayersA[m];
+	    point.x += layer.x;
+	    point.y += layer.y;
+	  }
+	  for (o = 0, len1 = superLayersB.length; o < len1; o++) {
+	    layer = superLayersB[o];
+	    point.x -= layer.x;
+	    point.y -= layer.y;
+	  }
+	  return point;
+	};
+	
+	Utils.globalLayers = function(importedLayers) {
+	  var layer, layerName;
+	  for (layerName in importedLayers) {
+	    layer = importedLayers[layerName];
+	    layerName = layerName.replace(/\s/g, "");
+	    if (window.hasOwnProperty(layerName) && !window.Framer._globalWarningGiven) {
+	      print("Warning: Cannot make layer '" + layerName + "' a global, a variable with that name already exists");
+	    } else {
+	      window[layerName] = layer;
+	    }
+	  }
+	  return window.Framer._globalWarningGiven = true;
+	};
+	
+	_textSizeNode = null;
+	
+	Utils.textSize = function(text, style, constraints) {
+	  var frame, rect, shouldCreateNode;
+	  if (style == null) {
+	    style = {};
+	  }
+	  if (constraints == null) {
+	    constraints = {};
+	  }
+	  shouldCreateNode = !_textSizeNode;
+	  if (shouldCreateNode) {
+	    _textSizeNode = document.createElement("div");
+	    _textSizeNode.id = "_textSizeNode";
+	  }
+	  _textSizeNode.removeAttribute("style");
+	  _textSizeNode.innerHTML = text;
+	  style = _.extend(_.clone(style), {
+	    position: "fixed",
+	    display: "inline",
+	    visibility: "hidden",
+	    top: "-10000px",
+	    left: "-10000px"
+	  });
+	  delete style.width;
+	  delete style.height;
+	  delete style.bottom;
+	  delete style.right;
+	  if (constraints.width) {
+	    style.width = constraints.width + "px";
+	  }
+	  if (constraints.height) {
+	    style.height = constraints.height + "px";
+	  }
+	  _.extend(_textSizeNode.style, style);
+	  if (shouldCreateNode) {
+	    if (!window.document.body) {
+	      document.write(_textSizeNode.outerHTML);
+	      _textSizeNode = document.getElementById("_textSizeNode");
+	    } else {
+	      window.document.body.appendChild(_textSizeNode);
+	    }
+	  }
+	  rect = _textSizeNode.getBoundingClientRect();
+	  return frame = {
+	    width: rect.right - rect.left,
+	    height: rect.bottom - rect.top
+	  };
+	};
+	
+	_.extend(exports, Utils);
+
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var BaseClass, ScreenClass,
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	BaseClass = __webpack_require__(7).BaseClass;
+	BaseClass = __webpack_require__(6).BaseClass;
 	
 	ScreenClass = (function(superClass) {
 	  extend(ScreenClass, superClass);
@@ -13763,7 +13591,7 @@
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var CounterKey, DefinedPropertiesKey, DefinedPropertiesValuesKey, EventEmitter, Utils, _, capitalizeFirstLetter,
@@ -13771,11 +13599,11 @@
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	_ = __webpack_require__(3)._;
+	_ = __webpack_require__(1)._;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
-	EventEmitter = __webpack_require__(8).EventEmitter;
+	EventEmitter = __webpack_require__(7).EventEmitter;
 	
 	CounterKey = "_ObjectCounter";
 	
@@ -13929,6 +13757,10 @@
 	    return "<" + this.constructor.name + " id:" + (this.id || null) + ">";
 	  };
 	
+	  BaseClass.prototype.onChange = function(name, cb) {
+	    return this.on("change:" + name, cb);
+	  };
+	
 	  function BaseClass(options) {
 	    this.toInspect = bind(this.toInspect, this);
 	    this._getPropertyValue = bind(this._getPropertyValue, this);
@@ -13971,19 +13803,62 @@
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter;
+	var EventEmitter3, EventKey, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
 	
-	EventEmitter = __webpack_require__(9).EventEmitter;
+	_ = __webpack_require__(1)._;
 	
-	exports.EventEmitter = EventEmitter;
+	EventEmitter3 = __webpack_require__(8);
+	
+	EventKey = "_events";
+	
+	exports.EventEmitter = (function(superClass) {
+	  extend(EventEmitter, superClass);
+	
+	  function EventEmitter() {
+	    return EventEmitter.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  EventEmitter.prototype.listenerEvents = function() {
+	    return _.keys(this[EventKey]);
+	  };
+	
+	  EventEmitter.prototype.removeAllListeners = function(eventName) {
+	    var eventNames, i, len, listener, results;
+	    if (eventName) {
+	      eventNames = [eventName];
+	    } else {
+	      eventNames = this.listenerEvents();
+	    }
+	    results = [];
+	    for (i = 0, len = eventNames.length; i < len; i++) {
+	      eventName = eventNames[i];
+	      results.push((function() {
+	        var j, len1, ref, results1;
+	        ref = this.listeners(eventName);
+	        results1 = [];
+	        for (j = 0, len1 = ref.length; j < len1; j++) {
+	          listener = ref[j];
+	          results1.push(this.removeListener(eventName, listener));
+	        }
+	        return results1;
+	      }).call(this));
+	    }
+	    return results;
+	  };
+	
+	  return EventEmitter;
+	
+	})(EventEmitter3);
 
 
 /***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/* 8 */
+/***/ function(module, exports) {
 
 	'use strict';
 	
@@ -14217,12 +14092,2684 @@
 
 
 /***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, ColorModel, ColorType, bound01, convertToPercentage, correctAlpha, cssNames, hslToRgb, inputData, isNumeric, isOnePointZero, isPercentage, libhusl, matchers, numberFromString, pad2, percentToFraction, rgbToHex, rgbToHsl, rgbToRgb, rgbaFromHusl, stringToObject,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	libhusl = __webpack_require__(10);
+	
+	ColorType = {
+	  RGB: "rgb",
+	  HSL: "hsl",
+	  HEX: "hex",
+	  NAME: "name"
+	};
+	
+	exports.Color = (function(superClass) {
+	  extend(Color, superClass);
+	
+	  function Color(color1, r, g, b) {
+	    var color, input;
+	    this.color = color1;
+	    this.toInspect = bind(this.toInspect, this);
+	    color = this.color;
+	    if (Color.isColorObject(color)) {
+	      return color;
+	    }
+	    input = inputData(color, r, g, b);
+	    this._type = input.type;
+	    this._r = input.r;
+	    this._g = input.g;
+	    this._b = input.b;
+	    this._a = input.a;
+	    this._h = input.h;
+	    this._s = input.s;
+	    this._l = input.l;
+	    this._roundA = Math.round(100 * this._a) / 100;
+	  }
+	
+	  Color.define("r", {
+	    get: function() {
+	      return this._r;
+	    }
+	  });
+	
+	  Color.define("g", {
+	    get: function() {
+	      return this._g;
+	    }
+	  });
+	
+	  Color.define("b", {
+	    get: function() {
+	      return this._b;
+	    }
+	  });
+	
+	  Color.define("a", {
+	    get: function() {
+	      return this._a;
+	    }
+	  });
+	
+	  Color.define("h", {
+	    get: function() {
+	      return this._h;
+	    }
+	  });
+	
+	  Color.define("s", {
+	    get: function() {
+	      return this._s;
+	    }
+	  });
+	
+	  Color.define("l", {
+	    get: function() {
+	      return this._l;
+	    }
+	  });
+	
+	  Color.prototype.toHex = function(allow3Char) {
+	    return rgbToHex(this._r, this._g, this._b, allow3Char);
+	  };
+	
+	  Color.prototype.toHexString = function(allow3Char) {
+	    return "#" + this.toHex(allow3Char);
+	  };
+	
+	  Color.prototype.toRgb = function() {
+	    if (this._rgb === void 0) {
+	      this._rgb = {
+	        r: Math.round(this._r),
+	        g: Math.round(this._g),
+	        b: Math.round(this._b),
+	        a: this._a
+	      };
+	    }
+	    return this._rgb;
+	  };
+	
+	  Color.prototype.toRgbString = function() {
+	    if (this._a === 1) {
+	      return "rgb(" + (Utils.round(this._r, 0)) + ", " + (Utils.round(this._g, 0)) + ", " + (Utils.round(this._b, 0)) + ")";
+	    } else {
+	      return "rgba(" + (Utils.round(this._r, 0)) + ", " + (Utils.round(this._g, 0)) + ", " + (Utils.round(this._b, 0)) + ", " + this._roundA + ")";
+	    }
+	  };
+	
+	  Color.prototype.toHsl = function() {
+	    if (this._hsl === void 0) {
+	      this._hsl = {
+	        h: this.h,
+	        s: this.s,
+	        l: this.l,
+	        a: this.a
+	      };
+	    }
+	    return this._hsl;
+	  };
+	
+	  Color.prototype.toHusl = function() {
+	    var c, husl;
+	    if (this._husl === void 0) {
+	      c = libhusl._conv;
+	      husl = c.lch.husl(c.luv.lch(c.xyz.luv(c.rgb.xyz([this.r / 255, this.g / 255, this.b / 255]))));
+	      this._husl = {
+	        h: husl[0],
+	        s: husl[1],
+	        l: husl[2]
+	      };
+	    }
+	    return this._husl;
+	  };
+	
+	  Color.prototype.toHslString = function() {
+	    var h, hsl, l, s;
+	    if (this._hslString === void 0) {
+	      hsl = this.toHsl();
+	      h = Math.round(hsl.h);
+	      s = Math.round(hsl.s * 100);
+	      l = Math.round(hsl.l * 100);
+	      if (this._a === 1) {
+	        this._hslString = "hsl(" + h + ", " + s + "%, " + l + "%)";
+	      } else {
+	        this._hslString = "hsla(" + h + ", " + s + "%, " + l + "%, " + this._roundA + ")";
+	      }
+	    }
+	    return this._hslString;
+	  };
+	
+	  Color.prototype.toName = function() {
+	    var hex, i, key, len, ref, value;
+	    if (this._a === 0) {
+	      return "transparent";
+	    }
+	    if (this._a < 1) {
+	      return false;
+	    }
+	    hex = rgbToHex(this._r, this._g, this._b, true);
+	    ref = _.keys(cssNames);
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      key = ref[i];
+	      value = cssNames[key];
+	      if (value === hex) {
+	        return key;
+	      }
+	    }
+	    return false;
+	  };
+	
+	  Color.prototype.lighten = function(amount) {
+	    var hsl;
+	    if (amount == null) {
+	      amount = 10;
+	    }
+	    hsl = this.toHsl();
+	    hsl.l += amount / 100;
+	    hsl.l = Math.min(1, Math.max(0, hsl.l));
+	    return new Color(hsl);
+	  };
+	
+	  Color.prototype.brighten = function(amount) {
+	    var rgb;
+	    if (amount == null) {
+	      amount = 10;
+	    }
+	    rgb = this.toRgb();
+	    rgb.r = Math.max(0, Math.min(255, rgb.r - Math.round(255 * -(amount / 100))));
+	    rgb.g = Math.max(0, Math.min(255, rgb.g - Math.round(255 * -(amount / 100))));
+	    rgb.b = Math.max(0, Math.min(255, rgb.b - Math.round(255 * -(amount / 100))));
+	    return new Color(rgb);
+	  };
+	
+	  Color.prototype.darken = function(amount) {
+	    var hsl;
+	    if (amount == null) {
+	      amount = 10;
+	    }
+	    hsl = this.toHsl();
+	    hsl.l -= amount / 100;
+	    hsl.l = Math.min(1, Math.max(0, hsl.l));
+	    return new Color(hsl);
+	  };
+	
+	  Color.prototype.desaturate = function(amount) {
+	    var hsl;
+	    if (amount == null) {
+	      amount = 10;
+	    }
+	    hsl = this.toHsl();
+	    hsl.s -= amount / 100;
+	    hsl.s = Math.min(1, Math.max(0, hsl.s));
+	    return new Color(hsl);
+	  };
+	
+	  Color.prototype.saturate = function(amount) {
+	    var hsl;
+	    if (amount == null) {
+	      amount = 10;
+	    }
+	    hsl = this.toHsl();
+	    hsl.s += amount / 100;
+	    hsl.s = Math.min(1, Math.max(0, hsl.s));
+	    return new Color(hsl);
+	  };
+	
+	  Color.prototype.grayscale = function() {
+	    var hsl;
+	    hsl = this.toHsl();
+	    return new Color(hsl).desaturate(100);
+	  };
+	
+	  Color.prototype.toString = function() {
+	    return this.toRgbString();
+	  };
+	
+	  Color.prototype.transparent = function() {
+	    var result;
+	    return result = new Color({
+	      r: this.r,
+	      g: this.g,
+	      b: this.b,
+	      a: 0
+	    });
+	  };
+	
+	  Color.prototype.mix = function(colorB, fraction, limit, model) {
+	    if (limit == null) {
+	      limit = false;
+	    }
+	    return Color.mix(this, colorB, fraction, limit, model);
+	  };
+	
+	  Color.prototype.isEqual = function(colorB) {
+	    return Color.equal(this, colorB);
+	  };
+	
+	  Color.prototype.toInspect = function() {
+	    if (this._type === ColorType.HSL) {
+	      return "<" + this.constructor.name + " h:" + this.h + " s:" + this.s + " l:" + this.l + " a:" + this.a + ">";
+	    } else if (this._type === ColorType.HEX || this._type === ColorType.NAME) {
+	      return "<" + this.constructor.name + " \"" + this.color + "\">";
+	    } else {
+	      return "<" + this.constructor.name + " r:" + this.r + " g:" + this.g + " b:" + this.b + " a:" + this.a + ">";
+	    }
+	  };
+	
+	  Color.mix = function(colorA, colorB, fraction, limit, model) {
+	    var deltaH, fromH, hslA, hslB, result, toH, tween;
+	    if (fraction == null) {
+	      fraction = .5;
+	    }
+	    if (limit == null) {
+	      limit = false;
+	    }
+	    result = null;
+	    if (typeof colorA === "string" && this.isColorString(colorA)) {
+	      colorA = new Color(colorA);
+	    }
+	    if (typeof colorB === "string" && this.isColorString(colorB)) {
+	      colorB = new Color(colorB);
+	    }
+	    if (!(colorA instanceof Color) && colorB instanceof Color) {
+	      colorA = colorB.transparent();
+	    } else if (colorA instanceof Color && colorA._a === 0 && colorB instanceof Color && colorB._a !== 0) {
+	      colorA = colorB.transparent();
+	    } else if (!(colorB instanceof Color) && colorA instanceof Color) {
+	      colorB = colorA.transparent();
+	    } else if (colorB instanceof Color && colorB._a === 0 && colorA instanceof Color && colorA._a !== 0) {
+	      colorB = colorA.transparent();
+	    }
+	    if (colorB instanceof Color) {
+	      if (ColorModel.isRGB(model)) {
+	        result = new Color({
+	          r: Utils.modulate(fraction, [0, 1], [colorA._r, colorB._r], limit),
+	          g: Utils.modulate(fraction, [0, 1], [colorA._g, colorB._g], limit),
+	          b: Utils.modulate(fraction, [0, 1], [colorA._b, colorB._b], limit),
+	          a: Utils.modulate(fraction, [0, 1], [colorA._a, colorB._a], limit)
+	        });
+	      } else {
+	        hslA;
+	        hslB;
+	        if (ColorModel.isHSL(model)) {
+	          hslA = colorA.toHsl();
+	          hslB = colorB.toHsl();
+	        } else {
+	          hslA = colorA.toHusl();
+	          hslB = colorB.toHusl();
+	        }
+	        if (hslA.s === 0) {
+	          hslA.h = hslB.h;
+	        } else if (hslB.s === 0) {
+	          hslB.h = hslA.h;
+	        }
+	        fromH = hslA.h;
+	        toH = hslB.h;
+	        deltaH = toH - fromH;
+	        if (deltaH > 180) {
+	          deltaH = (toH - 360) - fromH;
+	        } else if (deltaH < -180) {
+	          deltaH = (toH + 360) - fromH;
+	        }
+	        tween = {
+	          h: Utils.modulate(fraction, [0, 1], [fromH, fromH + deltaH], limit),
+	          s: Utils.modulate(fraction, [0, 1], [hslA.s, hslB.s], limit),
+	          l: Utils.modulate(fraction, [0, 1], [hslA.l, hslB.l], limit),
+	          a: Utils.modulate(fraction, [0, 1], [colorA.a, colorB.a], limit)
+	        };
+	        if (ColorModel.isHSL(model)) {
+	          result = new Color(tween);
+	        } else {
+	          result = new Color(rgbaFromHusl(tween));
+	        }
+	      }
+	    }
+	    return result;
+	  };
+	
+	  Color.random = function(alpha) {
+	    var c;
+	    if (alpha == null) {
+	      alpha = 1.0;
+	    }
+	    c = function() {
+	      return parseInt(Math.random() * 255);
+	    };
+	    return new Color("rgba(" + (c()) + ", " + (c()) + ", " + (c()) + ", " + alpha + ")");
+	  };
+	
+	  Color.toColor = function(color) {
+	    return new Color(color);
+	  };
+	
+	  Color.validColorValue = function(color) {
+	    return color instanceof Color || color === null;
+	  };
+	
+	  Color.isColor = function(color) {
+	    if (_.isString(color)) {
+	      return this.isColorString(color);
+	    } else {
+	      return this.isColorObject(color);
+	    }
+	  };
+	
+	  Color.isColorObject = function(color) {
+	    return color instanceof Color;
+	  };
+	
+	  Color.isColorString = function(colorString) {
+	    if (_.isString(colorString)) {
+	      return stringToObject(colorString) !== false;
+	    }
+	    return false;
+	  };
+	
+	  Color.equal = function(colorA, colorB) {
+	    if (!this.validColorValue(colorA)) {
+	      if (!Color.isColorString(colorA)) {
+	        return false;
+	      }
+	    }
+	    if (!this.validColorValue(colorB)) {
+	      if (!Color.isColorString(colorB)) {
+	        return false;
+	      }
+	    }
+	    colorA = new Color(colorA);
+	    colorB = new Color(colorB);
+	    return colorA.r === colorB.r && colorA.g === colorB.g && colorA.b === colorB.b && colorA.a === colorB.a;
+	  };
+	
+	  Color.rgbToHsl = function(a, b, c) {
+	    return rgbToHsl(a, b, c);
+	  };
+	
+	  return Color;
+	
+	})(BaseClass);
+	
+	ColorModel = {
+	  RGB: "rgb",
+	  RGBA: "rgba",
+	  HSL: "hsl",
+	  HSLA: "hsla"
+	};
+	
+	ColorModel.isRGB = function(colorModel) {
+	  var ref;
+	  if (_.isString(colorModel)) {
+	    return (ref = colorModel.toLowerCase()) === ColorModel.RGB || ref === ColorModel.RGBA;
+	  }
+	  return false;
+	};
+	
+	ColorModel.isHSL = function(colorModel) {
+	  var ref;
+	  if (_.isString(colorModel)) {
+	    return (ref = colorModel.toLowerCase()) === ColorModel.HSL || ref === ColorModel.HSLA;
+	  }
+	  return false;
+	};
+	
+	rgbaFromHusl = function(husl) {
+	  var c, rgb, rgba;
+	  c = libhusl._conv;
+	  rgb = c.xyz.rgb(c.luv.xyz(c.lch.luv(c.husl.lch([husl.h, husl.s, husl.l]))));
+	  rgba = {
+	    r: rgb[0] * 255,
+	    g: rgb[1] * 255,
+	    b: rgb[2] * 255,
+	    a: husl.a
+	  };
+	  return rgba;
+	};
+	
+	inputData = function(color, g, b, alpha) {
+	  var a, h, hsl, l, ok, rgb, s, type;
+	  rgb = {
+	    r: 0,
+	    g: 0,
+	    b: 0
+	  };
+	  hsl = {
+	    h: 0,
+	    s: 0,
+	    l: 0
+	  };
+	  a = 1;
+	  ok = false;
+	  type = ColorType.RGB;
+	  if (color === null) {
+	    a = 0;
+	  } else if (_.isNumber(color)) {
+	    rgb.r = color;
+	    if (_.isNumber(g)) {
+	      rgb.g = g;
+	    }
+	    if (_.isNumber(b)) {
+	      rgb.b = b;
+	    }
+	    if (_.isNumber(alpha)) {
+	      a = alpha;
+	    }
+	  } else {
+	    if (typeof color === "string") {
+	      color = stringToObject(color);
+	      if (color.hasOwnProperty("type")) {
+	        type = color.type;
+	      }
+	    }
+	    if (typeof color === "object") {
+	      if (color.hasOwnProperty("r") || color.hasOwnProperty("g") || color.hasOwnProperty("b")) {
+	        rgb = rgbToRgb(color.r, color.g, color.b);
+	      } else if (color.hasOwnProperty("h") || color.hasOwnProperty("s") || color.hasOwnProperty("l")) {
+	        h = isNumeric(color.h) ? parseFloat(color.h) : 0;
+	        h = (h + 360) % 360;
+	        s = isNumeric(color.s) ? color.s : 1;
+	        if (_.isString(color.s)) {
+	          s = numberFromString(color.s);
+	        }
+	        l = isNumeric(color.l) ? color.l : 0.5;
+	        if (_.isString(color.l)) {
+	          l = numberFromString(color.l);
+	        }
+	        rgb = hslToRgb(h, s, l);
+	        type = ColorType.HSL;
+	        hsl = {
+	          h: h,
+	          s: s,
+	          l: l
+	        };
+	      }
+	      if (color.hasOwnProperty("a")) {
+	        a = color.a;
+	      }
+	    }
+	  }
+	  a = correctAlpha(a);
+	  if (type !== ColorType.HSL) {
+	    hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+	  }
+	  return {
+	    type: type,
+	    r: Math.min(255, Math.max(rgb.r, 0)),
+	    g: Math.min(255, Math.max(rgb.g, 0)),
+	    b: Math.min(255, Math.max(rgb.b, 0)),
+	    h: Utils.clamp(hsl.h, 0, 360),
+	    s: Utils.clamp(hsl.s, 0, 1),
+	    l: Utils.clamp(hsl.l, 0, 1),
+	    a: a
+	  };
+	};
+	
+	numberFromString = function(string) {
+	  return string.match(/\d+/)[0];
+	};
+	
+	rgbToRgb = function(r, g, b) {
+	  return {
+	    r: isNumeric(r) ? bound01(r, 255) * 255 : 0,
+	    g: isNumeric(g) ? bound01(g, 255) * 255 : 0,
+	    b: isNumeric(b) ? bound01(b, 255) * 255 : 0
+	  };
+	};
+	
+	rgbToHex = function(r, g, b, allow3Char) {
+	  var hex;
+	  hex = [pad2(Math.round(r).toString(16)), pad2(Math.round(g).toString(16)), pad2(Math.round(b).toString(16))];
+	  if (allow3Char && hex[0].charAt(0) === hex[0].charAt(1) && hex[1].charAt(0) === hex[1].charAt(1) && hex[2].charAt(0) === hex[2].charAt(1)) {
+	    return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0);
+	  }
+	  return hex.join("");
+	};
+	
+	rgbToHsl = function(r, g, b) {
+	  var d, h, l, max, min, s;
+	  r = bound01(r, 255);
+	  g = bound01(g, 255);
+	  b = bound01(b, 255);
+	  max = Math.max(r, g, b);
+	  min = Math.min(r, g, b);
+	  h = s = l = (max + min) / 2;
+	  if (max === min) {
+	    h = s = 0;
+	  } else {
+	    d = max - min;
+	    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+	    switch (max) {
+	      case r:
+	        h = (g - b) / d + (g < b ? 6 : 0);
+	        break;
+	      case g:
+	        h = (b - r) / d + 2;
+	        break;
+	      case b:
+	        h = (r - g) / d + 4;
+	    }
+	    h /= 6;
+	  }
+	  return {
+	    h: h * 360,
+	    s: s,
+	    l: l
+	  };
+	};
+	
+	hslToRgb = function(h, s, l) {
+	  var b, g, hue2rgb, p, q, r;
+	  r = void 0;
+	  g = void 0;
+	  b = void 0;
+	  h = bound01(h, 360);
+	  s = bound01(s * 100, 100);
+	  l = bound01(l * 100, 100);
+	  hue2rgb = function(p, q, t) {
+	    if (t < 0) {
+	      t += 1;
+	    }
+	    if (t > 1) {
+	      t -= 1;
+	    }
+	    if (t < 1 / 6) {
+	      return p + (q - p) * 6 * t;
+	    }
+	    if (t < 1 / 2) {
+	      return q;
+	    }
+	    if (t < 2 / 3) {
+	      return p + (q - p) * (2 / 3 - t) * 6;
+	    }
+	    return p;
+	  };
+	  if (s === 0) {
+	    r = g = b = l;
+	  } else {
+	    q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	    p = 2 * l - q;
+	    r = hue2rgb(p, q, h + 1 / 3);
+	    g = hue2rgb(p, q, h);
+	    b = hue2rgb(p, q, h - (1 / 3));
+	  }
+	  return {
+	    r: r * 255,
+	    g: g * 255,
+	    b: b * 255
+	  };
+	};
+	
+	convertToPercentage = function(n) {
+	  if (n <= 1) {
+	    n = n * 100 + "%";
+	  }
+	  return n;
+	};
+	
+	correctAlpha = function(a) {
+	  a = parseFloat(a);
+	  if (isNaN(a) || a < 0 || a > 1) {
+	    a = 1;
+	  }
+	  return a;
+	};
+	
+	bound01 = function(n, max) {
+	  var processPercent;
+	  if (isOnePointZero(n)) {
+	    n = "100%";
+	  }
+	  processPercent = isPercentage(n);
+	  n = Math.min(max, Math.max(0, parseFloat(n)));
+	  if (processPercent) {
+	    n = parseInt(n * max, 10) / 100;
+	  }
+	  if (Math.abs(n - max) < 0.000001) {
+	    return 1;
+	  }
+	  return n % max / parseFloat(max);
+	};
+	
+	isOnePointZero = function(n) {
+	  return typeof n === "string" && n.indexOf(".") !== -1 && parseFloat(n) === 1;
+	};
+	
+	isPercentage = function(n) {
+	  return typeof n === "string" && n.indexOf("%") !== -1;
+	};
+	
+	pad2 = function(char) {
+	  if (char.length === 1) {
+	    return "0" + char;
+	  } else {
+	    return "" + char;
+	  }
+	};
+	
+	matchers = (function() {
+	  var css_integer, css_number, css_unit, permissive_match3, permissive_match4;
+	  css_integer = '[-\\+]?\\d+%?';
+	  css_number = "[-\\+]?\\d*\\.\\d+%?";
+	  css_unit = "(?:" + css_number + ")|(?:" + css_integer + ")";
+	  permissive_match3 = '[\\s|\\(]+(' + css_unit + ')[,|\\s]+(' + css_unit + ')[,|\\s]+(' + css_unit + ')\\s*\\)?';
+	  permissive_match4 = '[\\s|\\(]+(' + css_unit + ')[,|\\s]+(' + css_unit + ')[,|\\s]+(' + css_unit + ')[,|\\s]+(' + css_unit + ')\\s*\\)?';
+	  return {
+	    rgb: new RegExp('rgb' + permissive_match3),
+	    rgba: new RegExp('rgba' + permissive_match4),
+	    hsl: new RegExp('hsl' + permissive_match3),
+	    hsla: new RegExp('hsla' + permissive_match4),
+	    hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+	    hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
+	  };
+	})();
+	
+	isNumeric = function(value) {
+	  return !isNaN(value) && isFinite(value);
+	};
+	
+	percentToFraction = function(percentage) {
+	  return numberFromString(percentage) / 100;
+	};
+	
+	stringToObject = function(color) {
+	  var match, named, trimLeft, trimRight;
+	  trimLeft = /^[\s,#]+/;
+	  trimRight = /\s+$/;
+	  color = color.replace(trimLeft, "").replace(trimRight, "").toLowerCase();
+	  named = false;
+	  if (cssNames[color]) {
+	    color = cssNames[color];
+	    named = true;
+	    ({
+	      type: ColorType.NAME
+	    });
+	  } else if (color === "transparent") {
+	    return {
+	      r: 0,
+	      g: 0,
+	      b: 0,
+	      a: 0,
+	      type: ColorType.NAME
+	    };
+	  }
+	  match = void 0;
+	  if (match = matchers.rgb.exec(color)) {
+	    return {
+	      r: match[1],
+	      g: match[2],
+	      b: match[3]
+	    };
+	  }
+	  if (match = matchers.rgba.exec(color)) {
+	    return {
+	      r: match[1],
+	      g: match[2],
+	      b: match[3],
+	      a: match[4]
+	    };
+	  }
+	  if (match = matchers.hsl.exec(color)) {
+	    return {
+	      h: match[1],
+	      s: percentToFraction(match[2]),
+	      l: percentToFraction(match[3])
+	    };
+	  }
+	  if (match = matchers.hsla.exec(color)) {
+	    return {
+	      h: match[1],
+	      s: percentToFraction(match[2]),
+	      l: percentToFraction(match[3]),
+	      a: match[4]
+	    };
+	  }
+	  if (match = matchers.hex6.exec(color) || (match = matchers.hex6.exec(cssNames[color]))) {
+	    return {
+	      r: parseInt(match[1], 16),
+	      g: parseInt(match[2], 16),
+	      b: parseInt(match[3], 16),
+	      a: 1,
+	      type: ColorType.HEX
+	    };
+	  }
+	  if (match = matchers.hex3.exec(color) || (match = matchers.hex3.exec(cssNames[color]))) {
+	    return {
+	      r: parseInt(match[1] + "" + match[1], 16),
+	      g: parseInt(match[2] + "" + match[2], 16),
+	      b: parseInt(match[3] + "" + match[3], 16),
+	      type: ColorType.HEX
+	    };
+	  } else {
+	    return false;
+	  }
+	};
+	
+	cssNames = {
+	  aliceblue: "f0f8ff",
+	  antiquewhite: "faebd7",
+	  aqua: "0ff",
+	  aquamarine: "7fffd4",
+	  azure: "f0ffff",
+	  beige: "f5f5dc",
+	  bisque: "ffe4c4",
+	  black: "000",
+	  blanchedalmond: "ffebcd",
+	  blue: "00f",
+	  blueviolet: "8a2be2",
+	  brown: "a52a2a",
+	  burlywood: "deb887",
+	  burntsienna: "ea7e5d",
+	  cadetblue: "5f9ea0",
+	  chartreuse: "7fff00",
+	  chocolate: "d2691e",
+	  coral: "ff7f50",
+	  cornflowerblue: "6495ed",
+	  cornsilk: "fff8dc",
+	  crimson: "dc143c",
+	  cyan: "0ff",
+	  darkblue: "00008b",
+	  darkcyan: "008b8b",
+	  darkgoldenrod: "b8860b",
+	  darkgray: "a9a9a9",
+	  darkgreen: "006400",
+	  darkgrey: "a9a9a9",
+	  darkkhaki: "bdb76b",
+	  darkmagenta: "8b008b",
+	  darkolivegreen: "556b2f",
+	  darkorange: "ff8c00",
+	  darkorchid: "9932cc",
+	  darkred: "8b0000",
+	  darksalmon: "e9967a",
+	  darkseagreen: "8fbc8f",
+	  darkslateblue: "483d8b",
+	  darkslategray: "2f4f4f",
+	  darkslategrey: "2f4f4f",
+	  darkturquoise: "00ced1",
+	  darkviolet: "9400d3",
+	  deeppink: "ff1493",
+	  deepskyblue: "00bfff",
+	  dimgray: "696969",
+	  dimgrey: "696969",
+	  dodgerblue: "1e90ff",
+	  firebrick: "b22222",
+	  floralwhite: "fffaf0",
+	  forestgreen: "228b22",
+	  fuchsia: "f0f",
+	  gainsboro: "dcdcdc",
+	  ghostwhite: "f8f8ff",
+	  gold: "ffd700",
+	  goldenrod: "daa520",
+	  gray: "808080",
+	  green: "008000",
+	  greenyellow: "adff2f",
+	  grey: "808080",
+	  honeydew: "f0fff0",
+	  hotpink: "ff69b4",
+	  indianred: "cd5c5c",
+	  indigo: "4b0082",
+	  ivory: "fffff0",
+	  khaki: "f0e68c",
+	  lavender: "e6e6fa",
+	  lavenderblush: "fff0f5",
+	  lawngreen: "7cfc00",
+	  lemonchiffon: "fffacd",
+	  lightblue: "add8e6",
+	  lightcoral: "f08080",
+	  lightcyan: "e0ffff",
+	  lightgoldenrodyellow: "fafad2",
+	  lightgray: "d3d3d3",
+	  lightgreen: "90ee90",
+	  lightgrey: "d3d3d3",
+	  lightpink: "ffb6c1",
+	  lightsalmon: "ffa07a",
+	  lightseagreen: "20b2aa",
+	  lightskyblue: "87cefa",
+	  lightslategray: "789",
+	  lightslategrey: "789",
+	  lightsteelblue: "b0c4de",
+	  lightyellow: "ffffe0",
+	  lime: "0f0",
+	  limegreen: "32cd32",
+	  linen: "faf0e6",
+	  magenta: "f0f",
+	  maroon: "800000",
+	  mediumaquamarine: "66cdaa",
+	  mediumblue: "0000cd",
+	  mediumorchid: "ba55d3",
+	  mediumpurple: "9370db",
+	  mediumseagreen: "3cb371",
+	  mediumslateblue: "7b68ee",
+	  mediumspringgreen: "00fa9a",
+	  mediumturquoise: "48d1cc",
+	  mediumvioletred: "c71585",
+	  midnightblue: "191970",
+	  mintcream: "f5fffa",
+	  mistyrose: "ffe4e1",
+	  moccasin: "ffe4b5",
+	  navajowhite: "ffdead",
+	  navy: "000080",
+	  oldlace: "fdf5e6",
+	  olive: "808000",
+	  olivedrab: "6b8e23",
+	  orange: "ffa500",
+	  orangered: "ff4500",
+	  orchid: "da70d6",
+	  palegoldenrod: "eee8aa",
+	  palegreen: "98fb98",
+	  paleturquoise: "afeeee",
+	  palevioletred: "db7093",
+	  papayawhip: "ffefd5",
+	  peachpuff: "ffdab9",
+	  peru: "cd853f",
+	  pink: "ffc0cb",
+	  plum: "dda0dd",
+	  powderblue: "b0e0e6",
+	  purple: "800080",
+	  rebeccapurple: "663399",
+	  red: "f00",
+	  rosybrown: "bc8f8f",
+	  royalblue: "4169e1",
+	  saddlebrown: "8b4513",
+	  salmon: "fa8072",
+	  sandybrown: "f4a460",
+	  seagreen: "2e8b57",
+	  seashell: "fff5ee",
+	  sienna: "a0522d",
+	  silver: "c0c0c0",
+	  skyblue: "87ceeb",
+	  slateblue: "6a5acd",
+	  slategray: "708090",
+	  slategrey: "708090",
+	  snow: "fffafa",
+	  springgreen: "00ff7f",
+	  steelblue: "4682b4",
+	  tan: "d2b48c",
+	  teal: "008080",
+	  thistle: "d8bfd8",
+	  tomato: "ff6347",
+	  turquoise: "40e0d0",
+	  violet: "ee82ee",
+	  wheat: "f5deb3",
+	  white: "fff",
+	  whitesmoke: "f5f5f5",
+	  yellow: "ff0",
+	  yellowgreen: "9acd32"
+	};
+
+
+/***/ },
 /* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {// Generated by CoffeeScript 1.9.3
+	(function() {
+	  var L_to_Y, Y_to_L, conv, distanceFromPole, dotProduct, epsilon, fromLinear, getBounds, intersectLineLine, kappa, lengthOfRayUntilIntersect, m, m_inv, maxChromaForLH, maxSafeChromaForL, refU, refV, root, toLinear;
+	
+	  m = {
+	    R: [3.2409699419045214, -1.5373831775700935, -0.49861076029300328],
+	    G: [-0.96924363628087983, 1.8759675015077207, 0.041555057407175613],
+	    B: [0.055630079696993609, -0.20397695888897657, 1.0569715142428786]
+	  };
+	
+	  m_inv = {
+	    X: [0.41239079926595948, 0.35758433938387796, 0.18048078840183429],
+	    Y: [0.21263900587151036, 0.71516867876775593, 0.072192315360733715],
+	    Z: [0.019330818715591851, 0.11919477979462599, 0.95053215224966058]
+	  };
+	
+	  refU = 0.19783000664283681;
+	
+	  refV = 0.468319994938791;
+	
+	  kappa = 903.2962962962963;
+	
+	  epsilon = 0.0088564516790356308;
+	
+	  getBounds = function(L) {
+	    var bottom, channel, j, k, len1, len2, m1, m2, m3, ref, ref1, ref2, ret, sub1, sub2, t, top1, top2;
+	    sub1 = Math.pow(L + 16, 3) / 1560896;
+	    sub2 = sub1 > epsilon ? sub1 : L / kappa;
+	    ret = [];
+	    ref = ['R', 'G', 'B'];
+	    for (j = 0, len1 = ref.length; j < len1; j++) {
+	      channel = ref[j];
+	      ref1 = m[channel], m1 = ref1[0], m2 = ref1[1], m3 = ref1[2];
+	      ref2 = [0, 1];
+	      for (k = 0, len2 = ref2.length; k < len2; k++) {
+	        t = ref2[k];
+	        top1 = (284517 * m1 - 94839 * m3) * sub2;
+	        top2 = (838422 * m3 + 769860 * m2 + 731718 * m1) * L * sub2 - 769860 * t * L;
+	        bottom = (632260 * m3 - 126452 * m2) * sub2 + 126452 * t;
+	        ret.push([top1 / bottom, top2 / bottom]);
+	      }
+	    }
+	    return ret;
+	  };
+	
+	  intersectLineLine = function(line1, line2) {
+	    return (line1[1] - line2[1]) / (line2[0] - line1[0]);
+	  };
+	
+	  distanceFromPole = function(point) {
+	    return Math.sqrt(Math.pow(point[0], 2) + Math.pow(point[1], 2));
+	  };
+	
+	  lengthOfRayUntilIntersect = function(theta, line) {
+	    var b1, len, m1;
+	    m1 = line[0], b1 = line[1];
+	    len = b1 / (Math.sin(theta) - m1 * Math.cos(theta));
+	    if (len < 0) {
+	      return null;
+	    }
+	    return len;
+	  };
+	
+	  maxSafeChromaForL = function(L) {
+	    var b1, j, len1, lengths, m1, ref, ref1, x;
+	    lengths = [];
+	    ref = getBounds(L);
+	    for (j = 0, len1 = ref.length; j < len1; j++) {
+	      ref1 = ref[j], m1 = ref1[0], b1 = ref1[1];
+	      x = intersectLineLine([m1, b1], [-1 / m1, 0]);
+	      lengths.push(distanceFromPole([x, b1 + x * m1]));
+	    }
+	    return Math.min.apply(Math, lengths);
+	  };
+	
+	  maxChromaForLH = function(L, H) {
+	    var hrad, j, l, len1, lengths, line, ref;
+	    hrad = H / 360 * Math.PI * 2;
+	    lengths = [];
+	    ref = getBounds(L);
+	    for (j = 0, len1 = ref.length; j < len1; j++) {
+	      line = ref[j];
+	      l = lengthOfRayUntilIntersect(hrad, line);
+	      if (l !== null) {
+	        lengths.push(l);
+	      }
+	    }
+	    return Math.min.apply(Math, lengths);
+	  };
+	
+	  dotProduct = function(a, b) {
+	    var i, j, ref, ret;
+	    ret = 0;
+	    for (i = j = 0, ref = a.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+	      ret += a[i] * b[i];
+	    }
+	    return ret;
+	  };
+	
+	  fromLinear = function(c) {
+	    if (c <= 0.0031308) {
+	      return 12.92 * c;
+	    } else {
+	      return 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+	    }
+	  };
+	
+	  toLinear = function(c) {
+	    var a;
+	    a = 0.055;
+	    if (c > 0.04045) {
+	      return Math.pow((c + a) / (1 + a), 2.4);
+	    } else {
+	      return c / 12.92;
+	    }
+	  };
+	
+	  conv = {
+	    'xyz': {},
+	    'luv': {},
+	    'lch': {},
+	    'husl': {},
+	    'huslp': {},
+	    'rgb': {},
+	    'hex': {}
+	  };
+	
+	  conv.xyz.rgb = function(tuple) {
+	    var B, G, R;
+	    R = fromLinear(dotProduct(m.R, tuple));
+	    G = fromLinear(dotProduct(m.G, tuple));
+	    B = fromLinear(dotProduct(m.B, tuple));
+	    return [R, G, B];
+	  };
+	
+	  conv.rgb.xyz = function(tuple) {
+	    var B, G, R, X, Y, Z, rgbl;
+	    R = tuple[0], G = tuple[1], B = tuple[2];
+	    rgbl = [toLinear(R), toLinear(G), toLinear(B)];
+	    X = dotProduct(m_inv.X, rgbl);
+	    Y = dotProduct(m_inv.Y, rgbl);
+	    Z = dotProduct(m_inv.Z, rgbl);
+	    return [X, Y, Z];
+	  };
+	
+	  Y_to_L = function(Y) {
+	    if (Y <= epsilon) {
+	      return Y * kappa;
+	    } else {
+	      return 116 * Math.pow(Y, 1 / 3) - 16;
+	    }
+	  };
+	
+	  L_to_Y = function(L) {
+	    if (L <= 8) {
+	      return L / kappa;
+	    } else {
+	      return Math.pow((L + 16) / 116, 3);
+	    }
+	  };
+	
+	  conv.xyz.luv = function(tuple) {
+	    var L, U, V, X, Y, Z, varU, varV;
+	    X = tuple[0], Y = tuple[1], Z = tuple[2];
+	    if (Y === 0) {
+	      return [0, 0, 0];
+	    }
+	    L = Y_to_L(Y);
+	    varU = (4 * X) / (X + (15 * Y) + (3 * Z));
+	    varV = (9 * Y) / (X + (15 * Y) + (3 * Z));
+	    U = 13 * L * (varU - refU);
+	    V = 13 * L * (varV - refV);
+	    return [L, U, V];
+	  };
+	
+	  conv.luv.xyz = function(tuple) {
+	    var L, U, V, X, Y, Z, varU, varV;
+	    L = tuple[0], U = tuple[1], V = tuple[2];
+	    if (L === 0) {
+	      return [0, 0, 0];
+	    }
+	    varU = U / (13 * L) + refU;
+	    varV = V / (13 * L) + refV;
+	    Y = L_to_Y(L);
+	    X = 0 - (9 * Y * varU) / ((varU - 4) * varV - varU * varV);
+	    Z = (9 * Y - (15 * varV * Y) - (varV * X)) / (3 * varV);
+	    return [X, Y, Z];
+	  };
+	
+	  conv.luv.lch = function(tuple) {
+	    var C, H, Hrad, L, U, V;
+	    L = tuple[0], U = tuple[1], V = tuple[2];
+	    C = Math.sqrt(Math.pow(U, 2) + Math.pow(V, 2));
+	    if (C < 0.00000001) {
+	      H = 0;
+	    } else {
+	      Hrad = Math.atan2(V, U);
+	      H = Hrad * 360 / 2 / Math.PI;
+	      if (H < 0) {
+	        H = 360 + H;
+	      }
+	    }
+	    return [L, C, H];
+	  };
+	
+	  conv.lch.luv = function(tuple) {
+	    var C, H, Hrad, L, U, V;
+	    L = tuple[0], C = tuple[1], H = tuple[2];
+	    Hrad = H / 360 * 2 * Math.PI;
+	    U = Math.cos(Hrad) * C;
+	    V = Math.sin(Hrad) * C;
+	    return [L, U, V];
+	  };
+	
+	  conv.husl.lch = function(tuple) {
+	    var C, H, L, S, max;
+	    H = tuple[0], S = tuple[1], L = tuple[2];
+	    if (L > 99.9999999 || L < 0.00000001) {
+	      C = 0;
+	    } else {
+	      max = maxChromaForLH(L, H);
+	      C = max / 100 * S;
+	    }
+	    return [L, C, H];
+	  };
+	
+	  conv.lch.husl = function(tuple) {
+	    var C, H, L, S, max;
+	    L = tuple[0], C = tuple[1], H = tuple[2];
+	    if (L > 99.9999999 || L < 0.00000001) {
+	      S = 0;
+	    } else {
+	      max = maxChromaForLH(L, H);
+	      S = C / max * 100;
+	    }
+	    return [H, S, L];
+	  };
+	
+	  conv.huslp.lch = function(tuple) {
+	    var C, H, L, S, max;
+	    H = tuple[0], S = tuple[1], L = tuple[2];
+	    if (L > 99.9999999 || L < 0.00000001) {
+	      C = 0;
+	    } else {
+	      max = maxSafeChromaForL(L);
+	      C = max / 100 * S;
+	    }
+	    return [L, C, H];
+	  };
+	
+	  conv.lch.huslp = function(tuple) {
+	    var C, H, L, S, max;
+	    L = tuple[0], C = tuple[1], H = tuple[2];
+	    if (L > 99.9999999 || L < 0.00000001) {
+	      S = 0;
+	    } else {
+	      max = maxSafeChromaForL(L);
+	      S = C / max * 100;
+	    }
+	    return [H, S, L];
+	  };
+	
+	  conv.rgb.hex = function(tuple) {
+	    var ch, hex, j, len1;
+	    hex = "#";
+	    for (j = 0, len1 = tuple.length; j < len1; j++) {
+	      ch = tuple[j];
+	      ch = Math.round(ch * 1e6) / 1e6;
+	      if (ch < 0 || ch > 1) {
+	        throw new Error("Illegal rgb value: " + ch);
+	      }
+	      ch = Math.round(ch * 255).toString(16);
+	      if (ch.length === 1) {
+	        ch = "0" + ch;
+	      }
+	      hex += ch;
+	    }
+	    return hex;
+	  };
+	
+	  conv.hex.rgb = function(hex) {
+	    var b, g, j, len1, n, r, ref, results;
+	    if (hex.charAt(0) === "#") {
+	      hex = hex.substring(1, 7);
+	    }
+	    r = hex.substring(0, 2);
+	    g = hex.substring(2, 4);
+	    b = hex.substring(4, 6);
+	    ref = [r, g, b];
+	    results = [];
+	    for (j = 0, len1 = ref.length; j < len1; j++) {
+	      n = ref[j];
+	      results.push(parseInt(n, 16) / 255);
+	    }
+	    return results;
+	  };
+	
+	  conv.lch.rgb = function(tuple) {
+	    return conv.xyz.rgb(conv.luv.xyz(conv.lch.luv(tuple)));
+	  };
+	
+	  conv.rgb.lch = function(tuple) {
+	    return conv.luv.lch(conv.xyz.luv(conv.rgb.xyz(tuple)));
+	  };
+	
+	  conv.husl.rgb = function(tuple) {
+	    return conv.lch.rgb(conv.husl.lch(tuple));
+	  };
+	
+	  conv.rgb.husl = function(tuple) {
+	    return conv.lch.husl(conv.rgb.lch(tuple));
+	  };
+	
+	  conv.huslp.rgb = function(tuple) {
+	    return conv.lch.rgb(conv.huslp.lch(tuple));
+	  };
+	
+	  conv.rgb.huslp = function(tuple) {
+	    return conv.lch.huslp(conv.rgb.lch(tuple));
+	  };
+	
+	  root = {};
+	
+	  root.fromRGB = function(R, G, B) {
+	    return conv.rgb.husl([R, G, B]);
+	  };
+	
+	  root.fromHex = function(hex) {
+	    return conv.rgb.husl(conv.hex.rgb(hex));
+	  };
+	
+	  root.toRGB = function(H, S, L) {
+	    return conv.husl.rgb([H, S, L]);
+	  };
+	
+	  root.toHex = function(H, S, L) {
+	    return conv.rgb.hex(conv.husl.rgb([H, S, L]));
+	  };
+	
+	  root.p = {};
+	
+	  root.p.toRGB = function(H, S, L) {
+	    return conv.xyz.rgb(conv.luv.xyz(conv.lch.luv(conv.huslp.lch([H, S, L]))));
+	  };
+	
+	  root.p.toHex = function(H, S, L) {
+	    return conv.rgb.hex(conv.xyz.rgb(conv.luv.xyz(conv.lch.luv(conv.huslp.lch([H, S, L])))));
+	  };
+	
+	  root.p.fromRGB = function(R, G, B) {
+	    return conv.lch.huslp(conv.luv.lch(conv.xyz.luv(conv.rgb.xyz([R, G, B]))));
+	  };
+	
+	  root.p.fromHex = function(hex) {
+	    return conv.lch.huslp(conv.luv.lch(conv.xyz.luv(conv.rgb.xyz(conv.hex.rgb(hex)))));
+	  };
+	
+	  root._conv = conv;
+	
+	  root._getBounds = getBounds;
+	
+	  root._maxChromaForLH = maxChromaForLH;
+	
+	  root._maxSafeChromaForL = maxSafeChromaForL;
+	
+	  if (!((typeof module !== "undefined" && module !== null) || (typeof jQuery !== "undefined" && jQuery !== null) || (typeof requirejs !== "undefined" && requirejs !== null))) {
+	    this.HUSL = root;
+	  }
+	
+	  if (typeof module !== "undefined" && module !== null) {
+	    module.exports = root;
+	  }
+	
+	  if (typeof jQuery !== "undefined" && jQuery !== null) {
+	    jQuery.husl = root;
+	  }
+	
+	  if ((typeof requirejs !== "undefined" && requirejs !== null) && ("function" !== "undefined" && __webpack_require__(11) !== null)) {
+	    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (root), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  }
+	
+	}).call(this);
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Animation, BaseClass, Color, Config, Defaults, EventEmitter, Events, LayerDraggable, LayerStates, LayerStyle, NoCacheDateKey, Utils, _, layerProperty, layerValueTypeError,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+	  slice = [].slice;
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	Config = __webpack_require__(13).Config;
+	
+	Events = __webpack_require__(14).Events;
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	EventEmitter = __webpack_require__(7).EventEmitter;
+	
+	Color = __webpack_require__(9).Color;
+	
+	Animation = __webpack_require__(16).Animation;
+	
+	LayerStyle = __webpack_require__(23).LayerStyle;
+	
+	LayerStates = __webpack_require__(24).LayerStates;
+	
+	LayerDraggable = __webpack_require__(25).LayerDraggable;
+	
+	NoCacheDateKey = Date.now();
+	
+	layerValueTypeError = function(name, value) {
+	  throw new Error("Layer." + name + ": value '" + value + "' of type '" + (typeof value) + "'' is not valid");
+	};
+	
+	layerProperty = function(obj, name, cssProperty, fallback, validator, transformer, options, set) {
+	  var result;
+	  if (options == null) {
+	    options = {};
+	  }
+	  result = {
+	    "default": fallback,
+	    get: function() {
+	      if (this._properties.hasOwnProperty(name)) {
+	        return this._properties[name];
+	      }
+	      return fallback;
+	    },
+	    set: function(value) {
+	      if (transformer && (value || value === null)) {
+	        value = transformer(value);
+	      }
+	      if (value === this._properties[name]) {
+	        return;
+	      }
+	      if (value && validator && !validator(value)) {
+	        layerValueTypeError(name, value);
+	      }
+	      this._properties[name] = value;
+	      this._element.style[cssProperty] = LayerStyle[cssProperty](this);
+	      if (typeof set === "function") {
+	        set(this, value);
+	      }
+	      this.emit("change:" + name, value);
+	      if (name === "x" || name === "y") {
+	        this.emit("change:point", value);
+	      }
+	      if (name === "width" || name === "height") {
+	        this.emit("change:size", value);
+	      }
+	      if (name === "x" || name === "y" || name === "width" || name === "height") {
+	        this.emit("change:frame", value);
+	      }
+	      if (name === "rotationZ") {
+	        return this.emit("change:rotation", value);
+	      }
+	    }
+	  };
+	  return result = _.extend(result, options);
+	};
+	
+	exports.Layer = (function(superClass) {
+	  extend(Layer, superClass);
+	
+	  function Layer(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this.addListener = bind(this.addListener, this);
+	    this.once = bind(this.once, this);
+	    this._properties = {};
+	    this._style = {};
+	    this._subLayers = [];
+	    this._prefer2d = false;
+	    this._alwaysUseImageCache = false;
+	    this._createElement();
+	    if (options.hasOwnProperty("frame")) {
+	      options = _.extend(options, options.frame);
+	    }
+	    options = Defaults.getDefaults("Layer", options);
+	    Layer.__super__.constructor.call(this, options);
+	    this._context.addLayer(this);
+	    this._id = this._context.layerCounter;
+	    if (!options.superLayer) {
+	      if (!options.shadow) {
+	        this._insertElement();
+	      }
+	    } else {
+	      this.superLayer = options.superLayer;
+	    }
+	    if (options.hasOwnProperty("index")) {
+	      this.index = options.index;
+	    }
+	    this._context.emit("layer:create", this);
+	  }
+	
+	  Layer.define("context", {
+	    get: function() {
+	      return this._context;
+	    }
+	  });
+	
+	  Layer.define("custom", Layer.simpleProperty("custom", void 0));
+	
+	  Layer.define("width", layerProperty(Layer, "width", "width", 100, _.isNumber));
+	
+	  Layer.define("height", layerProperty(Layer, "height", "height", 100, _.isNumber));
+	
+	  Layer.define("visible", layerProperty(Layer, "visible", "display", true, _.isBoolean));
+	
+	  Layer.define("opacity", layerProperty(Layer, "opacity", "opacity", 1, _.isNumber));
+	
+	  Layer.define("index", layerProperty(Layer, "index", "zIndex", 0, _.isNumber, null, {
+	    importable: false,
+	    exportable: false
+	  }));
+	
+	  Layer.define("clip", layerProperty(Layer, "clip", "overflow", true, _.isBoolean));
+	
+	  Layer.define("scrollHorizontal", layerProperty(Layer, "scrollHorizontal", "overflowX", false, _.isBoolean, null, {}, function(layer, value) {
+	    if (value === true) {
+	      return layer.ignoreEvents = false;
+	    }
+	  }));
+	
+	  Layer.define("scrollVertical", layerProperty(Layer, "scrollVertical", "overflowY", false, _.isBoolean, null, {}, function(layer, value) {
+	    if (value === true) {
+	      return layer.ignoreEvents = false;
+	    }
+	  }));
+	
+	  Layer.define("scroll", {
+	    get: function() {
+	      return this.scrollHorizontal === true || this.scrollVertical === true;
+	    },
+	    set: function(value) {
+	      return this.scrollHorizontal = this.scrollVertical = value;
+	    }
+	  });
+	
+	  Layer.define("ignoreEvents", layerProperty(Layer, "ignoreEvents", "pointerEvents", true, _.isBoolean));
+	
+	  Layer.define("x", layerProperty(Layer, "x", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("y", layerProperty(Layer, "y", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("z", layerProperty(Layer, "z", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("scaleX", layerProperty(Layer, "scaleX", "webkitTransform", 1, _.isNumber));
+	
+	  Layer.define("scaleY", layerProperty(Layer, "scaleY", "webkitTransform", 1, _.isNumber));
+	
+	  Layer.define("scaleZ", layerProperty(Layer, "scaleZ", "webkitTransform", 1, _.isNumber));
+	
+	  Layer.define("scale", layerProperty(Layer, "scale", "webkitTransform", 1, _.isNumber));
+	
+	  Layer.define("skewX", layerProperty(Layer, "skewX", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("skewY", layerProperty(Layer, "skewY", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("skew", layerProperty(Layer, "skew", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("originX", layerProperty(Layer, "originX", "webkitTransformOrigin", 0.5, _.isNumber));
+	
+	  Layer.define("originY", layerProperty(Layer, "originY", "webkitTransformOrigin", 0.5, _.isNumber));
+	
+	  Layer.define("perspective", layerProperty(Layer, "perspective", "webkitPerspective", 0, _.isNumber));
+	
+	  Layer.define("rotationX", layerProperty(Layer, "rotationX", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("rotationY", layerProperty(Layer, "rotationY", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("rotationZ", layerProperty(Layer, "rotationZ", "webkitTransform", 0, _.isNumber));
+	
+	  Layer.define("rotation", {
+	    get: function() {
+	      return this.rotationZ;
+	    },
+	    set: function(value) {
+	      return this.rotationZ = value;
+	    }
+	  });
+	
+	  Layer.define("blur", layerProperty(Layer, "blur", "webkitFilter", 0, _.isNumber));
+	
+	  Layer.define("brightness", layerProperty(Layer, "brightness", "webkitFilter", 100, _.isNumber));
+	
+	  Layer.define("saturate", layerProperty(Layer, "saturate", "webkitFilter", 100, _.isNumber));
+	
+	  Layer.define("hueRotate", layerProperty(Layer, "hueRotate", "webkitFilter", 0, _.isNumber));
+	
+	  Layer.define("contrast", layerProperty(Layer, "contrast", "webkitFilter", 100, _.isNumber));
+	
+	  Layer.define("invert", layerProperty(Layer, "invert", "webkitFilter", 0, _.isNumber));
+	
+	  Layer.define("grayscale", layerProperty(Layer, "grayscale", "webkitFilter", 0, _.isNumber));
+	
+	  Layer.define("sepia", layerProperty(Layer, "sepia", "webkitFilter", 0, _.isNumber));
+	
+	  Layer.define("shadowX", layerProperty(Layer, "shadowX", "boxShadow", 0, _.isNumber));
+	
+	  Layer.define("shadowY", layerProperty(Layer, "shadowY", "boxShadow", 0, _.isNumber));
+	
+	  Layer.define("shadowBlur", layerProperty(Layer, "shadowBlur", "boxShadow", 0, _.isNumber));
+	
+	  Layer.define("shadowSpread", layerProperty(Layer, "shadowSpread", "boxShadow", 0, _.isNumber));
+	
+	  Layer.define("shadowColor", layerProperty(Layer, "shadowColor", "boxShadow", "", Color.validColorValue, Color.toColor));
+	
+	  Layer.define("backgroundColor", layerProperty(Layer, "backgroundColor", "backgroundColor", null, Color.validColorValue, Color.toColor));
+	
+	  Layer.define("color", layerProperty(Layer, "color", "color", null, Color.validColorValue, Color.toColor));
+	
+	  Layer.define("borderColor", layerProperty(Layer, "borderColor", "border", null, Color.validColorValue, Color.toColor));
+	
+	  Layer.define("borderWidth", layerProperty(Layer, "borderWidth", "border", 0, _.isNumber));
+	
+	  Layer.define("force2d", layerProperty(Layer, "force2d", "webkitTransform", false, _.isBoolean));
+	
+	  Layer.define("name", {
+	    "default": "",
+	    get: function() {
+	      return this._getPropertyValue("name");
+	    },
+	    set: function(value) {
+	      this._setPropertyValue("name", value);
+	      return this._element.setAttribute("name", value);
+	    }
+	  });
+	
+	  Layer.define("borderRadius", {
+	    importable: true,
+	    exportable: true,
+	    "default": 0,
+	    get: function() {
+	      return this._properties["borderRadius"];
+	    },
+	    set: function(value) {
+	      if (value && !_.isNumber(value)) {
+	        console.warn("Layer.borderRadius should be a numeric property, not type " + (typeof value));
+	      }
+	      this._properties["borderRadius"] = value;
+	      this._element.style["borderRadius"] = LayerStyle["borderRadius"](this);
+	      return this.emit("change:borderRadius", value);
+	    }
+	  });
+	
+	  Layer.define("cornerRadius", {
+	    importable: false,
+	    exportable: false,
+	    get: function() {
+	      return this.borderRadius;
+	    },
+	    set: function(value) {
+	      return this.borderRadius = value;
+	    }
+	  });
+	
+	  Layer.define("point", {
+	    get: function() {
+	      return _.pick(this, ["x", "y"]);
+	    },
+	    set: function(point) {
+	      var i, k, len, ref, results;
+	      if (!point) {
+	        return;
+	      }
+	      ref = ["x", "y"];
+	      results = [];
+	      for (i = 0, len = ref.length; i < len; i++) {
+	        k = ref[i];
+	        if (point.hasOwnProperty(k)) {
+	          results.push(this[k] = point[k]);
+	        } else {
+	          results.push(void 0);
+	        }
+	      }
+	      return results;
+	    }
+	  });
+	
+	  Layer.define("size", {
+	    get: function() {
+	      return _.pick(this, ["width", "height"]);
+	    },
+	    set: function(size) {
+	      var i, k, len, ref, results;
+	      if (!size) {
+	        return;
+	      }
+	      ref = ["width", "height"];
+	      results = [];
+	      for (i = 0, len = ref.length; i < len; i++) {
+	        k = ref[i];
+	        if (size.hasOwnProperty(k)) {
+	          results.push(this[k] = size[k]);
+	        } else {
+	          results.push(void 0);
+	        }
+	      }
+	      return results;
+	    }
+	  });
+	
+	  Layer.define("frame", {
+	    get: function() {
+	      return _.pick(this, ["x", "y", "width", "height"]);
+	    },
+	    set: function(frame) {
+	      var i, k, len, ref, results;
+	      if (!frame) {
+	        return;
+	      }
+	      ref = ["x", "y", "width", "height"];
+	      results = [];
+	      for (i = 0, len = ref.length; i < len; i++) {
+	        k = ref[i];
+	        if (frame.hasOwnProperty(k)) {
+	          results.push(this[k] = frame[k]);
+	        } else {
+	          results.push(void 0);
+	        }
+	      }
+	      return results;
+	    }
+	  });
+	
+	  Layer.define("minX", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return this.x;
+	    },
+	    set: function(value) {
+	      return this.x = value;
+	    }
+	  });
+	
+	  Layer.define("midX", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return Utils.frameGetMidX(this);
+	    },
+	    set: function(value) {
+	      return Utils.frameSetMidX(this, value);
+	    }
+	  });
+	
+	  Layer.define("maxX", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return Utils.frameGetMaxX(this);
+	    },
+	    set: function(value) {
+	      return Utils.frameSetMaxX(this, value);
+	    }
+	  });
+	
+	  Layer.define("minY", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return this.y;
+	    },
+	    set: function(value) {
+	      return this.y = value;
+	    }
+	  });
+	
+	  Layer.define("midY", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return Utils.frameGetMidY(this);
+	    },
+	    set: function(value) {
+	      return Utils.frameSetMidY(this, value);
+	    }
+	  });
+	
+	  Layer.define("maxY", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return Utils.frameGetMaxY(this);
+	    },
+	    set: function(value) {
+	      return Utils.frameSetMaxY(this, value);
+	    }
+	  });
+	
+	  Layer.prototype.convertPoint = function(point) {
+	    return Utils.convertPoint(point, null, this);
+	  };
+	
+	  Layer.define("canvasFrame", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      var context;
+	      return Utils.convertPoint(this.frame, this, null, context = true);
+	    },
+	    set: function(frame) {
+	      var context;
+	      if (!this.superLayer) {
+	        return this.frame = frame;
+	      } else {
+	        return this.frame = Utils.convertPoint(frame, null, this.superLayer, context = true);
+	      }
+	    }
+	  });
+	
+	  Layer.define("screenFrame", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      var context;
+	      return Utils.convertPoint(this.frame, this, null, context = false);
+	    },
+	    set: function(frame) {
+	      var context;
+	      if (!this.superLayer) {
+	        return this.frame = frame;
+	      } else {
+	        return this.frame = Utils.convertPoint(frame, null, this.superLayer, context = false);
+	      }
+	    }
+	  });
+	
+	  Layer.prototype.contentFrame = function() {
+	    if (!this.subLayers.length) {
+	      return {
+	        x: 0,
+	        y: 0,
+	        width: 0,
+	        height: 0
+	      };
+	    }
+	    return Utils.frameMerge(_.pluck(this.subLayers, "frame"));
+	  };
+	
+	  Layer.prototype.centerFrame = function() {
+	    var frame;
+	    if (this.superLayer) {
+	      frame = this.frame;
+	      Utils.frameSetMidX(frame, parseInt(this.superLayer.width / 2.0));
+	      Utils.frameSetMidY(frame, parseInt(this.superLayer.height / 2.0));
+	      return frame;
+	    } else {
+	      frame = this.frame;
+	      Utils.frameSetMidX(frame, parseInt(this._context.width / 2.0));
+	      Utils.frameSetMidY(frame, parseInt(this._context.height / 2.0));
+	      return frame;
+	    }
+	  };
+	
+	  Layer.prototype.center = function() {
+	    this.frame = this.centerFrame();
+	    return this;
+	  };
+	
+	  Layer.prototype.centerX = function(offset) {
+	    if (offset == null) {
+	      offset = 0;
+	    }
+	    this.x = this.centerFrame().x + offset;
+	    return this;
+	  };
+	
+	  Layer.prototype.centerY = function(offset) {
+	    if (offset == null) {
+	      offset = 0;
+	    }
+	    this.y = this.centerFrame().y + offset;
+	    return this;
+	  };
+	
+	  Layer.prototype.pixelAlign = function() {
+	    this.x = parseInt(this.x);
+	    return this.y = parseInt(this.y);
+	  };
+	
+	  Layer.prototype.canvasScaleX = function() {
+	    var context, i, len, ref, scale, superLayer;
+	    scale = this.scale * this.scaleX;
+	    ref = this.superLayers(context = true);
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      superLayer = ref[i];
+	      scale = scale * superLayer.scale * superLayer.scaleX;
+	    }
+	    return scale;
+	  };
+	
+	  Layer.prototype.canvasScaleY = function() {
+	    var context, i, len, ref, scale, superLayer;
+	    scale = this.scale * this.scaleY;
+	    ref = this.superLayers(context = true);
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      superLayer = ref[i];
+	      scale = scale * superLayer.scale * superLayer.scaleY;
+	    }
+	    return scale;
+	  };
+	
+	  Layer.prototype.screenScaleX = function() {
+	    var context, i, len, ref, scale, superLayer;
+	    scale = this.scale * this.scaleX;
+	    ref = this.superLayers(context = false);
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      superLayer = ref[i];
+	      scale = scale * superLayer.scale * superLayer.scaleX;
+	    }
+	    return scale;
+	  };
+	
+	  Layer.prototype.screenScaleY = function() {
+	    var context, i, len, ref, scale, superLayer;
+	    scale = this.scale * this.scaleY;
+	    ref = this.superLayers(context = false);
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      superLayer = ref[i];
+	      scale = scale * superLayer.scale * superLayer.scaleY;
+	    }
+	    return scale;
+	  };
+	
+	  Layer.prototype.screenScaledFrame = function() {
+	    var context, factorX, factorY, frame, i, layerScaledFrame, layers, len, superLayer;
+	    frame = {
+	      x: 0,
+	      y: 0,
+	      width: this.width * this.screenScaleX(),
+	      height: this.height * this.screenScaleY()
+	    };
+	    layers = this.superLayers(context = true);
+	    layers.push(this);
+	    layers.reverse();
+	    for (i = 0, len = layers.length; i < len; i++) {
+	      superLayer = layers[i];
+	      factorX = superLayer._superOrParentLayer() ? superLayer._superOrParentLayer().screenScaleX() : 1;
+	      factorY = superLayer._superOrParentLayer() ? superLayer._superOrParentLayer().screenScaleY() : 1;
+	      layerScaledFrame = superLayer.scaledFrame();
+	      frame.x += layerScaledFrame.x * factorX;
+	      frame.y += layerScaledFrame.y * factorY;
+	    }
+	    return frame;
+	  };
+	
+	  Layer.prototype.scaledFrame = function() {
+	    var frame, scaleX, scaleY;
+	    frame = this.frame;
+	    scaleX = this.scale * this.scaleX;
+	    scaleY = this.scale * this.scaleY;
+	    frame.width *= scaleX;
+	    frame.height *= scaleY;
+	    frame.x += (1 - scaleX) * this.originX * this.width;
+	    frame.y += (1 - scaleY) * this.originY * this.height;
+	    return frame;
+	  };
+	
+	  Layer.define("style", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return this._element.style;
+	    },
+	    set: function(value) {
+	      _.extend(this._element.style, value);
+	      return this.emit("change:style");
+	    }
+	  });
+	
+	  Layer.prototype.computedStyle = function() {
+	    var getComputedStyle;
+	    getComputedStyle = document.defaultView.getComputedStyle;
+	    if (getComputedStyle == null) {
+	      getComputedStyle = window.getComputedStyle;
+	    }
+	    return getComputedStyle(this._element);
+	  };
+	
+	  Layer.define("classList", {
+	    importable: true,
+	    exportable: false,
+	    get: function() {
+	      return this._element.classList;
+	    }
+	  });
+	
+	  Layer.prototype._createElement = function() {
+	    if (this._element != null) {
+	      return;
+	    }
+	    this._element = document.createElement("div");
+	    return this._element.classList.add("framerLayer");
+	  };
+	
+	  Layer.prototype._insertElement = function() {
+	    this.bringToFront();
+	    return this._context.element.appendChild(this._element);
+	  };
+	
+	  Layer.define("html", {
+	    get: function() {
+	      var ref;
+	      return ((ref = this._elementHTML) != null ? ref.innerHTML : void 0) || "";
+	    },
+	    set: function(value) {
+	      if (!this._elementHTML) {
+	        this._elementHTML = document.createElement("div");
+	        this._element.appendChild(this._elementHTML);
+	      }
+	      this._elementHTML.innerHTML = value;
+	      return this.emit("change:html");
+	    }
+	  });
+	
+	  Layer.prototype.querySelector = function(query) {
+	    return this._element.querySelector(query);
+	  };
+	
+	  Layer.prototype.querySelectorAll = function(query) {
+	    return this._element.querySelectorAll(query);
+	  };
+	
+	  Layer.prototype.destroy = function() {
+	    var ref;
+	    if (this.superLayer) {
+	      this.superLayer._subLayers = _.without(this.superLayer._subLayers, this);
+	    }
+	    if ((ref = this._element.parentNode) != null) {
+	      ref.removeChild(this._element);
+	    }
+	    this.removeAllListeners();
+	    this._context.removeLayer(this);
+	    return this._context.emit("layer:destroy", this);
+	  };
+	
+	  Layer.prototype.copy = function() {
+	    var copiedSublayer, i, layer, len, ref, subLayer;
+	    layer = this.copySingle();
+	    ref = this.subLayers;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      subLayer = ref[i];
+	      copiedSublayer = subLayer.copy();
+	      copiedSublayer.superLayer = layer;
+	    }
+	    return layer;
+	  };
+	
+	  Layer.prototype.copySingle = function() {
+	    var copy;
+	    copy = new this.constructor(this.props);
+	    return copy;
+	  };
+	
+	  Layer.define("image", {
+	    "default": "",
+	    get: function() {
+	      return this._getPropertyValue("image");
+	    },
+	    set: function(value) {
+	      var currentValue, imageUrl, loader, ref, ref1;
+	      if (!(_.isString(value) || value === null)) {
+	        layerValueTypeError("image", value);
+	      }
+	      currentValue = this._getPropertyValue("image");
+	      if (currentValue === value) {
+	        return this.emit("load");
+	      }
+	      this.backgroundColor = null;
+	      this._setPropertyValue("image", value);
+	      if (value === null || value === "") {
+	        this.style["background-image"] = null;
+	        return;
+	      }
+	      imageUrl = value;
+	      if (this._alwaysUseImageCache === false && Utils.isLocalAssetUrl(imageUrl)) {
+	        imageUrl += "?nocache=" + NoCacheDateKey;
+	      }
+	      if ((ref = this._eventListeners) != null ? ref.hasOwnProperty("load" || ((ref1 = this._eventListeners) != null ? ref1.hasOwnProperty("error") : void 0)) : void 0) {
+	        loader = new Image();
+	        loader.name = imageUrl;
+	        loader.src = imageUrl;
+	        loader.onload = (function(_this) {
+	          return function() {
+	            _this.style["background-image"] = "url('" + imageUrl + "')";
+	            return _this.emit("load", loader);
+	          };
+	        })(this);
+	        return loader.onerror = (function(_this) {
+	          return function() {
+	            return _this.emit("error", loader);
+	          };
+	        })(this);
+	      } else {
+	        return this.style["background-image"] = "url('" + imageUrl + "')";
+	      }
+	    }
+	  });
+	
+	  Layer.define("superLayer", {
+	    enumerable: false,
+	    exportable: false,
+	    importable: true,
+	    get: function() {
+	      return this._superLayer || null;
+	    },
+	    set: function(layer) {
+	      if (layer === this._superLayer) {
+	        return;
+	      }
+	      if (!layer instanceof Layer) {
+	        throw Error("Layer.superLayer needs to be a Layer object");
+	      }
+	      Utils.domCompleteCancel(this.__insertElement);
+	      if (this._superLayer) {
+	        this._superLayer._subLayers = _.without(this._superLayer._subLayers, this);
+	        this._superLayer._element.removeChild(this._element);
+	        this._superLayer.emit("change:subLayers", {
+	          added: [],
+	          removed: [this]
+	        });
+	      }
+	      if (layer) {
+	        layer._element.appendChild(this._element);
+	        layer._subLayers.push(this);
+	        layer.emit("change:subLayers", {
+	          added: [this],
+	          removed: []
+	        });
+	      } else {
+	        this._insertElement();
+	      }
+	      this._superLayer = layer;
+	      this.bringToFront();
+	      return this.emit("change:superLayer");
+	    }
+	  });
+	
+	  Layer.define("subLayers", {
+	    enumerable: false,
+	    exportable: false,
+	    importable: false,
+	    get: function() {
+	      return _.clone(this._subLayers);
+	    }
+	  });
+	
+	  Layer.define("siblingLayers", {
+	    enumerable: false,
+	    exportable: false,
+	    importable: false,
+	    get: function() {
+	      if (this.superLayer === null) {
+	        return _.filter(this._context.getLayers(), (function(_this) {
+	          return function(layer) {
+	            return layer !== _this && layer.superLayer === null;
+	          };
+	        })(this));
+	      }
+	      return _.without(this.superLayer.subLayers, this);
+	    }
+	  });
+	
+	  Layer.prototype.addSubLayer = function(layer) {
+	    return layer.superLayer = this;
+	  };
+	
+	  Layer.prototype.removeSubLayer = function(layer) {
+	    if (indexOf.call(this.subLayers, layer) < 0) {
+	      return;
+	    }
+	    return layer.superLayer = null;
+	  };
+	
+	  Layer.prototype.subLayersByName = function(name) {
+	    return _.filter(this.subLayers, function(layer) {
+	      return layer.name === name;
+	    });
+	  };
+	
+	  Layer.prototype.siblingLayersByName = function(name) {
+	    return _.filter(this.siblingLayers, function(layer) {
+	      return layer.name === name;
+	    });
+	  };
+	
+	  Layer.prototype.superLayers = function(context) {
+	    var currentLayer, superLayers;
+	    if (context == null) {
+	      context = false;
+	    }
+	    superLayers = [];
+	    currentLayer = this;
+	    if (context === false) {
+	      while (currentLayer.superLayer) {
+	        superLayers.push(currentLayer.superLayer);
+	        currentLayer = currentLayer.superLayer;
+	      }
+	    } else {
+	      while (currentLayer._superOrParentLayer()) {
+	        superLayers.push(currentLayer._superOrParentLayer());
+	        currentLayer = currentLayer._superOrParentLayer();
+	      }
+	    }
+	    return superLayers;
+	  };
+	
+	  Layer.prototype._superOrParentLayer = function() {
+	    if (this.superLayer) {
+	      return this.superLayer;
+	    }
+	    if (this._context._parent) {
+	      return this._context._parent;
+	    }
+	  };
+	
+	  Layer.prototype.subLayersAbove = function(point, originX, originY) {
+	    if (originX == null) {
+	      originX = 0;
+	    }
+	    if (originY == null) {
+	      originY = 0;
+	    }
+	    return _.filter(this.subLayers, function(layer) {
+	      return Utils.framePointForOrigin(layer.frame, originX, originY).y < point.y;
+	    });
+	  };
+	
+	  Layer.prototype.subLayersBelow = function(point, originX, originY) {
+	    if (originX == null) {
+	      originX = 0;
+	    }
+	    if (originY == null) {
+	      originY = 0;
+	    }
+	    return _.filter(this.subLayers, function(layer) {
+	      return Utils.framePointForOrigin(layer.frame, originX, originY).y > point.y;
+	    });
+	  };
+	
+	  Layer.prototype.subLayersLeft = function(point, originX, originY) {
+	    if (originX == null) {
+	      originX = 0;
+	    }
+	    if (originY == null) {
+	      originY = 0;
+	    }
+	    return _.filter(this.subLayers, function(layer) {
+	      return Utils.framePointForOrigin(layer.frame, originX, originY).x < point.x;
+	    });
+	  };
+	
+	  Layer.prototype.subLayersRight = function(point, originX, originY) {
+	    if (originX == null) {
+	      originX = 0;
+	    }
+	    if (originY == null) {
+	      originY = 0;
+	    }
+	    return _.filter(this.subLayers, function(layer) {
+	      return Utils.framePointForOrigin(layer.frame, originX, originY).x > point.x;
+	    });
+	  };
+	
+	  Layer.prototype.animate = function(options) {
+	    var animation, start;
+	    start = options.start;
+	    if (start == null) {
+	      start = true;
+	    }
+	    delete options.start;
+	    options.layer = this;
+	    animation = new Animation(options);
+	    if (start) {
+	      animation.start();
+	    }
+	    return animation;
+	  };
+	
+	  Layer.prototype.animations = function() {
+	    return _.filter(this._context.animations, (function(_this) {
+	      return function(animation) {
+	        return animation.options.layer === _this;
+	      };
+	    })(this));
+	  };
+	
+	  Layer.prototype.animatingProperties = function() {
+	    var animation, i, j, len, len1, properties, propertyName, ref, ref1;
+	    properties = {};
+	    ref = this.animations();
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      animation = ref[i];
+	      ref1 = animation.animatingProperties();
+	      for (j = 0, len1 = ref1.length; j < len1; j++) {
+	        propertyName = ref1[j];
+	        properties[propertyName] = animation;
+	      }
+	    }
+	    return properties;
+	  };
+	
+	  Layer.define("isAnimating", {
+	    enumerable: false,
+	    exportable: false,
+	    get: function() {
+	      return this.animations().length !== 0;
+	    }
+	  });
+	
+	  Layer.prototype.animateStop = function() {
+	    var ref;
+	    _.invoke(this.animations(), "stop");
+	    return (ref = this._draggable) != null ? ref.animateStop() : void 0;
+	  };
+	
+	  Layer.prototype.bringToFront = function() {
+	    return this.index = _.max(_.union([0], this.siblingLayers.map(function(layer) {
+	      return layer.index;
+	    }))) + 1;
+	  };
+	
+	  Layer.prototype.sendToBack = function() {
+	    return this.index = _.min(_.union([0], this.siblingLayers.map(function(layer) {
+	      return layer.index;
+	    }))) - 1;
+	  };
+	
+	  Layer.prototype.placeBefore = function(layer) {
+	    var i, l, len, ref;
+	    if (indexOf.call(this.siblingLayers, layer) < 0) {
+	      return;
+	    }
+	    ref = this.siblingLayers;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      l = ref[i];
+	      if (l.index <= layer.index) {
+	        l.index -= 1;
+	      }
+	    }
+	    return this.index = layer.index + 1;
+	  };
+	
+	  Layer.prototype.placeBehind = function(layer) {
+	    var i, l, len, ref;
+	    if (indexOf.call(this.siblingLayers, layer) < 0) {
+	      return;
+	    }
+	    ref = this.siblingLayers;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      l = ref[i];
+	      if (l.index >= layer.index) {
+	        l.index += 1;
+	      }
+	    }
+	    return this.index = layer.index - 1;
+	  };
+	
+	  Layer.define("states", {
+	    enumerable: false,
+	    exportable: false,
+	    importable: false,
+	    get: function() {
+	      return this._states != null ? this._states : this._states = new LayerStates(this);
+	    }
+	  });
+	
+	  Layer.define("draggable", {
+	    importable: false,
+	    exportable: false,
+	    get: function() {
+	      return this._draggable != null ? this._draggable : this._draggable = new LayerDraggable(this);
+	    },
+	    set: function(value) {
+	      if (_.isBoolean(value)) {
+	        return this.draggable.enabled = value;
+	      }
+	    }
+	  });
+	
+	  Layer.define("scrollFrame", {
+	    importable: false,
+	    get: function() {
+	      var frame;
+	      return frame = {
+	        x: this.scrollX,
+	        y: this.scrollY,
+	        width: this.width,
+	        height: this.height
+	      };
+	    },
+	    set: function(frame) {
+	      this.scrollX = frame.x;
+	      return this.scrollY = frame.y;
+	    }
+	  });
+	
+	  Layer.define("scrollX", {
+	    get: function() {
+	      return this._element.scrollLeft;
+	    },
+	    set: function(value) {
+	      if (!_.isNumber(value)) {
+	        layerValueTypeError("scrollX", value);
+	      }
+	      return this._element.scrollLeft = value;
+	    }
+	  });
+	
+	  Layer.define("scrollY", {
+	    get: function() {
+	      return this._element.scrollTop;
+	    },
+	    set: function(value) {
+	      if (!_.isNumber(value)) {
+	        layerValueTypeError("scrollY", value);
+	      }
+	      return this._element.scrollTop = value;
+	    }
+	  });
+	
+	  Layer.define("_domEventManager", {
+	    get: function() {
+	      return this._context.domEventManager.wrap(this._element);
+	    }
+	  });
+	
+	  Layer.prototype.emit = function() {
+	    var args;
+	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	    return Layer.__super__.emit.apply(this, slice.call(args).concat([this]));
+	  };
+	
+	  Layer.prototype.once = function(eventName, listener) {
+	    Layer.__super__.once.call(this, eventName, listener);
+	    return this._addListener(eventName, listener);
+	  };
+	
+	  Layer.prototype.addListener = function(eventName, listener) {
+	    Layer.__super__.addListener.call(this, eventName, listener);
+	    return this._addListener(eventName, listener);
+	  };
+	
+	  Layer.prototype.removeListener = function(eventName, listener) {
+	    Layer.__super__.removeListener.call(this, eventName, listener);
+	    return this._removeListener(eventName, listener);
+	  };
+	
+	  Layer.prototype._addListener = function(eventName, listener) {
+	    if (!this._domEventManager.listeners(eventName).length) {
+	      this._domEventManager.addEventListener(eventName, (function(_this) {
+	        return function(event) {
+	          return _this.emit(eventName, event);
+	        };
+	      })(this));
+	    }
+	    if (!_.startsWith(eventName, "change:")) {
+	      return this.ignoreEvents = false;
+	    }
+	  };
+	
+	  Layer.prototype._removeListener = function(eventName, listener) {
+	    if (!this.listeners(eventName).length) {
+	      return this._domEventManager.removeAllListeners(eventName);
+	    }
+	  };
+	
+	  Layer.prototype.on = Layer.prototype.addListener;
+	
+	  Layer.prototype.off = Layer.prototype.removeListener;
+	
+	  Layer.prototype.onClick = function(cb) {
+	    return this.on(Events.Click, cb);
+	  };
+	
+	  Layer.prototype.onDoubleClick = function(cb) {
+	    return this.on(Events.DoubleClick, cb);
+	  };
+	
+	  Layer.prototype.onScroll = function(cb) {
+	    return this.on(Events.Scroll, cb);
+	  };
+	
+	  Layer.prototype.onTouchStart = function(cb) {
+	    return this.on(Events.TouchStart, cb);
+	  };
+	
+	  Layer.prototype.onTouchEnd = function(cb) {
+	    return this.on(Events.TouchEnd, cb);
+	  };
+	
+	  Layer.prototype.onTouchMove = function(cb) {
+	    return this.on(Events.TouchMove, cb);
+	  };
+	
+	  Layer.prototype.onMouseUp = function(cb) {
+	    return this.on(Events.MouseUp, cb);
+	  };
+	
+	  Layer.prototype.onMouseDown = function(cb) {
+	    return this.on(Events.MouseDown, cb);
+	  };
+	
+	  Layer.prototype.onMouseOver = function(cb) {
+	    return this.on(Events.MouseOver, cb);
+	  };
+	
+	  Layer.prototype.onMouseOut = function(cb) {
+	    return this.on(Events.MouseOut, cb);
+	  };
+	
+	  Layer.prototype.onMouseMove = function(cb) {
+	    return this.on(Events.MouseMove, cb);
+	  };
+	
+	  Layer.prototype.onMouseWheel = function(cb) {
+	    return this.on(Events.MouseWheel, cb);
+	  };
+	
+	  Layer.prototype.onAnimationStart = function(cb) {
+	    return this.on(Events.AnimationStart, cb);
+	  };
+	
+	  Layer.prototype.onAnimationStop = function(cb) {
+	    return this.on(Events.AnimationStop, cb);
+	  };
+	
+	  Layer.prototype.onAnimationEnd = function(cb) {
+	    return this.on(Events.AnimationEnd, cb);
+	  };
+	
+	  Layer.prototype.onAnimationDidStart = function(cb) {
+	    return this.on(Events.AnimationDidStart, cb);
+	  };
+	
+	  Layer.prototype.onAnimationDidStop = function(cb) {
+	    return this.on(Events.AnimationDidStop, cb);
+	  };
+	
+	  Layer.prototype.onAnimationDidEnd = function(cb) {
+	    return this.on(Events.AnimationDidEnd, cb);
+	  };
+	
+	  Layer.prototype.onImageLoaded = function(cb) {
+	    return this.on(Events.ImageLoaded, cb);
+	  };
+	
+	  Layer.prototype.onImageLoadError = function(cb) {
+	    return this.on(Events.ImageLoadError, cb);
+	  };
+	
+	  Layer.prototype.onMove = function(cb) {
+	    return this.on(Events.Move, cb);
+	  };
+	
+	  Layer.prototype.onDragStart = function(cb) {
+	    return this.on(Events.DragStart, cb);
+	  };
+	
+	  Layer.prototype.onDragWillMove = function(cb) {
+	    return this.on(Events.DragWillMove, cb);
+	  };
+	
+	  Layer.prototype.onDragMove = function(cb) {
+	    return this.on(Events.DragMove, cb);
+	  };
+	
+	  Layer.prototype.onDragDidMove = function(cb) {
+	    return this.on(Events.DragDidMove, cb);
+	  };
+	
+	  Layer.prototype.onDrag = function(cb) {
+	    return this.on(Events.Drag, cb);
+	  };
+	
+	  Layer.prototype.onDragEnd = function(cb) {
+	    return this.on(Events.DragEnd, cb);
+	  };
+	
+	  Layer.prototype.onDragAnimationDidStart = function(cb) {
+	    return this.on(Events.DragAnimationDidStart, cb);
+	  };
+	
+	  Layer.prototype.onDragAnimationDidEnd = function(cb) {
+	    return this.on(Events.DragAnimationDidEnd, cb);
+	  };
+	
+	  Layer.prototype.onDirectionLockDidStart = function(cb) {
+	    return this.on(Events.DirectionLockDidStart, cb);
+	  };
+	
+	  Layer.prototype.onPan = function(cb) {
+	    return this.on(Events.Pan, cb);
+	  };
+	
+	  Layer.prototype.onPanStart = function(cb) {
+	    return this.on(Events.PanStart, cb);
+	  };
+	
+	  Layer.prototype.onPanMove = function(cb) {
+	    return this.on(Events.PanMove, cb);
+	  };
+	
+	  Layer.prototype.onPanEnd = function(cb) {
+	    return this.on(Events.PanEnd, cb);
+	  };
+	
+	  Layer.prototype.onPanCancel = function(cb) {
+	    return this.on(Events.PanCancel, cb);
+	  };
+	
+	  Layer.prototype.onPanLeft = function(cb) {
+	    return this.on(Events.PanLeft, cb);
+	  };
+	
+	  Layer.prototype.onPanRight = function(cb) {
+	    return this.on(Events.PanRight, cb);
+	  };
+	
+	  Layer.prototype.onPanUp = function(cb) {
+	    return this.on(Events.PanUp, cb);
+	  };
+	
+	  Layer.prototype.onPanDown = function(cb) {
+	    return this.on(Events.PanDown, cb);
+	  };
+	
+	  Layer.prototype.onPinch = function(cb) {
+	    return this.on(Events.Pinch, cb);
+	  };
+	
+	  Layer.prototype.onPinchStart = function(cb) {
+	    return this.on(Events.PinchStart, cb);
+	  };
+	
+	  Layer.prototype.onPinchMove = function(cb) {
+	    return this.on(Events.PinchMove, cb);
+	  };
+	
+	  Layer.prototype.onPinchEnd = function(cb) {
+	    return this.on(Events.PinchEnd, cb);
+	  };
+	
+	  Layer.prototype.onPinchCancel = function(cb) {
+	    return this.on(Events.PinchCancel, cb);
+	  };
+	
+	  Layer.prototype.onPinchIn = function(cb) {
+	    return this.on(Events.PinchIn, cb);
+	  };
+	
+	  Layer.prototype.onPinchOut = function(cb) {
+	    return this.on(Events.PinchOut, cb);
+	  };
+	
+	  Layer.prototype.onPress = function(cb) {
+	    return this.on(Events.Press, cb);
+	  };
+	
+	  Layer.prototype.onPressUp = function(cb) {
+	    return this.on(Events.PressUp, cb);
+	  };
+	
+	  Layer.prototype.onRotate = function(cb) {
+	    return this.on(Events.Rotate, cb);
+	  };
+	
+	  Layer.prototype.onRotateStart = function(cb) {
+	    return this.on(Events.RotateStart, cb);
+	  };
+	
+	  Layer.prototype.onRotateMove = function(cb) {
+	    return this.on(Events.RotateMove, cb);
+	  };
+	
+	  Layer.prototype.onRotateEnd = function(cb) {
+	    return this.on(Events.RotateEnd, cb);
+	  };
+	
+	  Layer.prototype.onRotateCancel = function(cb) {
+	    return this.on(Events.RotateCancel, cb);
+	  };
+	
+	  Layer.prototype.onSwipe = function(cb) {
+	    return this.on(Events.Swipe, cb);
+	  };
+	
+	  Layer.prototype.onSwipeLeft = function(cb) {
+	    return this.on(Events.SwipeLeft, cb);
+	  };
+	
+	  Layer.prototype.onSwipeRight = function(cb) {
+	    return this.on(Events.SwipeRight, cb);
+	  };
+	
+	  Layer.prototype.onSwipeUp = function(cb) {
+	    return this.on(Events.SwipeUp, cb);
+	  };
+	
+	  Layer.prototype.onSwipeDown = function(cb) {
+	    return this.on(Events.SwipeDown, cb);
+	  };
+	
+	  Layer.prototype.onTap = function(cb) {
+	    return this.on(Events.Tap, cb);
+	  };
+	
+	  Layer.prototype.onSingleTap = function(cb) {
+	    return this.on(Events.SingleTap, cb);
+	  };
+	
+	  Layer.prototype.onDoubleTap = function(cb) {
+	    return this.on(Events.DoubleTap, cb);
+	  };
+	
+	  Layer.prototype.toInspect = function() {
+	    var round;
+	    round = function(value) {
+	      if (parseInt(value) === value) {
+	        return parseInt(value);
+	      }
+	      return Utils.round(value, 1);
+	    };
+	    if (this.name) {
+	      return "<" + this.constructor.name + " id:" + this.id + " name:" + this.name + " (" + (round(this.x)) + "," + (round(this.y)) + ") " + (round(this.width)) + "x" + (round(this.height)) + ">";
+	    }
+	    return "<" + this.constructor.name + " id:" + this.id + " (" + (round(this.x)) + "," + (round(this.y)) + ") " + (round(this.width)) + "x" + (round(this.height)) + ">";
+	  };
+	
+	  return Layer;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var FramerCSS, Utils;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
 	FramerCSS = "body {\n	margin: 0;\n}\n\n.framerContext {	\n	position: absolute;\n	left: 0;\n	top: 0;\n	right: 0;\n	bottom: 0;\n	pointer-events: none;\n	overflow: hidden;\n}\n\n.framerLayer {\n	display: block;\n	position: absolute;\n	left: 0;\n	top: 0;\n	background-repeat: no-repeat;\n	background-size: cover;\n	-webkit-overflow-scrolling: touch;\n	-webkit-box-sizing: border-box;\n	-webkit-user-select: none;\n}\n\n.framerLayer input,\n.framerLayer textarea,\n.framerLayer select,\n.framerLayer option,\n.framerLayer div[contenteditable=true]\n{\n	pointer-events: auto;\n	-webkit-user-select: auto;\n}\n\n.framerDebug {\n	padding: 6px;\n	color: #fff;\n	font: 10px/1em Monaco;\n}\n";
 	
@@ -14232,34 +16779,3336 @@
 
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventManagerElement, EventManagerIdCounter, GestureManagerElement, Utils,
+	var Events, Utils, _, _gestures,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	Events = {};
+	
+	Events.TouchStart = "touchstart";
+	
+	Events.TouchEnd = "touchend";
+	
+	Events.TouchMove = "touchmove";
+	
+	Events.MouseUp = "mouseup";
+	
+	Events.MouseDown = "mousedown";
+	
+	Events.MouseOver = "mouseover";
+	
+	Events.MouseOut = "mouseout";
+	
+	Events.MouseMove = "mousemove";
+	
+	Events.MouseWheel = "mousewheel";
+	
+	Events.DoubleClick = "dblclick";
+	
+	Events.MouseDoubleClick = "dblclick";
+	
+	if (!Utils.isTouch()) {
+	  Events.TouchStart = Events.MouseDown;
+	  Events.TouchEnd = Events.MouseUp;
+	  Events.TouchMove = Events.MouseMove;
+	}
+	
+	Events.Click = Events.TouchEnd;
+	
+	Events.AnimationStart = "start";
+	
+	Events.AnimationStop = "stop";
+	
+	Events.AnimationEnd = "end";
+	
+	Events.AnimationDidStart = "start";
+	
+	Events.AnimationDidStop = "stop";
+	
+	Events.AnimationDidEnd = "end";
+	
+	_gestures = [];
+	
+	_gestures.push(Events.Pan = "pan");
+	
+	_gestures.push(Events.PanStart = "panstart");
+	
+	_gestures.push(Events.PanMove = "panmove");
+	
+	_gestures.push(Events.PanEnd = "panend");
+	
+	_gestures.push(Events.PanCancel = "pancancel");
+	
+	_gestures.push(Events.PanLeft = "panleft");
+	
+	_gestures.push(Events.PanRight = "panright");
+	
+	_gestures.push(Events.PanUp = "panup");
+	
+	_gestures.push(Events.PanDown = "pandown");
+	
+	_gestures.push(Events.Pinch = "pinch");
+	
+	_gestures.push(Events.PinchStart = "pinchstart");
+	
+	_gestures.push(Events.PinchMove = "pinchmove");
+	
+	_gestures.push(Events.PinchEnd = "pinchend");
+	
+	_gestures.push(Events.PinchCancel = "pinchcancel");
+	
+	_gestures.push(Events.PinchIn = "pinchin");
+	
+	_gestures.push(Events.PinchOut = "pinchout");
+	
+	_gestures.push(Events.Press = "press");
+	
+	_gestures.push(Events.PressUp = "pressup");
+	
+	_gestures.push(Events.Rotate = "rotate");
+	
+	_gestures.push(Events.RotateStart = "rotatestart");
+	
+	_gestures.push(Events.RotateMove = "rotatemove");
+	
+	_gestures.push(Events.RotateEnd = "rotateend");
+	
+	_gestures.push(Events.RotateCancel = "rotatecancel");
+	
+	_gestures.push(Events.Swipe = "swipe");
+	
+	_gestures.push(Events.SwipeLeft = "swipeleft");
+	
+	_gestures.push(Events.SwipeRight = "swiperight");
+	
+	_gestures.push(Events.SwipeUp = "swipeup");
+	
+	_gestures.push(Events.SwipeDown = "swipedown");
+	
+	_gestures.push(Events.Tap = "tap");
+	
+	_gestures.push(Events.SingleTap = "singletap");
+	
+	_gestures.push(Events.DoubleTap = "doubletap");
+	
+	Events.Scroll = "scroll";
+	
+	Events.ImageLoaded = "load";
+	
+	Events.ImageLoadError = "error";
+	
+	Events.isGestureEvent = function(eventName) {
+	  return indexOf.call(_gestures, eventName) >= 0;
+	};
+	
+	Events.touchEvent = function(event) {
+	  var ref, ref1, touchEvent;
+	  touchEvent = (ref = event.touches) != null ? ref[0] : void 0;
+	  if (touchEvent == null) {
+	    touchEvent = (ref1 = event.changedTouches) != null ? ref1[0] : void 0;
+	  }
+	  if (touchEvent == null) {
+	    touchEvent = event;
+	  }
+	  return touchEvent;
+	};
+	
+	Events.wrap = function(element) {
+	  return Framer.CurrentContext.domEventManager.wrap(element);
+	};
+	
+	exports.Events = Events;
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Originals, Utils, _;
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	Originals = {
+	  Layer: {
+	    backgroundColor: "rgba(0, 124, 255, 0.5)",
+	    color: "white",
+	    shadowColor: "black",
+	    width: 100,
+	    height: 100
+	  },
+	  Animation: {
+	    curve: "ease",
+	    time: 1
+	  },
+	  DeviceComponent: {
+	    fullScreen: false,
+	    padding: 50,
+	    deviceType: "iphone-5s-spacegray",
+	    deviceZoom: "fit",
+	    contentZoom: 1,
+	    orientation: "portrait",
+	    keyboard: false,
+	    animationOptions: {
+	      curve: "spring(400,40,0)"
+	    }
+	  },
+	  LayerDraggable: {
+	    momentum: true,
+	    momentumOptions: {
+	      friction: 2.1,
+	      tolerance: 1
+	    },
+	    bounce: true,
+	    bounceOptions: {
+	      friction: 40,
+	      tension: 200,
+	      tolerance: 1
+	    },
+	    directionLock: false,
+	    directionLockThreshold: {
+	      x: 10,
+	      y: 10
+	    },
+	    overdrag: true,
+	    overdragScale: 0.5,
+	    pixelAlign: true,
+	    velocityTimeout: 100,
+	    velocityScale: 890
+	  },
+	  FrictionSimulator: {
+	    friction: 2,
+	    tolerance: 1 / 10
+	  },
+	  SpringSimulator: {
+	    tension: 500,
+	    friction: 10,
+	    tolerance: 1 / 10000
+	  },
+	  MomentumBounceSimulator: {
+	    momentum: {
+	      friction: 2,
+	      tolerance: 10
+	    },
+	    bounce: {
+	      tension: 500,
+	      friction: 10,
+	      tolerance: 1
+	    }
+	  }
+	};
+	
+	exports.Defaults = {
+	  getDefaults: function(className, options) {
+	    var defaults, k, ref, v;
+	    if (!Originals.hasOwnProperty(className)) {
+	      return {};
+	    }
+	    if (!Framer.Defaults.hasOwnProperty(className)) {
+	      return {};
+	    }
+	    defaults = _.clone(Originals[className]);
+	    ref = Framer.Defaults[className];
+	    for (k in ref) {
+	      v = ref[k];
+	      defaults[k] = _.isFunction(v) ? v() : v;
+	    }
+	    for (k in defaults) {
+	      v = defaults[k];
+	      if (!options.hasOwnProperty(k)) {
+	        options[k] = v;
+	      }
+	    }
+	    return options;
+	  },
+	  setup: function() {
+	    var className, classValues, k, ref, v;
+	    if (window.FramerDefaults) {
+	      ref = window.FramerDefaults;
+	      for (className in ref) {
+	        classValues = ref[className];
+	        for (k in classValues) {
+	          v = classValues[k];
+	          Originals[className][k] = v;
+	        }
+	      }
+	    }
+	    return exports.Defaults.reset();
+	  },
+	  reset: function() {
+	    return window.Framer.Defaults = _.clone(Originals);
+	  }
+	};
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AnimatorClassBezierPresets, AnimatorClasses, BezierCurveAnimator, Config, Defaults, EventEmitter, LinearAnimator, SpringDHOAnimator, SpringRK4Animator, Utils, _, evaluateRelativeProperty, isRelativeProperty, numberRE, relativePropertyRE,
+	  slice = [].slice,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	Config = __webpack_require__(13).Config;
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	EventEmitter = __webpack_require__(7).EventEmitter;
+	
+	LinearAnimator = __webpack_require__(17).LinearAnimator;
+	
+	BezierCurveAnimator = __webpack_require__(19).BezierCurveAnimator;
+	
+	SpringRK4Animator = __webpack_require__(20).SpringRK4Animator;
+	
+	SpringDHOAnimator = __webpack_require__(22).SpringDHOAnimator;
+	
+	AnimatorClasses = {
+	  "linear": LinearAnimator,
+	  "bezier-curve": BezierCurveAnimator,
+	  "spring-rk4": SpringRK4Animator,
+	  "spring-dho": SpringDHOAnimator
+	};
+	
+	AnimatorClasses["spring"] = AnimatorClasses["spring-rk4"];
+	
+	AnimatorClasses["cubic-bezier"] = AnimatorClasses["bezier-curve"];
+	
+	AnimatorClassBezierPresets = ["ease", "ease-in", "ease-out", "ease-in-out"];
+	
+	numberRE = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/;
+	
+	relativePropertyRE = new RegExp('^(?:([+-])=|)(' + numberRE.source + ')([a-z%]*)$', 'i');
+	
+	isRelativeProperty = function(v) {
+	  return _.isString(v) && relativePropertyRE.test(v);
+	};
+	
+	evaluateRelativeProperty = function(target, k, v) {
+	  var match, number, ref, rest, sign, unit;
+	  ref = relativePropertyRE.exec(v), match = ref[0], sign = ref[1], number = ref[2], unit = ref[3], rest = 5 <= ref.length ? slice.call(ref, 4) : [];
+	  if (sign) {
+	    return target[k] + (sign + 1) * number;
+	  }
+	  return +number;
+	};
+	
+	exports.Animation = (function(superClass) {
+	  extend(Animation, superClass);
+	
+	  function Animation(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this._updateValue = bind(this._updateValue, this);
+	    this._update = bind(this._update, this);
+	    this._start = bind(this._start, this);
+	    this.start = bind(this.start, this);
+	    options = Defaults.getDefaults("Animation", options);
+	    Animation.__super__.constructor.call(this, options);
+	    this.options = _.clone(_.defaults(options, {
+	      layer: null,
+	      properties: {},
+	      curve: "linear",
+	      curveOptions: {},
+	      time: 1,
+	      repeat: 0,
+	      delay: 0,
+	      debug: false,
+	      colorModel: "husl"
+	    }));
+	    if (options.origin) {
+	      console.warn("Animation.origin: please use layer.originX and layer.originY");
+	    }
+	    this.options.properties = Animation.filterAnimatableProperties(this.options.properties);
+	    this._parseAnimatorOptions();
+	    this._originalState = this._currentState();
+	    this._repeatCounter = this.options.repeat;
+	  }
+	
+	  Animation.prototype.start = function() {
+	    var AnimatorClass, animation, k, property, ref, ref1, ref2, v;
+	    if (this.options.layer === null) {
+	      console.error("Animation: missing layer");
+	    }
+	    AnimatorClass = this._animatorClass();
+	    if (this.options.debug) {
+	      console.log("Animation.start " + AnimatorClass.name, this.options.curveOptions);
+	    }
+	    this._animator = new AnimatorClass(this.options.curveOptions);
+	    this._target = this.options.layer;
+	    this._stateA = this._currentState();
+	    this._stateB = {};
+	    ref = this.options.properties;
+	    for (k in ref) {
+	      v = ref[k];
+	      if (_.isFunction(v)) {
+	        v = v();
+	      } else if (isRelativeProperty(v)) {
+	        v = evaluateRelativeProperty(this._target, k, v);
+	      }
+	      if (this._stateA[k] !== v) {
+	        this._stateB[k] = v;
+	      }
+	    }
+	    if (_.keys(this._stateA).length === 0) {
+	      console.warn("Animation: nothing to animate, no animatable properties");
+	      return false;
+	    }
+	    if (_.isEqual(this._stateA, this._stateB)) {
+	      console.warn("Animation: nothing to animate, all properties are equal to what it is now");
+	      return false;
+	    }
+	    ref1 = this._target.animatingProperties();
+	    for (property in ref1) {
+	      animation = ref1[property];
+	      if (this._stateA.hasOwnProperty(property)) {
+	        animation.stop();
+	      }
+	      if (property === "x" && (this._stateA.hasOwnProperty("minX") || this._stateA.hasOwnProperty("midX") || this._stateA.hasOwnProperty("maxX"))) {
+	        animation.stop();
+	      }
+	      if (property === "y" && (this._stateA.hasOwnProperty("minY") || this._stateA.hasOwnProperty("midY") || this._stateA.hasOwnProperty("maxY"))) {
+	        animation.stop();
+	      }
+	    }
+	    if (this.options.debug) {
+	      console.log("Animation.start");
+	      ref2 = this._stateB;
+	      for (k in ref2) {
+	        v = ref2[k];
+	        console.log("\t" + k + ": " + this._stateA[k] + " -> " + this._stateB[k]);
+	      }
+	    }
+	    if (this._repeatCounter > 0) {
+	      this.once("end", (function(_this) {
+	        return function() {
+	          var ref3;
+	          ref3 = _this._stateA;
+	          for (k in ref3) {
+	            v = ref3[k];
+	            _this._target[k] = v;
+	          }
+	          _this._repeatCounter--;
+	          return _this.start();
+	        };
+	      })(this));
+	    }
+	    if (this.options.delay) {
+	      Utils.delay(this.options.delay, this._start);
+	    } else {
+	      this._start();
+	    }
+	    return true;
+	  };
+	
+	  Animation.prototype.stop = function(emit) {
+	    if (emit == null) {
+	      emit = true;
+	    }
+	    this.options.layer.context.removeAnimation(this);
+	    if (emit) {
+	      this.emit("stop");
+	    }
+	    return Framer.Loop.off("update", this._update);
+	  };
+	
+	  Animation.prototype.reverse = function() {
+	    var animation, options;
+	    options = _.clone(this.options);
+	    options.properties = this._originalState;
+	    animation = new Animation(options);
+	    return animation;
+	  };
+	
+	  Animation.prototype.copy = function() {
+	    return new Animation(_.clone(this.options));
+	  };
+	
+	  Animation.prototype.revert = function() {
+	    return this.reverse();
+	  };
+	
+	  Animation.prototype.inverse = function() {
+	    return this.reverse();
+	  };
+	
+	  Animation.prototype.invert = function() {
+	    return this.reverse();
+	  };
+	
+	  Animation.prototype.emit = function(event) {
+	    Animation.__super__.emit.apply(this, arguments);
+	    return this.options.layer.emit(event, this);
+	  };
+	
+	  Animation.prototype.animatingProperties = function() {
+	    return _.keys(this._stateA);
+	  };
+	
+	  Animation.prototype._start = function() {
+	    this.options.layer.context.addAnimation(this);
+	    this.emit("start");
+	    return Framer.Loop.on("update", this._update);
+	  };
+	
+	  Animation.prototype._update = function(delta) {
+	    var emit;
+	    if (this._animator.finished()) {
+	      this._updateValue(1);
+	      this.stop(emit = false);
+	      this.emit("end");
+	      return this.emit("stop");
+	    } else {
+	      return this._updateValue(this._animator.next(delta));
+	    }
+	  };
+	
+	  Animation.prototype._updateValue = function(value) {
+	    var k, ref, v;
+	    ref = this._stateB;
+	    for (k in ref) {
+	      v = ref[k];
+	      if (Color.isColorObject(v) || Color.isColorObject(this._stateA[k])) {
+	        this._target[k] = Color.mix(this._stateA[k], this._stateB[k], value, false, this.options.colorModel);
+	      } else {
+	        this._target[k] = Utils.mapRange(value, 0, 1, this._stateA[k], this._stateB[k]);
+	      }
+	    }
+	  };
+	
+	  Animation.prototype._currentState = function() {
+	    return _.pick(this.options.layer, _.keys(this.options.properties));
+	  };
+	
+	  Animation.prototype._animatorClass = function() {
+	    var animatorClassName, parsedCurve;
+	    parsedCurve = Utils.parseFunction(this.options.curve);
+	    animatorClassName = parsedCurve.name.toLowerCase();
+	    if (AnimatorClasses.hasOwnProperty(animatorClassName)) {
+	      return AnimatorClasses[animatorClassName];
+	    }
+	    if (indexOf.call(AnimatorClassBezierPresets, animatorClassName) >= 0) {
+	      return BezierCurveAnimator;
+	    }
+	    return LinearAnimator;
+	  };
+	
+	  Animation.prototype._parseAnimatorOptions = function() {
+	    var animatorClass, animatorClassName, base, base1, i, j, k, l, len, len1, parsedCurve, ref, ref1, results, value;
+	    animatorClass = this._animatorClass();
+	    parsedCurve = Utils.parseFunction(this.options.curve);
+	    animatorClassName = parsedCurve.name.toLowerCase();
+	    if (animatorClass === LinearAnimator || animatorClass === BezierCurveAnimator) {
+	      if (_.isString(this.options.curveOptions) || _.isArray(this.options.curveOptions)) {
+	        this.options.curveOptions = {
+	          values: this.options.curveOptions
+	        };
+	      }
+	      if ((base = this.options.curveOptions).time == null) {
+	        base.time = this.options.time;
+	      }
+	    }
+	    if ((animatorClass === BezierCurveAnimator) && indexOf.call(AnimatorClassBezierPresets, animatorClassName) >= 0) {
+	      this.options.curveOptions.values = animatorClassName;
+	      if ((base1 = this.options.curveOptions).time == null) {
+	        base1.time = this.options.time;
+	      }
+	    }
+	    if (parsedCurve.args.length) {
+	      if (animatorClass === BezierCurveAnimator) {
+	        this.options.curveOptions.values = parsedCurve.args.map(function(v) {
+	          return parseFloat(v) || 0;
+	        });
+	      }
+	      if (animatorClass === SpringRK4Animator) {
+	        ref = ["tension", "friction", "velocity", "tolerance"];
+	        for (i = j = 0, len = ref.length; j < len; i = ++j) {
+	          k = ref[i];
+	          value = parseFloat(parsedCurve.args[i]);
+	          if (value) {
+	            this.options.curveOptions[k] = value;
+	          }
+	        }
+	      }
+	      if (animatorClass === SpringDHOAnimator) {
+	        ref1 = ["stiffness", "damping", "mass", "tolerance"];
+	        results = [];
+	        for (i = l = 0, len1 = ref1.length; l < len1; i = ++l) {
+	          k = ref1[i];
+	          value = parseFloat(parsedCurve.args[i]);
+	          if (value) {
+	            results.push(this.options.curveOptions[k] = value);
+	          } else {
+	            results.push(void 0);
+	          }
+	        }
+	        return results;
+	      }
+	    }
+	  };
+	
+	  Animation.filterAnimatableProperties = function(properties) {
+	    var animatableProperties, k, v;
+	    animatableProperties = {};
+	    for (k in properties) {
+	      v = properties[k];
+	      if (_.isNumber(v) || _.isFunction(v) || isRelativeProperty(v) || Color.isColorObject(v) || v === null) {
+	        animatableProperties[k] = v;
+	      } else if (_.isString(v)) {
+	        if (Color.isColorString(v)) {
+	          animatableProperties[k] = new Color(v);
+	        }
+	      }
+	    }
+	    return animatableProperties;
+	  };
+	
+	  Animation.prototype.onAnimationStart = function(cb) {
+	    return this.on(Events.AnimationStart, cb);
+	  };
+	
+	  Animation.prototype.onAnimationStop = function(cb) {
+	    return this.on(Events.AnimationStop, cb);
+	  };
+	
+	  Animation.prototype.onAnimationEnd = function(cb) {
+	    return this.on(Events.AnimationEnd, cb);
+	  };
+	
+	  Animation.prototype.onAnimationDidStart = function(cb) {
+	    return this.on(Events.AnimationDidStart, cb);
+	  };
+	
+	  Animation.prototype.onAnimationDidStop = function(cb) {
+	    return this.on(Events.AnimationDidStop, cb);
+	  };
+	
+	  Animation.prototype.onAnimationDidEnd = function(cb) {
+	    return this.on(Events.AnimationDidEnd, cb);
+	  };
+	
+	  return Animation;
+	
+	})(EventEmitter);
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Animator, Utils,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	Animator = __webpack_require__(18).Animator;
+	
+	exports.LinearAnimator = (function(superClass) {
+	  extend(LinearAnimator, superClass);
+	
+	  function LinearAnimator() {
+	    return LinearAnimator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  LinearAnimator.prototype.setup = function(options) {
+	    this.options = _.defaults(options, {
+	      time: 1,
+	      precision: 1 / 1000
+	    });
+	    return this._time = 0;
+	  };
+	
+	  LinearAnimator.prototype.next = function(delta) {
+	    this._time += delta;
+	    if (this.finished()) {
+	      return 1;
+	    }
+	    return this._time / this.options.time;
+	  };
+	
+	  LinearAnimator.prototype.finished = function() {
+	    return this._time >= this.options.time - this.options.precision;
+	  };
+	
+	  return LinearAnimator;
+	
+	})(Animator);
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Config, Utils;
+	
+	Utils = __webpack_require__(4);
+	
+	Config = __webpack_require__(13).Config;
+	
+	exports.Animator = (function() {
+	  "The animator class is a very simple class that\n	- Takes a set of input values at setup({input values})\n	- Emits an output value for progress (0 -> 1) in value(progress)";
+	  function Animator(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this.setup(options);
+	  }
+	
+	  Animator.prototype.setup = function(options) {
+	    throw Error("Not implemented");
+	  };
+	
+	  Animator.prototype.next = function(delta) {
+	    throw Error("Not implemented");
+	  };
+	
+	  Animator.prototype.finished = function() {
+	    throw Error("Not implemented");
+	  };
+	
+	  return Animator;
+
+	})();
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Animator, BezierCurveDefaults, UnitBezier, Utils, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	Animator = __webpack_require__(18).Animator;
+	
+	BezierCurveDefaults = {
+	  "linear": [0, 0, 1, 1],
+	  "ease": [.25, .1, .25, 1],
+	  "ease-in": [.42, 0, 1, 1],
+	  "ease-out": [0, 0, .58, 1],
+	  "ease-in-out": [.42, 0, .58, 1]
+	};
+	
+	exports.BezierCurveAnimator = (function(superClass) {
+	  extend(BezierCurveAnimator, superClass);
+	
+	  function BezierCurveAnimator() {
+	    return BezierCurveAnimator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  BezierCurveAnimator.prototype.setup = function(options) {
+	    if (_.isString(options) && BezierCurveDefaults.hasOwnProperty(options.toLowerCase())) {
+	      options = {
+	        values: BezierCurveDefaults[options.toLowerCase()]
+	      };
+	    }
+	    if (options.values && _.isString(options.values) && BezierCurveDefaults.hasOwnProperty(options.values.toLowerCase())) {
+	      options = {
+	        values: BezierCurveDefaults[options.values.toLowerCase()],
+	        time: options.time
+	      };
+	    }
+	    if (_.isArray(options) && options.length === 4) {
+	      options = {
+	        values: options
+	      };
+	    }
+	    this.options = _.defaults(options, {
+	      values: BezierCurveDefaults["ease-in-out"],
+	      time: 1,
+	      precision: 1 / 1000
+	    });
+	    return this._unitBezier = new UnitBezier(this.options.values[0], this.options.values[1], this.options.values[2], this.options.values[3], this._time = 0);
+	  };
+	
+	  BezierCurveAnimator.prototype.next = function(delta) {
+	    this._time += delta;
+	    if (this.finished()) {
+	      return 1;
+	    }
+	    return this._unitBezier.solve(this._time / this.options.time);
+	  };
+	
+	  BezierCurveAnimator.prototype.finished = function() {
+	    return this._time >= this.options.time - this.options.precision;
+	  };
+	
+	  return BezierCurveAnimator;
+	
+	})(Animator);
+	
+	UnitBezier = (function() {
+	  UnitBezier.prototype.epsilon = 1e-6;
+	
+	  function UnitBezier(p1x, p1y, p2x, p2y) {
+	    this.cx = 3.0 * p1x;
+	    this.bx = 3.0 * (p2x - p1x) - this.cx;
+	    this.ax = 1.0 - this.cx - this.bx;
+	    this.cy = 3.0 * p1y;
+	    this.by = 3.0 * (p2y - p1y) - this.cy;
+	    this.ay = 1.0 - this.cy - this.by;
+	  }
+	
+	  UnitBezier.prototype.sampleCurveX = function(t) {
+	    return ((this.ax * t + this.bx) * t + this.cx) * t;
+	  };
+	
+	  UnitBezier.prototype.sampleCurveY = function(t) {
+	    return ((this.ay * t + this.by) * t + this.cy) * t;
+	  };
+	
+	  UnitBezier.prototype.sampleCurveDerivativeX = function(t) {
+	    return (3.0 * this.ax * t + 2.0 * this.bx) * t + this.cx;
+	  };
+	
+	  UnitBezier.prototype.solveCurveX = function(x) {
+	    var d2, i, t0, t1, t2, x2;
+	    t2 = x;
+	    i = 0;
+	    while (i < 8) {
+	      x2 = this.sampleCurveX(t2) - x;
+	      if (Math.abs(x2) < this.epsilon) {
+	        return t2;
+	      }
+	      d2 = this.sampleCurveDerivativeX(t2);
+	      if (Math.abs(d2) < this.epsilon) {
+	        break;
+	      }
+	      t2 = t2 - x2 / d2;
+	      i++;
+	    }
+	    t0 = 0.0;
+	    t1 = 1.0;
+	    t2 = x;
+	    if (t2 < t0) {
+	      return t0;
+	    }
+	    if (t2 > t1) {
+	      return t1;
+	    }
+	    while (t0 < t1) {
+	      x2 = this.sampleCurveX(t2);
+	      if (Math.abs(x2 - x) < this.epsilon) {
+	        return t2;
+	      }
+	      if (x > x2) {
+	        t0 = t2;
+	      } else {
+	        t1 = t2;
+	      }
+	      t2 = (t1 - t0) * .5 + t0;
+	    }
+	    return t2;
+	  };
+	
+	  UnitBezier.prototype.solve = function(x) {
+	    return this.sampleCurveY(this.solveCurveX(x));
+	  };
+	
+	  return UnitBezier;
+
+	})();
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Animator, Integrator, Utils,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	Animator = __webpack_require__(18).Animator;
+	
+	Integrator = __webpack_require__(21).Integrator;
+	
+	exports.SpringRK4Animator = (function(superClass) {
+	  extend(SpringRK4Animator, superClass);
+	
+	  function SpringRK4Animator() {
+	    this.finished = bind(this.finished, this);
+	    return SpringRK4Animator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  SpringRK4Animator.prototype.setup = function(options) {
+	    this.options = _.defaults(options, {
+	      tension: 500,
+	      friction: 10,
+	      velocity: 0,
+	      tolerance: 1 / 10000,
+	      time: null
+	    });
+	    this._time = 0;
+	    this._value = 0;
+	    this._velocity = this.options.velocity;
+	    this._stopSpring = false;
+	    return this._integrator = new Integrator((function(_this) {
+	      return function(state) {
+	        return -_this.options.tension * state.x - _this.options.friction * state.v;
+	      };
+	    })(this));
+	  };
+	
+	  SpringRK4Animator.prototype.next = function(delta) {
+	    var finalVelocity, net1DVelocity, netFloat, netValueIsLow, netVelocityIsLow, stateAfter, stateBefore;
+	    if (this.finished()) {
+	      return 1;
+	    }
+	    this._time += delta;
+	    stateBefore = {};
+	    stateAfter = {};
+	    stateBefore.x = this._value - 1;
+	    stateBefore.v = this._velocity;
+	    stateAfter = this._integrator.integrateState(stateBefore, delta);
+	    this._value = 1 + stateAfter.x;
+	    finalVelocity = stateAfter.v;
+	    netFloat = stateAfter.x;
+	    net1DVelocity = stateAfter.v;
+	    netValueIsLow = Math.abs(netFloat) < this.options.tolerance;
+	    netVelocityIsLow = Math.abs(net1DVelocity) < this.options.tolerance;
+	    this._stopSpring = netValueIsLow && netVelocityIsLow;
+	    this._velocity = finalVelocity;
+	    return this._value;
+	  };
+	
+	  SpringRK4Animator.prototype.finished = function() {
+	    return this._stopSpring;
+	  };
+	
+	  return SpringRK4Animator;
+	
+	})(Animator);
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Config, Utils;
+	
+	Utils = __webpack_require__(4);
+	
+	Config = __webpack_require__(13).Config;
+	
+	exports.Integrator = (function() {
+	  "Usage:\n	- Instantiate with a function that takes (state) -> acceleration\n	- Call integrateState with state={x, v} and delta";
+	  function Integrator(_accelerationForState) {
+	    this._accelerationForState = _accelerationForState;
+	    if (!_.isFunction(this._accelerationForState)) {
+	      console.warn("Integrator: an integrator must be constructed with an acceleration function");
+	      this._accelerationForState = function() {
+	        return 0;
+	      };
+	    }
+	  }
+	
+	  Integrator.prototype.integrateState = function(state, dt) {
+	    var a, b, c, d, dvdt, dxdt;
+	    a = this._evaluateState(state);
+	    b = this._evaluateStateWithDerivative(state, dt * 0.5, a);
+	    c = this._evaluateStateWithDerivative(state, dt * 0.5, b);
+	    d = this._evaluateStateWithDerivative(state, dt, c);
+	    dxdt = 1.0 / 6.0 * (a.dx + 2.0 * (b.dx + c.dx) + d.dx);
+	    dvdt = 1.0 / 6.0 * (a.dv + 2.0 * (b.dv + c.dv) + d.dv);
+	    state.x = state.x + dxdt * dt;
+	    state.v = state.v + dvdt * dt;
+	    return state;
+	  };
+	
+	  Integrator.prototype._evaluateState = function(initialState) {
+	    var output;
+	    output = {};
+	    output.dx = initialState.v;
+	    output.dv = this._accelerationForState(initialState);
+	    return output;
+	  };
+	
+	  Integrator.prototype._evaluateStateWithDerivative = function(initialState, dt, derivative) {
+	    var output, state;
+	    state = {};
+	    state.x = initialState.x + derivative.dx * dt;
+	    state.v = initialState.v + derivative.dv * dt;
+	    output = {};
+	    output.dx = state.v;
+	    output.dv = this._accelerationForState(state);
+	    return output;
+	  };
+	
+	  return Integrator;
+
+	})();
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Animator, Utils,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	Animator = __webpack_require__(18).Animator;
+	
+	exports.SpringDHOAnimator = (function(superClass) {
+	  extend(SpringDHOAnimator, superClass);
+	
+	  function SpringDHOAnimator() {
+	    this.finished = bind(this.finished, this);
+	    return SpringDHOAnimator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  SpringDHOAnimator.prototype.setup = function(options) {
+	    this.options = _.defaults(options, {
+	      velocity: 0,
+	      tolerance: 1 / 10000,
+	      stiffness: 50,
+	      damping: 2,
+	      mass: 0.2,
+	      time: null
+	    });
+	    console.log("SpringDHOAnimator.options", this.options, options);
+	    this._time = 0;
+	    this._value = 0;
+	    return this._velocity = this.options.velocity;
+	  };
+	
+	  SpringDHOAnimator.prototype.next = function(delta) {
+	    var F_damper, F_spring, b, k;
+	    if (this.finished()) {
+	      return 1;
+	    }
+	    this._time += delta;
+	    k = 0 - this.options.stiffness;
+	    b = 0 - this.options.damping;
+	    F_spring = k * (this._value - 1);
+	    F_damper = b * this._velocity;
+	    this._velocity += ((F_spring + F_damper) / this.options.mass) * delta;
+	    this._value += this._velocity * delta;
+	    return this._value;
+	  };
+	
+	  SpringDHOAnimator.prototype.finished = function() {
+	    return this._time > 0 && Math.abs(this._velocity) < this.options.tolerance;
+	  };
+	
+	  return SpringDHOAnimator;
+	
+	})(Animator);
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	var _Force2DProperties, _WebkitProperties, filterFormat;
+	
+	filterFormat = function(value, unit) {
+	  return "" + (Utils.round(value, 2)) + unit;
+	};
+	
+	_WebkitProperties = [["blur", "blur", 0, "px"], ["brightness", "brightness", 100, "%"], ["saturate", "saturate", 100, "%"], ["hue-rotate", "hueRotate", 0, "deg"], ["contrast", "contrast", 100, "%"], ["invert", "invert", 0, "%"], ["grayscale", "grayscale", 0, "%"], ["sepia", "sepia", 0, "%"]];
+	
+	_Force2DProperties = {
+	  "z": 0,
+	  "scaleX": 1,
+	  "scaleY": 1,
+	  "scaleZ": 1,
+	  "skewX": 0,
+	  "skewY": 0,
+	  "rotationX": 0,
+	  "rotationY": 0
+	};
+	
+	exports.LayerStyle = {
+	  width: function(layer) {
+	    return layer._properties.width + "px";
+	  },
+	  height: function(layer) {
+	    return layer._properties.height + "px";
+	  },
+	  display: function(layer) {
+	    if (layer._properties.visible === true) {
+	      return "block";
+	    }
+	    return "none";
+	  },
+	  opacity: function(layer) {
+	    return layer._properties.opacity;
+	  },
+	  overflow: function(layer) {
+	    if (layer._properties.scrollHorizontal === true || layer._properties.scrollVertical === true) {
+	      return "auto";
+	    }
+	    if (layer._properties.clip === true) {
+	      return "hidden";
+	    }
+	    return "visible";
+	  },
+	  overflowX: function(layer) {
+	    if (layer._properties.scrollHorizontal === true) {
+	      return "scroll";
+	    }
+	    if (layer._properties.clip === true) {
+	      return "hidden";
+	    }
+	    return "visible";
+	  },
+	  overflowY: function(layer) {
+	    if (layer._properties.scrollVertical === true) {
+	      return "scroll";
+	    }
+	    if (layer._properties.clip === true) {
+	      return "hidden";
+	    }
+	    return "visible";
+	  },
+	  zIndex: function(layer) {
+	    return layer._properties.index;
+	  },
+	  webkitFilter: function(layer) {
+	    var css, cssName, fallback, i, layerName, len, ref, unit;
+	    css = [];
+	    for (i = 0, len = _WebkitProperties.length; i < len; i++) {
+	      ref = _WebkitProperties[i], cssName = ref[0], layerName = ref[1], fallback = ref[2], unit = ref[3];
+	      if (layer._properties.hasOwnProperty(layerName) && layer[layerName] !== fallback) {
+	        css.push(cssName + "(" + (filterFormat(layer[layerName], unit)) + ")");
+	      }
+	    }
+	    return css.join(" ");
+	  },
+	  webkitTransform: function(layer) {
+	    if (layer._prefer2d || layer._properties.force2d) {
+	      return exports.LayerStyle.webkitTransformForce2d(layer);
+	    }
+	    return "translate3d(" + layer._properties.x + "px," + layer._properties.y + "px," + layer._properties.z + "px) scale(" + layer._properties.scale + ") scale3d(" + layer._properties.scaleX + "," + layer._properties.scaleY + "," + layer._properties.scaleZ + ") skew(" + layer._properties.skew + "deg," + layer._properties.skew + "deg) skewX(" + layer._properties.skewX + "deg) skewY(" + layer._properties.skewY + "deg) rotateX(" + layer._properties.rotationX + "deg) rotateY(" + layer._properties.rotationY + "deg) rotateZ(" + layer._properties.rotationZ + "deg)";
+	  },
+	  webkitTransformForce2d: function(layer) {
+	    var css, p, v;
+	    css = [];
+	    for (p in _Force2DProperties) {
+	      v = _Force2DProperties[p];
+	      if (layer._properties[p] !== v) {
+	        console.warn("Layer property '" + p + "'' will be ignored with force2d enabled");
+	      }
+	    }
+	    css.push("translate(" + layer._properties.x + "px," + layer._properties.y + "px)");
+	    css.push("scale(" + layer._properties.scale + ")");
+	    css.push("skew(" + layer._properties.skew + "deg," + layer._properties.skew + "deg)");
+	    css.push("rotate(" + layer._properties.rotationZ + "deg)");
+	    return css.join(" ");
+	  },
+	  webkitTransformOrigin: function(layer) {
+	    return (layer._properties.originX * 100) + "% " + (layer._properties.originY * 100) + "%";
+	  },
+	  webkitPerspective: function(layer) {
+	    return "" + layer._properties.perspective;
+	  },
+	  pointerEvents: function(layer) {
+	    if (layer._properties.ignoreEvents) {
+	      return "none";
+	    } else {
+	      return "auto";
+	    }
+	  },
+	  boxShadow: function(layer) {
+	    var props;
+	    props = layer._properties;
+	    if (!props.shadowColor) {
+	      return "";
+	    } else if (props.shadowX === 0 && props.shadowY === 0 && props.shadowBlur === 0 && props.shadowSpread === 0) {
+	      return "";
+	    }
+	    return layer._properties.shadowX + "px " + layer._properties.shadowY + "px " + layer._properties.shadowBlur + "px " + layer._properties.shadowSpread + "px " + layer._properties.shadowColor;
+	  },
+	  backgroundColor: function(layer) {
+	    return layer._properties.backgroundColor;
+	  },
+	  color: function(layer) {
+	    return layer._properties.color;
+	  },
+	  borderRadius: function(layer) {
+	    if (!_.isNumber(layer._properties.borderRadius)) {
+	      return layer._properties.borderRadius;
+	    }
+	    return layer._properties.borderRadius + "px";
+	  },
+	  border: function(layer) {
+	    return layer._properties.borderWidth + "px solid " + layer._properties.borderColor;
+	  }
+	};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, Defaults, Events, LayerStatesIgnoredKeys, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+	  slice = [].slice;
+	
+	_ = __webpack_require__(1)._;
+	
+	Events = __webpack_require__(14).Events;
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	LayerStatesIgnoredKeys = ["ignoreEvents"];
+	
+	Events.StateWillSwitch = "willSwitch";
+	
+	Events.StateDidSwitch = "didSwitch";
+	
+	exports.LayerStates = (function(superClass) {
+	  extend(LayerStates, superClass);
+	
+	  function LayerStates(layer) {
+	    this.layer = layer;
+	    this._states = {};
+	    this._orderedStates = [];
+	    this.animationOptions = {};
+	    this.add("default", this.layer.props);
+	    this._currentState = "default";
+	    this._previousStates = [];
+	    LayerStates.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  LayerStates.prototype.add = function(stateName, properties) {
+	    var error, k, v;
+	    if (_.isObject(stateName)) {
+	      for (k in stateName) {
+	        v = stateName[k];
+	        this.add(k, v);
+	      }
+	      return;
+	    }
+	    error = function() {
+	      throw Error("Usage example: layer.states.add(\"someName\", {x:500})");
+	    };
+	    if (!_.isString(stateName)) {
+	      error();
+	    }
+	    if (!_.isObject(properties)) {
+	      error();
+	    }
+	    this._orderedStates.push(stateName);
+	    return this._states[stateName] = LayerStates.filterStateProperties(properties);
+	  };
+	
+	  LayerStates.prototype.remove = function(stateName) {
+	    if (!this._states.hasOwnProperty(stateName)) {
+	      return;
+	    }
+	    delete this._states[stateName];
+	    return this._orderedStates = _.without(this._orderedStates, stateName);
+	  };
+	
+	  LayerStates.prototype["switch"] = function(stateName, animationOptions, instant) {
+	    var animatablePropertyKeys, animatingKeys, k, properties, propertyName, ref, ref1, v, value;
+	    if (instant == null) {
+	      instant = false;
+	    }
+	    if (!this._states.hasOwnProperty(stateName)) {
+	      throw Error("No such state: '" + stateName + "'");
+	    }
+	    this.emit(Events.StateWillSwitch, this._currentState, stateName, this);
+	    this._previousStates.push(this._currentState);
+	    this._currentState = stateName;
+	    properties = {};
+	    animatingKeys = this.animatingKeys();
+	    ref = this._states[stateName];
+	    for (propertyName in ref) {
+	      value = ref[propertyName];
+	      if (indexOf.call(LayerStatesIgnoredKeys, propertyName) >= 0) {
+	        continue;
+	      }
+	      if (indexOf.call(animatingKeys, propertyName) < 0) {
+	        continue;
+	      }
+	      if (_.isFunction(value)) {
+	        value = value.call(this.layer, this.layer, stateName);
+	      }
+	      properties[propertyName] = value;
+	    }
+	    animatablePropertyKeys = [];
+	    for (k in properties) {
+	      v = properties[k];
+	      if (_.isNumber(v)) {
+	        animatablePropertyKeys.push(k);
+	      } else if (Color.isColorObject(v)) {
+	        animatablePropertyKeys.push(k);
+	      } else if (v === null) {
+	        animatablePropertyKeys.push(k);
+	      }
+	    }
+	    if (animatablePropertyKeys.length === 0) {
+	      instant = true;
+	    }
+	    if (instant === true) {
+	      this.layer.props = properties;
+	      return this.emit(Events.StateDidSwitch, _.last(this._previousStates), stateName, this);
+	    } else {
+	      if (animationOptions == null) {
+	        animationOptions = this.animationOptions;
+	      }
+	      animationOptions.properties = properties;
+	      if ((ref1 = this._animation) != null) {
+	        ref1.stop();
+	      }
+	      this._animation = this.layer.animate(animationOptions);
+	      return this._animation.on("stop", (function(_this) {
+	        return function() {
+	          for (k in properties) {
+	            v = properties[k];
+	            if (!(_.isNumber(v) || Color.isColorObject(v))) {
+	              _this.layer[k] = v;
+	            }
+	          }
+	          return _this.emit(Events.StateDidSwitch, _.last(_this._previousStates), stateName, _this);
+	        };
+	      })(this));
+	    }
+	  };
+	
+	  LayerStates.prototype.switchInstant = function(stateName) {
+	    return this["switch"](stateName, null, true);
+	  };
+	
+	  LayerStates.define("state", {
+	    get: function() {
+	      return this._currentState;
+	    }
+	  });
+	
+	  LayerStates.define("current", {
+	    get: function() {
+	      return this._currentState;
+	    }
+	  });
+	
+	  LayerStates.prototype.states = function() {
+	    return _.clone(this._orderedStates);
+	  };
+	
+	  LayerStates.prototype.animatingKeys = function() {
+	    var keys, ref, state, stateName;
+	    keys = [];
+	    ref = this._states;
+	    for (stateName in ref) {
+	      state = ref[stateName];
+	      keys = _.union(keys, _.keys(state));
+	    }
+	    return keys;
+	  };
+	
+	  LayerStates.prototype.previous = function(states, animationOptions) {
+	    if (states == null) {
+	      states = this.states();
+	    }
+	    return this["switch"](Utils.arrayPrev(states, this._currentState), animationOptions);
+	  };
+	
+	  LayerStates.prototype.next = function() {
+	    var states;
+	    states = Utils.arrayFromArguments(arguments);
+	    if (!states.length) {
+	      states = this.states();
+	    }
+	    return this["switch"](Utils.arrayNext(states, this._currentState));
+	  };
+	
+	  LayerStates.prototype.last = function(animationOptions) {
+	    return this["switch"](_.last(this._previousStates), animationOptions);
+	  };
+	
+	  LayerStates.prototype.emit = function() {
+	    var args, ref;
+	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	    LayerStates.__super__.emit.apply(this, arguments);
+	    return (ref = this.layer).emit.apply(ref, args);
+	  };
+	
+	  LayerStates.filterStateProperties = function(properties) {
+	    var k, stateProperties, v;
+	    stateProperties = {};
+	    for (k in properties) {
+	      v = properties[k];
+	      if (_.isString(v) && Color.isColorString(v)) {
+	        stateProperties[k] = new Color(v);
+	      } else if (_.isNumber(v) || _.isFunction(v) || _.isBoolean(v) || _.isString(v) || Color.isColorObject(v) || v === null) {
+	        stateProperties[k] = v;
+	      }
+	    }
+	    return stateProperties;
+	  };
+	
+	  return LayerStates;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, Defaults, EventBuffer, Events, Simulation, Utils, _,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	Events = __webpack_require__(14).Events;
+	
+	Simulation = __webpack_require__(26).Simulation;
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	EventBuffer = __webpack_require__(31).EventBuffer;
+	
+	Events.Move = "move";
+	
+	Events.DragStart = "dragstart";
+	
+	Events.DragWillMove = "dragwillmove";
+	
+	Events.DragMove = "dragmove";
+	
+	Events.DragDidMove = "dragmove";
+	
+	Events.Drag = "dragmove";
+	
+	Events.DragEnd = "dragend";
+	
+	Events.DragAnimationDidStart = "draganimationdidstart";
+	
+	Events.DragAnimationDidEnd = "draganimationdidend";
+	
+	Events.DirectionLockDidStart = "directionlockdidstart";
+	
+	"         \n┌──────┐                   │         \n│      │                             \n│      │  ───────────────▶ │ ◀────▶  \n│      │                             \n└──────┘                   │         \n                                     \n════════  ═════════════════ ═══════  \n                                     \n  Drag         Momentum      Bounce  \n                                         ";
+	
+	exports.LayerDraggable = (function(superClass) {
+	  extend(LayerDraggable, superClass);
+	
+	  LayerDraggable.define("speedX", LayerDraggable.simpleProperty("speedX", 1));
+	
+	  LayerDraggable.define("speedY", LayerDraggable.simpleProperty("speedY", 1));
+	
+	  LayerDraggable.define("horizontal", LayerDraggable.simpleProperty("horizontal", true));
+	
+	  LayerDraggable.define("vertical", LayerDraggable.simpleProperty("vertical", true));
+	
+	  LayerDraggable.define("momentumVelocityMultiplier", LayerDraggable.simpleProperty("momentumVelocityMultiplier", 800));
+	
+	  LayerDraggable.define("directionLock", LayerDraggable.simpleProperty("directionLock", true));
+	
+	  LayerDraggable.define("directionLockThreshold", LayerDraggable.simpleProperty("directionLockThreshold", {
+	    x: 10,
+	    y: 10
+	  }));
+	
+	  LayerDraggable.define("propagateEvents", LayerDraggable.simpleProperty("propagateEvents", true));
+	
+	  LayerDraggable.define("constraints", {
+	    get: function() {
+	      return this._constraints;
+	    },
+	    set: function(value) {
+	      if (value && _.isObject(value)) {
+	        this._constraints = _.defaults(value, {
+	          x: 0,
+	          y: 0,
+	          width: 0,
+	          height: 0
+	        });
+	      } else {
+	        this._constraints = {
+	          x: 0,
+	          y: 0,
+	          width: 0,
+	          height: 0
+	        };
+	      }
+	      if (this._constraints) {
+	        return this._updateSimulationConstraints(this._constraints);
+	      }
+	    }
+	  });
+	
+	  LayerDraggable.define("isDragging", {
+	    get: function() {
+	      return this._isDragging || false;
+	    }
+	  });
+	
+	  LayerDraggable.define("isAnimating", {
+	    get: function() {
+	      return this._isAnimating || false;
+	    }
+	  });
+	
+	  LayerDraggable.define("isMoving", {
+	    get: function() {
+	      return this._isMoving || false;
+	    }
+	  });
+	
+	  LayerDraggable.define("layerStartPoint", {
+	    get: function() {
+	      return this._layerStartPoint || this.layer.point;
+	    }
+	  });
+	
+	  LayerDraggable.define("cursorStartPoint", {
+	    get: function() {
+	      return this._cursorStartPoint || {
+	        x: 0,
+	        y: 0
+	      };
+	    }
+	  });
+	
+	  LayerDraggable.define("layerCursorOffset", {
+	    get: function() {
+	      return this._layerCursorOffset || {
+	        x: 0,
+	        y: 0
+	      };
+	    }
+	  });
+	
+	  LayerDraggable.define("offset", {
+	    get: function() {
+	      var offset;
+	      if (!this._correctedLayerStartPoint) {
+	        return {
+	          x: 0,
+	          y: 0
+	        };
+	      }
+	      return offset = {
+	        x: this.layer.x - this._correctedLayerStartPoint.x,
+	        y: this.layer.y - this._correctedLayerStartPoint.y
+	      };
+	    }
+	  });
+	
+	  function LayerDraggable(layer) {
+	    var options;
+	    this.layer = layer;
+	    this._stopSimulation = bind(this._stopSimulation, this);
+	    this._onSimulationStop = bind(this._onSimulationStop, this);
+	    this._onSimulationStep = bind(this._onSimulationStep, this);
+	    this._touchEnd = bind(this._touchEnd, this);
+	    this._touchMove = bind(this._touchMove, this);
+	    this._touchStart = bind(this._touchStart, this);
+	    this.touchStart = bind(this.touchStart, this);
+	    options = Defaults.getDefaults("LayerDraggable", {});
+	    LayerDraggable.__super__.constructor.call(this, options);
+	    _.extend(this, options);
+	    this.enabled = true;
+	    this._eventBuffer = new EventBuffer;
+	    this._constraints = null;
+	    this.attach();
+	  }
+	
+	  LayerDraggable.prototype.attach = function() {
+	    return this.layer.on(Events.TouchStart, this._touchStart);
+	  };
+	
+	  LayerDraggable.prototype.remove = function() {
+	    return this.layer.off(Events.TouchStart, this._touchStart);
+	  };
+	
+	  LayerDraggable.prototype.updatePosition = function(point) {
+	    return point;
+	  };
+	
+	  LayerDraggable.prototype.touchStart = function(event) {
+	    return this._touchStart(event);
+	  };
+	
+	  LayerDraggable.prototype._touchStart = function(event) {
+	    var touchEvent;
+	    this._isMoving = this.isAnimating;
+	    this.layer.animateStop();
+	    this._stopSimulation();
+	    this._resetdirectionLock();
+	    event.preventDefault();
+	    if (!this.propagateEvents) {
+	      event.stopPropagation();
+	    }
+	    touchEvent = Events.touchEvent(event);
+	    this._eventBuffer.push({
+	      x: touchEvent.clientX,
+	      y: touchEvent.clientY,
+	      t: Date.now()
+	    });
+	    this._layerStartPoint = this.layer.point;
+	    this._correctedLayerStartPoint = this.layer.point;
+	    if (this.constraints && this.bounce) {
+	      this._correctedLayerStartPoint = this._constrainPosition(this._correctedLayerStartPoint, this.constraints, 1 / this.overdragScale);
+	    }
+	    this._cursorStartPoint = {
+	      x: touchEvent.clientX,
+	      y: touchEvent.clientY
+	    };
+	    this._layerCursorOffset = {
+	      x: touchEvent.clientX - this._correctedLayerStartPoint.x,
+	      y: touchEvent.clientY - this._correctedLayerStartPoint.y
+	    };
+	    this.layer._context.domEventManager.wrap(document).addEventListener(Events.TouchMove, this._touchMove);
+	    this.layer._context.domEventManager.wrap(document).addEventListener(Events.TouchEnd, this._touchEnd);
+	    return this.emit(Events.DragStart, event);
+	  };
+	
+	  LayerDraggable.prototype._touchMove = function(event) {
+	    var offset, point, touchEvent;
+	    if (!this.enabled) {
+	      return;
+	    }
+	    event.preventDefault();
+	    if (!this.propagateEvents) {
+	      event.stopPropagation();
+	    }
+	    touchEvent = Events.touchEvent(event);
+	    this._eventBuffer.push({
+	      x: touchEvent.clientX,
+	      y: touchEvent.clientY,
+	      t: Date.now()
+	    });
+	    offset = {
+	      x: touchEvent.clientX - this._correctedLayerStartPoint.x - this._layerCursorOffset.x,
+	      y: touchEvent.clientY - this._correctedLayerStartPoint.y - this._layerCursorOffset.y
+	    };
+	    offset.x = offset.x * this.speedX * (1 / this.layer.canvasScaleX()) * this.layer.scaleX * this.layer.scale;
+	    offset.y = offset.y * this.speedY * (1 / this.layer.canvasScaleY()) * this.layer.scaleY * this.layer.scale;
+	    point = this.layer.point;
+	    if (this.horizontal) {
+	      point.x = this._correctedLayerStartPoint.x + offset.x;
+	    }
+	    if (this.vertical) {
+	      point.y = this._correctedLayerStartPoint.y + offset.y;
+	    }
+	    if (this._constraints) {
+	      point = this._constrainPosition(point, this._constraints, this.overdragScale);
+	    }
+	    if (this.directionLock) {
+	      if (!this._directionLockEnabledX && !this._directionLockEnabledY) {
+	        this._updatedirectionLock(offset);
+	        return;
+	      } else {
+	        if (this._directionLockEnabledX) {
+	          point.x = this._layerStartPoint.x;
+	        }
+	        if (this._directionLockEnabledY) {
+	          point.y = this._layerStartPoint.y;
+	        }
+	      }
+	    }
+	    if (this.pixelAlign) {
+	      point.x = parseInt(point.x);
+	      point.y = parseInt(point.y);
+	    }
+	    if (point.x !== this._layerStartPoint.x || point.y !== this._layerStartPoint.y) {
+	      this._isDragging = true;
+	      this._isMoving = true;
+	    }
+	    if (this.isDragging) {
+	      this.emit(Events.DragWillMove, event);
+	    }
+	    this.layer.point = this.updatePosition(point);
+	    if (this.isDragging) {
+	      this.emit(Events.Move, this.layer.point);
+	      return this.emit(Events.DragDidMove, event);
+	    }
+	  };
+	
+	  LayerDraggable.prototype._touchEnd = function(event) {
+	    if (!this.propagateEvents) {
+	      event.stopPropagation();
+	    }
+	    this.layer._context.domEventManager.wrap(document).removeEventListener(Events.TouchMove, this._touchMove);
+	    this.layer._context.domEventManager.wrap(document).removeEventListener(Events.TouchEnd, this._touchEnd);
+	    this._startSimulation();
+	    this.emit(Events.DragEnd, event);
+	    return this._isDragging = false;
+	  };
+	
+	  LayerDraggable.define("constraintsOffset", {
+	    get: function() {
+	      var constrainedPoint, maxX, maxY, minX, minY, offset, point, ref;
+	      if (!this.constraints) {
+	        return {
+	          x: 0,
+	          y: 0
+	        };
+	      }
+	      ref = this._calculateConstraints(this.constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
+	      point = this.layer.point;
+	      constrainedPoint = {
+	        x: Utils.clamp(point.x, minX, maxX),
+	        y: Utils.clamp(point.y, minY, maxY)
+	      };
+	      offset = {
+	        x: point.x - constrainedPoint.x,
+	        y: point.y - constrainedPoint.y
+	      };
+	      return offset;
+	    }
+	  });
+	
+	  LayerDraggable.define("isBeyondConstraints", {
+	    get: function() {
+	      var constraintsOffset;
+	      constraintsOffset = this.constraintsOffset;
+	      if (constraintsOffset.x !== 0) {
+	        return true;
+	      }
+	      if (constraintsOffset.y !== 0) {
+	        return true;
+	      }
+	      return false;
+	    }
+	  });
+	
+	  LayerDraggable.prototype._clampAndScale = function(value, min, max, scale) {
+	    if (value < min) {
+	      value = min + (value - min) * scale;
+	    }
+	    if (value > max) {
+	      value = max + (value - max) * scale;
+	    }
+	    return value;
+	  };
+	
+	  LayerDraggable.prototype._calculateConstraints = function(bounds) {
+	    var constraints;
+	    if (!bounds) {
+	      return constraints = {
+	        minX: Infinity,
+	        maxX: Infinity,
+	        minY: Infinity,
+	        maxY: Infinity
+	      };
+	    }
+	    constraints = {
+	      minX: Utils.frameGetMinX(bounds),
+	      maxX: Utils.frameGetMaxX(bounds),
+	      minY: Utils.frameGetMinY(bounds),
+	      maxY: Utils.frameGetMaxY(bounds)
+	    };
+	    constraints.maxX -= this.layer.width;
+	    constraints.maxY -= this.layer.height;
+	    return constraints;
+	  };
+	
+	  LayerDraggable.prototype._constrainPosition = function(proposedPoint, bounds, scale) {
+	    var maxX, maxY, minX, minY, point, ref;
+	    ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
+	    if (this.overdrag) {
+	      point = {
+	        x: this._clampAndScale(proposedPoint.x, minX, maxX, scale),
+	        y: this._clampAndScale(proposedPoint.y, minY, maxY, scale)
+	      };
+	    } else {
+	      point = {
+	        x: Utils.clamp(proposedPoint.x, minX, maxX),
+	        y: Utils.clamp(proposedPoint.y, minY, maxY)
+	      };
+	    }
+	    if (this.speedX === 0 || this.horizontal === false) {
+	      point.x = proposedPoint.x;
+	    }
+	    if (this.speedY === 0 || this.vertical === false) {
+	      point.y = proposedPoint.y;
+	    }
+	    return point;
+	  };
+	
+	  LayerDraggable.define("velocity", {
+	    get: function() {
+	      if (this.isAnimating) {
+	        return this._calculateSimulationVelocity();
+	      }
+	      return this._eventBuffer.velocity;
+	      return {
+	        x: 0,
+	        y: 0
+	      };
+	    }
+	  });
+	
+	  LayerDraggable.define("angle", {
+	    get: function() {
+	      return this._eventBuffer.angle;
+	    }
+	  });
+	
+	  LayerDraggable.define("direction", {
+	    get: function() {
+	      var velocity;
+	      velocity = this.velocity;
+	      if (Math.abs(velocity.x) > Math.abs(velocity.y)) {
+	        if (velocity.x > 0) {
+	          return "right";
+	        }
+	        return "left";
+	      } else {
+	        if (velocity.y > 0) {
+	          return "down";
+	        }
+	        return "up";
+	      }
+	    }
+	  });
+	
+	  LayerDraggable.prototype.calculateVelocity = function() {
+	    return this.velocity;
+	  };
+	
+	  LayerDraggable.prototype._calculateSimulationVelocity = function() {
+	    var velocity, xFinished, yFinished;
+	    xFinished = this._simulation.x.finished();
+	    yFinished = this._simulation.y.finished();
+	    velocity = {
+	      x: 0,
+	      y: 0
+	    };
+	    if (!xFinished) {
+	      velocity.x = this._simulation.x.simulator.state.v / this.momentumVelocityMultiplier;
+	    }
+	    if (!yFinished) {
+	      velocity.y = this._simulation.y.simulator.state.v / this.momentumVelocityMultiplier;
+	    }
+	    return velocity;
+	  };
+	
+	  LayerDraggable.prototype.emit = function(eventName, event) {
+	    this.layer.emit(eventName, event, this);
+	    return LayerDraggable.__super__.emit.call(this, eventName, event, this);
+	  };
+	
+	  LayerDraggable.prototype._updatedirectionLock = function(correctedDelta) {
+	    this._directionLockEnabledX = Math.abs(correctedDelta.y) > this.directionLockThreshold.y;
+	    this._directionLockEnabledY = Math.abs(correctedDelta.x) > this.directionLockThreshold.x;
+	    if (this._directionLockEnabledX || this._directionLockEnabledY) {
+	      return this.emit(Events.DirectionLockDidStart, {
+	        x: this._directionLockEnabledX,
+	        y: this._directionLockEnabledY
+	      });
+	    }
+	  };
+	
+	  LayerDraggable.prototype._resetdirectionLock = function() {
+	    this._directionLockEnabledX = false;
+	    return this._directionLockEnabledY = false;
+	  };
+	
+	  LayerDraggable.prototype._setupSimulation = function() {
+	    if (this._simulation) {
+	      return;
+	    }
+	    this._simulation = {
+	      x: this._setupSimulationForAxis("x"),
+	      y: this._setupSimulationForAxis("y")
+	    };
+	    return this._updateSimulationConstraints(this.constraints);
+	  };
+	
+	  LayerDraggable.prototype._setupSimulationForAxis = function(axis) {
+	    var properties, simulation;
+	    properties = {};
+	    properties[axis] = true;
+	    simulation = new Simulation({
+	      layer: this.layer,
+	      properties: properties,
+	      model: "inertial-scroll",
+	      modelOptions: {
+	        momentum: this.momentumOptions,
+	        bounce: this.bounceOptions
+	      }
+	    });
+	    simulation.on(Events.SimulationStep, (function(_this) {
+	      return function(state) {
+	        return _this._onSimulationStep(axis, state);
+	      };
+	    })(this));
+	    simulation.on(Events.SimulationStop, (function(_this) {
+	      return function(state) {
+	        return _this._onSimulationStop(axis, state);
+	      };
+	    })(this));
+	    return simulation;
+	  };
+	
+	  LayerDraggable.prototype._updateSimulationConstraints = function(constraints) {
+	    var maxX, maxY, minX, minY, ref;
+	    if (!this._simulation) {
+	      return;
+	    }
+	    if (constraints) {
+	      ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
+	      this._simulation.x.simulator.options = {
+	        min: minX,
+	        max: maxX
+	      };
+	      return this._simulation.y.simulator.options = {
+	        min: minY,
+	        max: maxY
+	      };
+	    } else {
+	      this._simulation.x.simulator.options = {
+	        min: -Infinity,
+	        max: +Infinity
+	      };
+	      return this._simulation.y.simulator.options = {
+	        min: -Infinity,
+	        max: +Infinity
+	      };
+	    }
+	  };
+	
+	  LayerDraggable.prototype._onSimulationStep = function(axis, state) {
+	    var delta, maxX, maxY, minX, minY, ref, updatePoint;
+	    if (axis === "x" && this.horizontal === false) {
+	      return;
+	    }
+	    if (axis === "y" && this.vertical === false) {
+	      return;
+	    }
+	    if (this.constraints) {
+	      if (this.bounce) {
+	        delta = state.x - this.layer[axis];
+	      } else {
+	        ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
+	        if (axis === "x") {
+	          delta = Utils.clamp(state.x, minX, maxX) - this.layer[axis];
+	        }
+	        if (axis === "y") {
+	          delta = Utils.clamp(state.x, minY, maxY) - this.layer[axis];
+	        }
+	      }
+	    } else {
+	      delta = state.x - this.layer[axis];
+	    }
+	    updatePoint = this.layer.point;
+	    if (axis === "x") {
+	      updatePoint[axis] = updatePoint[axis] + (delta * this.speedX);
+	    }
+	    if (axis === "y") {
+	      updatePoint[axis] = updatePoint[axis] + (delta * this.speedY);
+	    }
+	    this.updatePosition(updatePoint);
+	    this.layer[axis] = this.updatePosition(updatePoint)[axis];
+	    return this.emit(Events.Move, this.layer.point);
+	  };
+	
+	  LayerDraggable.prototype._onSimulationStop = function(axis, state) {
+	    if (!this._simulation) {
+	      return;
+	    }
+	    if (this.pixelAlign) {
+	      this.layer[axis] = parseInt(this.layer[axis]);
+	    }
+	    if (this._simulation.x.finished() && this._simulation.y.finished()) {
+	      return this._stopSimulation();
+	    }
+	  };
+	
+	  LayerDraggable.prototype._startSimulation = function() {
+	    var maxX, maxY, minX, minY, ref, startSimulationX, startSimulationY, velocity, velocityX, velocityY;
+	    if (!(this.momentum || this.bounce)) {
+	      return;
+	    }
+	    if (this.isBeyondConstraints === false && this.momentum === false) {
+	      return;
+	    }
+	    if (this.isBeyondConstraints === false && this.isDragging === false) {
+	      return;
+	    }
+	    ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
+	    startSimulationX = this.overdrag === true || (this.layer.x > minX && this.layer.x < maxX);
+	    startSimulationY = this.overdrag === true || (this.layer.y > minY && this.layer.y < maxY);
+	    if ((startSimulationX === startSimulationY && startSimulationY === false)) {
+	      return;
+	    }
+	    velocity = this.velocity;
+	    velocityX = velocity.x * this.momentumVelocityMultiplier * this.speedX * (1 / this.layer.canvasScaleX()) * this.layer.scaleX * this.layer.scale;
+	    velocityY = velocity.y * this.momentumVelocityMultiplier * this.speedY * (1 / this.layer.canvasScaleY()) * this.layer.scaleY * this.layer.scale;
+	    this._setupSimulation();
+	    this._isAnimating = true;
+	    this._isMoving = true;
+	    this._simulation.x.simulator.setState({
+	      x: this.layer.x,
+	      v: velocityX
+	    });
+	    if (startSimulationX) {
+	      this._simulation.x.start();
+	    }
+	    this._simulation.y.simulator.setState({
+	      x: this.layer.y,
+	      v: velocityY
+	    });
+	    if (startSimulationY) {
+	      this._simulation.y.start();
+	    }
+	    return this.emit(Events.DragAnimationDidStart);
+	  };
+	
+	  LayerDraggable.prototype._stopSimulation = function() {
+	    var ref, ref1;
+	    this._isAnimating = false;
+	    if (!this._simulation) {
+	      return;
+	    }
+	    if ((ref = this._simulation) != null) {
+	      ref.x.stop();
+	    }
+	    if ((ref1 = this._simulation) != null) {
+	      ref1.y.stop();
+	    }
+	    this._simulation = null;
+	    this.emit(Events.Move, this.layer.point);
+	    return this.emit(Events.DragAnimationDidEnd);
+	  };
+	
+	  LayerDraggable.prototype.animateStop = function() {
+	    return this._stopSimulation();
+	  };
+	
+	  LayerDraggable.prototype.onMove = function(cb) {
+	    return this.on(Events.Move, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragStart = function(cb) {
+	    return this.on(Events.DragStart, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragWillMove = function(cb) {
+	    return this.on(Events.DragWillMove, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragMove = function(cb) {
+	    return this.on(Events.DragMove, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragDidMove = function(cb) {
+	    return this.on(Events.DragDidMove, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDrag = function(cb) {
+	    return this.on(Events.Drag, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragEnd = function(cb) {
+	    return this.on(Events.DragEnd, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragAnimationDidStart = function(cb) {
+	    return this.on(Events.DragAnimationDidStart, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDragAnimationDidEnd = function(cb) {
+	    return this.on(Events.DragAnimationDidEnd, cb);
+	  };
+	
+	  LayerDraggable.prototype.onDirectionLockDidStart = function(cb) {
+	    return this.on(Events.DirectionLockDidStart, cb);
+	  };
+	
+	  return LayerDraggable;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, Config, Defaults, Events, FrictionSimulator, MomentumBounceSimulator, SimulatorClasses, SpringSimulator, Utils, _,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	Config = __webpack_require__(13).Config;
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	Events = __webpack_require__(14).Events;
+	
+	SpringSimulator = __webpack_require__(27).SpringSimulator;
+	
+	FrictionSimulator = __webpack_require__(29).FrictionSimulator;
+	
+	MomentumBounceSimulator = __webpack_require__(30).MomentumBounceSimulator;
+	
+	Events.SimulationStart = 'simulationStart';
+	
+	Events.SimulationStep = 'simulationStep';
+	
+	Events.SimulationStop = 'simulationStop';
+	
+	SimulatorClasses = {
+	  "spring": SpringSimulator,
+	  "friction": FrictionSimulator,
+	  "inertial-scroll": MomentumBounceSimulator
+	};
+	
+	exports.Simulation = (function(superClass) {
+	  extend(Simulation, superClass);
+	
+	  function Simulation(options) {
+	    var SimulatorClass;
+	    if (options == null) {
+	      options = {};
+	    }
+	    this._update = bind(this._update, this);
+	    this._start = bind(this._start, this);
+	    this.start = bind(this.start, this);
+	    Simulation.__super__.constructor.call(this, options);
+	    this.options = _.defaults(options, {
+	      layer: null,
+	      properties: {},
+	      model: "spring",
+	      modelOptions: {},
+	      delay: 0,
+	      debug: false
+	    });
+	    this._running = false;
+	    SimulatorClass = SimulatorClasses[this.options.model] || SpringSimulator;
+	    this._simulator = new SimulatorClass(this.options.modelOptions);
+	  }
+	
+	  Simulation.prototype.animatingProperties = function() {
+	    return _.keys(this.options.properties);
+	  };
+	
+	  Simulation.prototype.start = function() {
+	    var animatingProperties, animation, property, ref;
+	    if (this.options.layer === null) {
+	      console.error("Simulation: missing layer");
+	    }
+	    if (this.options.debug) {
+	      console.log("Simulation.start " + this._simulator.constructor.name, this.options.modelOptions);
+	    }
+	    animatingProperties = this.animatingProperties();
+	    ref = this.options.layer.animatingProperties();
+	    for (property in ref) {
+	      animation = ref[property];
+	      if (indexOf.call(animatingProperties, property) >= 0) {
+	        animation.stop();
+	      }
+	    }
+	    if (this.options.delay) {
+	      Utils.delay(this.options.delay, this._start);
+	    } else {
+	      this._start();
+	    }
+	    return true;
+	  };
+	
+	  Simulation.prototype.stop = function(emit) {
+	    if (emit == null) {
+	      emit = true;
+	    }
+	    if (!this._running) {
+	      return;
+	    }
+	    this._running = false;
+	    this.options.layer.context.removeAnimation(this);
+	    if (emit) {
+	      this.emit(Events.SimulationStop);
+	    }
+	    return Framer.Loop.off("update", this._update);
+	  };
+	
+	  Simulation.prototype.emit = function(event) {
+	    Simulation.__super__.emit.apply(this, arguments);
+	    return this.options.layer.emit(event, this);
+	  };
+	
+	  Simulation.prototype._start = function() {
+	    if (this._running) {
+	      return;
+	    }
+	    this._running = true;
+	    this.options.layer.context.addAnimation(this);
+	    this.emit(Events.SimulationStart);
+	    return Framer.Loop.on("update", this._update);
+	  };
+	
+	  Simulation.prototype._update = function(delta) {
+	    var emit, result;
+	    if (this._simulator.finished()) {
+	      this.stop(emit = false);
+	      this.emit("end");
+	      return this.emit(Events.SimulationStop);
+	    } else {
+	      result = this._simulator.next(delta);
+	      return this.emit(Events.SimulationStep, result, delta);
+	    }
+	  };
+	
+	  Simulation.define("simulator", {
+	    get: function() {
+	      return this._simulator;
+	    }
+	  });
+	
+	  Simulation.prototype.finished = function() {
+	    return this._simulator.finished();
+	  };
+	
+	  return Simulation;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Defaults, Integrator, Simulator, Utils,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	Simulator = __webpack_require__(28).Simulator;
+	
+	Integrator = __webpack_require__(21).Integrator;
+	
+	exports.SpringSimulator = (function(superClass) {
+	  extend(SpringSimulator, superClass);
+	
+	  function SpringSimulator() {
+	    this.finished = bind(this.finished, this);
+	    return SpringSimulator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  SpringSimulator.prototype.setup = function(options) {
+	    this.options = Defaults.getDefaults("SpringSimulator", options);
+	    this.options = _.defaults(options, {
+	      velocity: 0,
+	      position: 0,
+	      offset: 0
+	    });
+	    this._state = {
+	      x: this.options.position,
+	      v: this.options.velocity
+	    };
+	    return this._integrator = new Integrator((function(_this) {
+	      return function(state) {
+	        return -_this.options.tension * state.x - _this.options.friction * state.v;
+	      };
+	    })(this));
+	  };
+	
+	  SpringSimulator.prototype.next = function(delta) {
+	    this._state = this._integrator.integrateState(this._state, delta);
+	    return this.getState();
+	  };
+	
+	  SpringSimulator.prototype.finished = function() {
+	    var positionNearZero, velocityNearZero;
+	    positionNearZero = Math.abs(this._state.x) < this.options.tolerance;
+	    velocityNearZero = Math.abs(this._state.v) < this.options.tolerance;
+	    return positionNearZero && velocityNearZero;
+	  };
+	
+	  SpringSimulator.prototype.setState = function(state) {
+	    return this._state = {
+	      x: state.x - this.options.offset,
+	      v: state.v
+	    };
+	  };
+	
+	  SpringSimulator.prototype.getState = function() {
+	    var state;
+	    return state = {
+	      x: this._state.x + this.options.offset,
+	      v: this._state.v
+	    };
+	  };
+	
+	  return SpringSimulator;
+	
+	})(Simulator);
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, Config, Utils, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	_ = __webpack_require__(1)._;
+	
+	Config = __webpack_require__(13).Config;
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	exports.Simulator = (function(superClass) {
+	  "The simulator class runs a physics simulation based on a set of input values \nat setup({input values}), and emits an output state {x, v}";
+	  extend(Simulator, superClass);
+	
+	  Simulator.define("state", {
+	    get: function() {
+	      return _.clone(this._state);
+	    },
+	    set: function(state) {
+	      return this._state = _.clone(state);
+	    }
+	  });
+	
+	  function Simulator(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this._state = {
+	      x: 0,
+	      v: 0
+	    };
+	    this.options = null;
+	    this.setup(options);
+	  }
+	
+	  Simulator.prototype.setup = function(options) {
+	    throw Error("Not implemented");
+	  };
+	
+	  Simulator.prototype.next = function(delta) {
+	    throw Error("Not implemented");
+	  };
+	
+	  Simulator.prototype.finished = function() {
+	    throw Error("Not implemented");
+	  };
+	
+	  return Simulator;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Defaults, Integrator, Simulator, Utils,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	Simulator = __webpack_require__(28).Simulator;
+	
+	Integrator = __webpack_require__(21).Integrator;
+	
+	exports.FrictionSimulator = (function(superClass) {
+	  extend(FrictionSimulator, superClass);
+	
+	  function FrictionSimulator() {
+	    this.finished = bind(this.finished, this);
+	    return FrictionSimulator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  FrictionSimulator.prototype.setup = function(options) {
+	    this.options = Defaults.getDefaults("FrictionSimulator", options);
+	    this.options = _.defaults(options, {
+	      velocity: 0,
+	      position: 0
+	    });
+	    this._state = {
+	      x: this.options.position,
+	      v: this.options.velocity
+	    };
+	    return this._integrator = new Integrator((function(_this) {
+	      return function(state) {
+	        return -(_this.options.friction * state.v);
+	      };
+	    })(this));
+	  };
+	
+	  FrictionSimulator.prototype.next = function(delta) {
+	    this._state = this._integrator.integrateState(this._state, delta);
+	    return this._state;
+	  };
+	
+	  FrictionSimulator.prototype.finished = function() {
+	    return Math.abs(this._state.v) < this.options.tolerance;
+	  };
+	
+	  return FrictionSimulator;
+	
+	})(Simulator);
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Defaults, FrictionSimulator, Simulator, SpringSimulator, Utils,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Utils = __webpack_require__(4);
+	
+	Defaults = __webpack_require__(15).Defaults;
+	
+	Simulator = __webpack_require__(28).Simulator;
+	
+	SpringSimulator = __webpack_require__(27).SpringSimulator;
+	
+	FrictionSimulator = __webpack_require__(29).FrictionSimulator;
+	
+	exports.MomentumBounceSimulator = (function(superClass) {
+	  extend(MomentumBounceSimulator, superClass);
+	
+	  function MomentumBounceSimulator() {
+	    this.finished = bind(this.finished, this);
+	    return MomentumBounceSimulator.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  MomentumBounceSimulator.prototype.setup = function(options) {
+	    this.options = Defaults.getDefaults("MomentumBounceSimulator", options);
+	    this.options = _.defaults(options, {
+	      velocity: 0,
+	      position: 0,
+	      min: 0,
+	      max: 0
+	    });
+	    this._frictionSimulator = new FrictionSimulator({
+	      friction: this.options.momentum.friction,
+	      tolerance: this.options.momentum.tolerance,
+	      velocity: this.options.velocity,
+	      position: this.options.position
+	    });
+	    this._springSimulator = new SpringSimulator({
+	      tension: this.options.bounce.tension,
+	      friction: this.options.bounce.friction,
+	      tolerance: this.options.bounce.tolerance,
+	      velocity: this.options.velocity,
+	      position: this.options.position
+	    });
+	    this._state = {
+	      x: this.options.position,
+	      v: this.options.velocity
+	    };
+	    return this._useSpring = false;
+	  };
+	
+	  MomentumBounceSimulator.prototype.next = function(delta) {
+	    if (this._useSpring) {
+	      this._state = this._springSimulator.next(delta);
+	    } else {
+	      this._state = this._frictionSimulator.next(delta);
+	      this._tryTransitionToSpring(this._state);
+	    }
+	    return this._state;
+	  };
+	
+	  MomentumBounceSimulator.prototype.finished = function() {
+	    if (this._useSpring) {
+	      return this._springSimulator.finished();
+	    }
+	    return this._frictionSimulator.finished();
+	  };
+	
+	  MomentumBounceSimulator.prototype.setState = function(state) {
+	    var bound;
+	    this._state = {
+	      x: state.x,
+	      v: state.v
+	    };
+	    this._frictionSimulator.setState(this._state);
+	    if (this._isValidState()) {
+	      return this._tryTransitionToSpring();
+	    } else {
+	      if (this._state.x <= this.options.min) {
+	        bound = this.options.min;
+	      }
+	      if (this._state.x >= this.options.max) {
+	        bound = this.options.max;
+	      }
+	      return this._transitionToSpring(bound);
+	    }
+	  };
+	
+	  MomentumBounceSimulator.prototype._tryTransitionToSpring = function(force) {
+	    var aboveMaxWithVelocity, belowMinWithVelocity, bound;
+	    belowMinWithVelocity = this._state.x < this.options.min && this._state.v <= 0;
+	    aboveMaxWithVelocity = this._state.x > this.options.max && this._state.v >= 0;
+	    if (belowMinWithVelocity || aboveMaxWithVelocity) {
+	      if (belowMinWithVelocity) {
+	        bound = this.options.min;
+	      }
+	      if (aboveMaxWithVelocity) {
+	        bound = this.options.max;
+	      }
+	      return this._transitionToSpring(bound);
+	    } else {
+	      return this._useSpring = false;
+	    }
+	  };
+	
+	  MomentumBounceSimulator.prototype._transitionToSpring = function(bound) {
+	    this._useSpring = true;
+	    this._springSimulator.options.offset = bound;
+	    return this._springSimulator.setState(this._state);
+	  };
+	
+	  MomentumBounceSimulator.prototype._isValidState = function() {
+	    var aboveMaxTravelingBack, belowMinTravelingBack, bound, check, friction, solution;
+	    belowMinTravelingBack = this._state.x < this.options.min && this._state.v > 0;
+	    aboveMaxTravelingBack = this._state.x > this.options.max && this._state.v < 0;
+	    check = false;
+	    if (belowMinTravelingBack) {
+	      bound = this.options.min;
+	      check = true;
+	    } else if (aboveMaxTravelingBack) {
+	      bound = this.options.max;
+	      check = true;
+	    }
+	    if (check) {
+	      friction = this._frictionSimulator.options.friction;
+	      solution = 1 - (friction * (bound - this._state.x)) / this._state.v;
+	      return solution > 0;
+	    }
+	    return true;
+	  };
+	
+	  return MomentumBounceSimulator;
+	
+	})(Simulator);
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, Events, Utils, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	Events = __webpack_require__(14).Events;
+	
+	Events.EventBufferReset = "eventbufferreset";
+	
+	Events.EventBufferUpdated = "eventbufferupdated";
+	
+	exports.EventBuffer = (function(superClass) {
+	  extend(EventBuffer, superClass);
+	
+	  function EventBuffer(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this.options = _.defaults(options, {
+	      velocityTimeout: 100
+	    });
+	    this._events = [];
+	  }
+	
+	  EventBuffer.prototype.push = function(event) {
+	    this._events.push(event);
+	    return this.emit(Events.EventBufferUpdated, event);
+	  };
+	
+	  EventBuffer.prototype.reset = function() {
+	    this._events.length = 0;
+	    return this.emit(Events.EventBufferReset);
+	  };
+	
+	  EventBuffer.define("length", {
+	    get: function() {
+	      return this._events.length;
+	    }
+	  });
+	
+	  EventBuffer.define("first", {
+	    get: function() {
+	      return this._events[0];
+	    }
+	  });
+	
+	  EventBuffer.define("offset", {
+	    get: function() {
+	      var current, first, offset;
+	      if (events.length < 2) {
+	        return {
+	          x: 0,
+	          y: 0
+	        };
+	      }
+	      current = events[events.length - 1];
+	      first = events[0];
+	      return offset = {
+	        x: current.x - first.x,
+	        y: current.y - first.y
+	      };
+	    }
+	  });
+	
+	  EventBuffer.define("events", {
+	    get: function() {
+	      var timeout;
+	      timeout = Date.now() - this.options.velocityTimeout;
+	      return _.filter(this._events, (function(_this) {
+	        return function(event) {
+	          return event.t > timeout;
+	        };
+	      })(this));
+	    }
+	  });
+	
+	  EventBuffer.define("angle", {
+	    get: function() {
+	      var events, p1, p2;
+	      events = this.events;
+	      if (events.length < 2) {
+	        return 0;
+	      }
+	      p1 = events[0];
+	      p2 = events[1];
+	      return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+	    }
+	  });
+	
+	  EventBuffer.define("velocity", {
+	    get: function() {
+	      var current, events, first, time, velocity;
+	      events = this.events;
+	      if (events.length < 2) {
+	        return {
+	          x: 0,
+	          y: 0
+	        };
+	      }
+	      current = events[events.length - 1];
+	      first = events[0];
+	      time = current.t - first.t;
+	      velocity = {
+	        x: (current.x - first.x) / time,
+	        y: (current.y - first.y) / time
+	      };
+	      if (velocity.x === Infinity) {
+	        velocity.x = 0;
+	      }
+	      if (velocity.y === Infinity) {
+	        velocity.y = 0;
+	      }
+	      return velocity;
+	    }
+	  });
+	
+	  return EventBuffer;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Layer,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Layer = __webpack_require__(12).Layer;
+	
+	"Todo: make it work in a parent layer";
+	
+	exports.BackgroundLayer = (function(superClass) {
+	  extend(BackgroundLayer, superClass);
+	
+	  function BackgroundLayer(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this.layout = bind(this.layout, this);
+	    if (options.backgroundColor == null) {
+	      options.backgroundColor = "#fff";
+	    }
+	    BackgroundLayer.__super__.constructor.call(this, options);
+	    this.sendToBack();
+	    this.layout();
+	    this._context.domEventManager.wrap(window).addEventListener("resize", this.layout);
+	  }
+	
+	  BackgroundLayer.prototype.layout = function() {
+	    if (this.superLayer) {
+	      return this.frame = this.superLayer.frame;
+	    } else {
+	      return this.frame = this._context.frame;
+	    }
+	  };
+	
+	  return BackgroundLayer;
+	
+	})(Layer);
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Layer,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	Layer = __webpack_require__(12).Layer;
+	
+	exports.VideoLayer = (function(superClass) {
+	  extend(VideoLayer, superClass);
+	
+	  function VideoLayer(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    this.player = document.createElement("video");
+	    this.player.setAttribute("webkit-playsinline", "true");
+	    this.player.style.width = "100%";
+	    this.player.style.height = "100%";
+	    VideoLayer.__super__.constructor.call(this, options);
+	    this.player.on = this._context.domEventManager.wrap(this.player).addEventListener;
+	    this.player.off = this._context.domEventManager.wrap(this.player).removeEventListener;
+	    this.video = options.video;
+	    this._element.appendChild(this.player);
+	  }
+	
+	  VideoLayer.define("video", {
+	    get: function() {
+	      return this.player.src;
+	    },
+	    set: function(video) {
+	      return this.player.src = video;
+	    }
+	  });
+	
+	  return VideoLayer;
+	
+	})(Layer);
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AnimationGroup, EventEmitter, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	_ = __webpack_require__(1)._;
+	
+	EventEmitter = __webpack_require__(7).EventEmitter;
+	
+	AnimationGroup = (function(superClass) {
+	  extend(AnimationGroup, superClass);
+	
+	  function AnimationGroup(animations) {
+	    if (animations == null) {
+	      animations = [];
+	    }
+	    this.setAnimations(animations);
+	    this._currentAnimation = null;
+	  }
+	
+	  AnimationGroup.prototype.setAnimations = function(animations) {
+	    return this._animations = _.map(animations, function(animation) {
+	      return animation.copy();
+	    });
+	  };
+	
+	  AnimationGroup.prototype.start = function() {
+	    this.emit("start");
+	    _.map(this._animations, (function(_this) {
+	      return function(animation, index) {
+	        var nextAnimation;
+	        nextAnimation = _this._animations[index + 1];
+	        if (nextAnimation) {
+	          return animation.on(Events.AnimationEnd, function() {
+	            nextAnimation.start();
+	            return _this._currentAnimation = animation;
+	          });
+	        } else {
+	          return animation.on(Events.AnimationEnd, function() {
+	            _this.emit("end");
+	            return _this._currentAnimation = null;
+	          });
+	        }
+	      };
+	    })(this));
+	    return this._animations[0].start();
+	  };
+	
+	  AnimationGroup.prototype.stop = function() {
+	    var ref;
+	    return (ref = this._currentAnimation) != null ? ref.stop() : void 0;
+	  };
+	
+	  return AnimationGroup;
+	
+	})(EventEmitter);
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, CanvasClass, Events,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	Events = __webpack_require__(14).Events;
+	
+	CanvasClass = (function(superClass) {
+	  extend(CanvasClass, superClass);
+	
+	  function CanvasClass() {
+	    this.addListener = bind(this.addListener, this);
+	    return CanvasClass.__super__.constructor.apply(this, arguments);
+	  }
+	
+	  CanvasClass.define("width", {
+	    get: function() {
+	      return window.innerWidth;
+	    }
+	  });
+	
+	  CanvasClass.define("height", {
+	    get: function() {
+	      return window.innerHeight;
+	    }
+	  });
+	
+	  CanvasClass.define("size", {
+	    get: function() {
+	      return {
+	        width: this.width,
+	        height: this.height
+	      };
+	    }
+	  });
+	
+	  CanvasClass.define("frame", {
+	    get: function() {
+	      return {
+	        x: 0,
+	        y: 0,
+	        width: this.width,
+	        height: this.height
+	      };
+	    }
+	  });
+	
+	  CanvasClass.prototype.addListener = function(eventName, listener) {
+	    if (eventName === "resize") {
+	      Events.wrap(window).addEventListener("resize", (function(_this) {
+	        return function() {
+	          return _this.emit("resize");
+	        };
+	      })(this));
+	    }
+	    return CanvasClass.__super__.addListener.call(this, eventName, listener);
+	  };
+	
+	  CanvasClass.prototype.on = CanvasClass.prototype.addListener;
+	
+	  CanvasClass.prototype.onResize = function(cb) {
+	    return this.on("resize", cb);
+	  };
+	
+	  return CanvasClass;
+	
+	})(BaseClass);
+	
+	exports.Canvas = new CanvasClass;
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Context, Utils, printContext, printLayer,
+	  slice = [].slice;
+	
+	Utils = __webpack_require__(4);
+	
+	Context = __webpack_require__(37).Context;
+	
+	"\nTodo:\n- Better looks\n- Resizable\n- Live in own space on top of all Framer stuff\n";
+	
+	printContext = null;
+	
+	printLayer = null;
+	
+	exports.print = function() {
+	  var args;
+	  args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	  if (!printContext) {
+	    printContext = new Context({
+	      name: "Print"
+	    });
+	  }
+	  printContext.run(function() {
+	    var printNode, printPrefix, update;
+	    if (!printLayer) {
+	      printLayer = new Layer;
+	      printLayer.scrollVertical = true;
+	      printLayer.ignoreEvents = false;
+	      printLayer.html = "";
+	      printLayer.style = {
+	        "font": "12px/1.35em Menlo",
+	        "color": "rgba(0,0,0,.7)",
+	        "padding": "8px",
+	        "padding-bottom": "30px",
+	        "border-top": "1px solid #d9d9d9"
+	      };
+	      printLayer.opacity = 0.9;
+	      printLayer.style.zIndex = 999;
+	      printLayer.visible = true;
+	      printLayer.backgroundColor = "white";
+	      update = function() {
+	        printLayer.width = window.innerWidth;
+	        printLayer.height = 160;
+	        return printLayer.maxY = window.innerHeight;
+	      };
+	      update();
+	      printContext.domEventManager.wrap(window).addEventListener("resize", update);
+	    }
+	    printPrefix = "» ";
+	    printNode = document.createElement("div");
+	    printNode.innerHTML = _.escape(printPrefix + args.map(Utils.inspect).join(", ")) + "<br>";
+	    printNode.style["-webkit-user-select"] = "text";
+	    printNode.style["cursor"] = "auto";
+	    return printLayer._element.appendChild(printNode);
+	  });
+	  return Utils.delay(0, function() {
+	    return printLayer._element.scrollTop = printLayer._element.scrollHeight;
+	  });
+	};
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BaseClass, Config, DOMEventManager, Utils, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+	
+	_ = __webpack_require__(1)._;
+	
+	Utils = __webpack_require__(4);
+	
+	BaseClass = __webpack_require__(6).BaseClass;
+	
+	Config = __webpack_require__(13).Config;
+	
+	DOMEventManager = __webpack_require__(38).DOMEventManager;
+	
+	
+	/*
+	
+	An easy way to think of the context is a bucket of things related to a set of layers. There
+	is always at least one context on the screen, but often many more. For example, the device has
+	a special context and replaces the default one (so it renders in the screen), and the print
+	function uses on to draw the console.
+	
+	The default context lives under Framer.DefaultContext and the current one in 
+	Framer.CurrentContext. You can create layers in any context by using the run function.
+	
+	A context keeps track of everyting around those layers, so it can clean it up again. We use
+	this a lot in Framer Studio's autocomplete function. Async things like running animations and
+	timers get stopped too.
+	
+	Contexts can live inside another context (with a layer as a parent) so you can only reload
+	a part of a prototype. This is mainly how device works.
+	
+	Another feature is to temporarily freeze/resume a context. If you freeze it, all user event
+	will temporarily get blocked so in theory nothing will change in the context. You can restore
+	these at any time.
+	 */
+	
+	exports.Context = (function(superClass) {
+	  extend(Context, superClass);
+	
+	  Context.define("parent", {
+	    get: function() {
+	      return this._parent;
+	    }
+	  });
+	
+	  Context.define("element", {
+	    get: function() {
+	      return this._element;
+	    }
+	  });
+	
+	  function Context(options) {
+	    if (options == null) {
+	      options = {};
+	    }
+	    Context.__super__.constructor.apply(this, arguments);
+	    options = _.defaults(options, {
+	      parent: null,
+	      name: null
+	    });
+	    if (!options.name) {
+	      throw Error("Contexts need a name");
+	    }
+	    this._parent = options.parent;
+	    this._name = options.name;
+	    this.reset();
+	  }
+	
+	  Context.prototype.reset = function() {
+	    this._createDOMEventManager();
+	    this._createRootElement();
+	    this.resetLayers();
+	    this.resetAnimations();
+	    this.resetTimers();
+	    this.resetIntervals();
+	    return this.emit("reset", this);
+	  };
+	
+	  Context.define("layers", {
+	    get: function() {
+	      return _.clone(this._layers);
+	    }
+	  });
+	
+	  Context.define("layerCounter", {
+	    get: function() {
+	      return this._layerCounter;
+	    }
+	  });
+	
+	  Context.prototype.addLayer = function(layer) {
+	    if (indexOf.call(this._layers, layer) >= 0) {
+	      return;
+	    }
+	    this._layerCounter++;
+	    return this._layers.push(layer);
+	  };
+	
+	  Context.prototype.removeLayer = function(layer) {
+	    return this._layers = _.without(this._layers, layer);
+	  };
+	
+	  Context.prototype.resetLayers = function() {
+	    this._layers = [];
+	    return this._layerCounter = 0;
+	  };
+	
+	  Context.define("animations", {
+	    get: function() {
+	      return _.clone(this._animations);
+	    }
+	  });
+	
+	  Context.prototype.addAnimation = function(animation) {
+	    if (indexOf.call(this._animations, animation) >= 0) {
+	      return;
+	    }
+	    return this._animations.push(animation);
+	  };
+	
+	  Context.prototype.removeAnimation = function(animation) {
+	    return this._animations = _.without(this._animations, animation);
+	  };
+	
+	  Context.prototype.resetAnimations = function() {
+	    this.stopAnimations();
+	    return this._animations = [];
+	  };
+	
+	  Context.prototype.stopAnimations = function() {
+	    if (!this._animations) {
+	      return;
+	    }
+	    return this._animations.map(function(animation) {
+	      return animation.stop(true);
+	    });
+	  };
+	
+	  Context.define("timers", {
+	    get: function() {
+	      return _.clone(this._timers);
+	    }
+	  });
+	
+	  Context.prototype.addTimer = function(timer) {
+	    if (indexOf.call(this._timers, timer) >= 0) {
+	      return;
+	    }
+	    return this._timers.push(timer);
+	  };
+	
+	  Context.prototype.removeTimer = function(timer) {
+	    return this._timers = _.without(this._timers, timer);
+	  };
+	
+	  Context.prototype.resetTimers = function() {
+	    if (this._timers) {
+	      this._timers.map(window.clearTimeout);
+	    }
+	    return this._timers = [];
+	  };
+	
+	  Context.define("intervals", {
+	    get: function() {
+	      return _.clone(this._intervals);
+	    }
+	  });
+	
+	  Context.prototype.addInterval = function(interval) {
+	    if (indexOf.call(this._intervals, interval) >= 0) {
+	      return;
+	    }
+	    return this._intervals.push(interval);
+	  };
+	
+	  Context.prototype.removeInterval = function(interval) {
+	    return this._intervals = _.without(this._intervals, interval);
+	  };
+	
+	  Context.prototype.resetIntervals = function() {
+	    if (this._intervals) {
+	      this._intervals.map(window.clearInterval);
+	    }
+	    return this._intervals = [];
+	  };
+	
+	  Context.prototype.run = function(fn) {
+	    var previousContext;
+	    previousContext = Framer.CurrentContext;
+	    Framer.CurrentContext = this;
+	    fn();
+	    return Framer.CurrentContext = previousContext;
+	  };
+	
+	  Context.prototype.freeze = function() {
+	    var eventName, i, j, layer, layerId, layerListeners, len, len1, ref, ref1;
+	    if (this._frozenEvents != null) {
+	      throw new Error("Context is already frozen");
+	    }
+	    this._frozenEvents = {};
+	    ref = this._layers;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      layer = ref[i];
+	      layerListeners = {};
+	      ref1 = layer.listenerEvents();
+	      for (j = 0, len1 = ref1.length; j < len1; j++) {
+	        eventName = ref1[j];
+	        layerListeners[eventName] = layer.listeners(eventName);
+	      }
+	      layer.removeAllListeners();
+	      layerId = this._layers.indexOf(layer);
+	      this._frozenEvents[layerId] = layerListeners;
+	    }
+	    this.stopAnimations();
+	    this.resetTimers();
+	    return this.resetIntervals();
+	  };
+	
+	  Context.prototype.resume = function() {
+	    var eventName, events, i, layer, layerId, len, listener, listeners, ref;
+	    if (this._frozenEvents == null) {
+	      throw new Error("Context is not frozen, cannot resume");
+	    }
+	    ref = this._frozenEvents;
+	    for (layerId in ref) {
+	      events = ref[layerId];
+	      layer = this._layers[layerId];
+	      for (eventName in events) {
+	        listeners = events[eventName];
+	        for (i = 0, len = listeners.length; i < len; i++) {
+	          listener = listeners[i];
+	          layer.on(eventName, listener);
+	        }
+	      }
+	    }
+	    return delete this._frozenEvents;
+	  };
+	
+	  Context.prototype._createDOMEventManager = function() {
+	    var ref;
+	    if ((ref = this.domEventManager) != null) {
+	      ref.reset();
+	    }
+	    return this.domEventManager = new DOMEventManager;
+	  };
+	
+	  Context.prototype._createRootElement = function() {
+	    this._destroyRootElement();
+	    this._element = document.createElement("div");
+	    this._element.id = "FramerContextRoot-" + this._name;
+	    this._element.classList.add("framerContext");
+	    this.__pendingElementAppend = (function(_this) {
+	      return function() {
+	        var parentElement, ref;
+	        parentElement = (ref = _this._parent) != null ? ref._element : void 0;
+	        if (parentElement == null) {
+	          parentElement = document.body;
+	        }
+	        return parentElement.appendChild(_this._element);
+	      };
+	    })(this);
+	    return Utils.domComplete(this.__pendingElementAppend);
+	  };
+	
+	  Context.prototype._destroyRootElement = function() {
+	    var ref;
+	    if ((ref = this._element) != null ? ref.parentNode : void 0) {
+	      this._element.parentNode.removeChild(this._element);
+	    }
+	    if (this.__pendingElementAppend) {
+	      Utils.domCompleteCancel(this.__pendingElementAppend);
+	      this.__pendingElementAppend = null;
+	    }
+	    return this._element = null;
+	  };
+	
+	  Context.define("width", {
+	    get: function() {
+	      if (this.parent) {
+	        return this.parent.width;
+	      }
+	      return window.innerWidth;
+	    }
+	  });
+	
+	  Context.define("height", {
+	    get: function() {
+	      if (this.parent) {
+	        return this.parent.height;
+	      }
+	      return window.innerHeight;
+	    }
+	  });
+	
+	  Context.define("frame", {
+	    get: function() {
+	      return {
+	        x: 0,
+	        y: 0,
+	        width: this.width,
+	        height: this.height
+	      };
+	    }
+	  });
+	
+	  Context.define("size", {
+	    get: function() {
+	      return _.pluck(this.frame, ["x", "y"]);
+	    }
+	  });
+	
+	  Context.define("point", {
+	    get: function() {
+	      return _.pluck(this.frame, ["width", "height"]);
+	    }
+	  });
+	
+	  return Context;
+	
+	})(BaseClass);
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var DOMEventManagerElement, EventEmitter, EventManagerIdCounter, GestureManagerElement, Utils, _,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 	
-	Utils = __webpack_require__(2);
+	_ = __webpack_require__(1)._;
 	
-	GestureManagerElement = __webpack_require__(12).GestureManagerElement;
+	EventEmitter = __webpack_require__(7).EventEmitter;
+	
+	GestureManagerElement = __webpack_require__(39).GestureManagerElement;
+	
+	Utils = __webpack_require__(4);
 	
 	EventManagerIdCounter = 0;
 	
-	EventManagerElement = (function() {
-	  function EventManagerElement(element1) {
+	DOMEventManagerElement = (function(superClass) {
+	  extend(DOMEventManagerElement, superClass);
+	
+	  function DOMEventManagerElement(element1) {
 	    this.element = element1;
-	    this._events = {};
 	    this._elementGestureManager = new GestureManagerElement(this.element);
 	  }
 	
-	  EventManagerElement.prototype.addEventListener = function(eventName, listener) {
-	    var base;
-	    if (!(Utils.domValidEvent(this.element, eventName) || Events.isGestureEvent(eventName))) {
-	      return;
-	    }
-	    if ((base = this._events)[eventName] == null) {
-	      base[eventName] = [];
-	    }
-	    this._events[eventName].push(listener);
+	  DOMEventManagerElement.prototype.addListener = function(eventName, listener) {
+	    DOMEventManagerElement.__super__.addListener.call(this, eventName, listener);
 	    if (Events.isGestureEvent(eventName)) {
 	      return this._elementGestureManager.addEventListener(eventName, listener);
 	    } else {
@@ -14267,92 +20116,62 @@
 	    }
 	  };
 	
-	  EventManagerElement.prototype.removeEventListener = function(eventName, listener) {
-	    if (!this._events) {
-	      return;
-	    }
-	    if (!this._events[eventName]) {
-	      return;
-	    }
-	    this._events[eventName] = _.without(this._events[eventName], listener);
+	  DOMEventManagerElement.prototype.removeListener = function(eventName, listener) {
+	    DOMEventManagerElement.__super__.removeListener.call(this, eventName, listener);
 	    if (Events.isGestureEvent(eventName)) {
-	      this._elementGestureManager.removeEventListener(eventName, listener);
+	      return this._elementGestureManager.removeEventListener(eventName, listener);
 	    } else {
-	      this.element.removeEventListener(eventName, listener);
+	      return this.element.removeEventListener(eventName, listener);
 	    }
 	  };
 	
-	  EventManagerElement.prototype.removeAllEventListeners = function(eventName) {
-	    var eventListener, events, i, j, len, len1, ref;
-	    events = eventName ? [eventName] : _.keys(this._events);
-	    for (i = 0, len = events.length; i < len; i++) {
-	      eventName = events[i];
-	      ref = this._events[eventName];
-	      for (j = 0, len1 = ref.length; j < len1; j++) {
-	        eventListener = ref[j];
-	        this.removeEventListener(eventName, eventListener);
-	      }
-	    }
-	  };
+	  DOMEventManagerElement.prototype.addEventListener = DOMEventManagerElement.prototype.addListener;
 	
-	  EventManagerElement.prototype.once = function(event, listener) {
-	    var fn;
-	    fn = (function(_this) {
-	      return function() {
-	        _this.removeListener(event, fn);
-	        return listener.apply(null, arguments);
-	      };
-	    })(this);
-	    return this.on(event, fn);
-	  };
+	  DOMEventManagerElement.prototype.removeEventListener = DOMEventManagerElement.prototype.removeListener;
 	
-	  EventManagerElement.prototype.on = EventManagerElement.prototype.addEventListener;
+	  return DOMEventManagerElement;
 	
-	  EventManagerElement.prototype.off = EventManagerElement.prototype.removeEventListener;
+	})(EventEmitter);
 	
-	  return EventManagerElement;
-	
-	})();
-	
-	exports.EventManager = (function() {
-	  function EventManager(element) {
+	exports.DOMEventManager = (function() {
+	  function DOMEventManager(element) {
 	    this.wrap = bind(this.wrap, this);
 	    this._elements = {};
 	  }
 	
-	  EventManager.prototype.wrap = function(element) {
+	  DOMEventManager.prototype.wrap = function(element) {
 	    if (!element._eventManagerId) {
 	      element._eventManagerId = EventManagerIdCounter++;
 	    }
 	    if (!this._elements[element._eventManagerId]) {
-	      this._elements[element._eventManagerId] = new EventManagerElement(element);
+	      this._elements[element._eventManagerId] = new DOMEventManagerElement(element);
 	    }
 	    return this._elements[element._eventManagerId];
 	  };
 	
-	  EventManager.prototype.reset = function() {
+	  DOMEventManager.prototype.reset = function() {
 	    var element, elementEventManager, ref, results;
 	    ref = this._elements;
 	    results = [];
 	    for (element in ref) {
 	      elementEventManager = ref[element];
-	      results.push(elementEventManager.removeAllEventListeners());
+	      results.push(elementEventManager.removeAllListeners());
 	    }
 	    return results;
 	  };
 	
-	  return EventManager;
+	  return DOMEventManager;
 
 	})();
 
 
 /***/ },
-/* 12 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Hammer;
 	
-	Hammer = __webpack_require__(13);
+	Hammer = __webpack_require__(40);
 	
 	exports.GestureManagerElement = (function() {
 	  function GestureManagerElement(element) {
@@ -14544,7 +20363,7 @@
 
 
 /***/ },
-/* 13 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.4 - 2014-09-28
@@ -16999,7 +22818,7 @@
 	    prefixed: prefixed
 	});
 	
-	if ("function" == TYPE_FUNCTION && __webpack_require__(14)) {
+	if ("function" == TYPE_FUNCTION && __webpack_require__(41)) {
 	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 	        return Hammer;
 	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -17013,4061 +22832,15 @@
 
 
 /***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/* 41 */
+/***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Animation, BaseClass, Config, Defaults, EventEmitter, LayerDraggable, LayerStates, LayerStyle, NoCacheDateKey, Utils, _, layerProperty, layerValueTypeError,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-	  slice = [].slice;
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	Config = __webpack_require__(10).Config;
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	EventEmitter = __webpack_require__(8).EventEmitter;
-	
-	Animation = __webpack_require__(17).Animation;
-	
-	LayerStyle = __webpack_require__(24).LayerStyle;
-	
-	LayerStates = __webpack_require__(25).LayerStates;
-	
-	LayerDraggable = __webpack_require__(27).LayerDraggable;
-	
-	NoCacheDateKey = Date.now();
-	
-	layerValueTypeError = function(name, value) {
-	  throw new Error("Layer." + name + ": value '" + value + "' of type '" + (typeof value) + "'' is not valid");
-	};
-	
-	layerProperty = function(obj, name, cssProperty, fallback, validator, options, set) {
-	  var result;
-	  if (options == null) {
-	    options = {};
-	  }
-	  result = {
-	    "default": fallback,
-	    get: function() {
-	      if (this._properties.hasOwnProperty(name)) {
-	        return this._properties[name];
-	      }
-	      return fallback;
-	    },
-	    set: function(value) {
-	      if (value && validator && !validator(value)) {
-	        layerValueTypeError(name, value);
-	      }
-	      this._properties[name] = value;
-	      this._element.style[cssProperty] = LayerStyle[cssProperty](this);
-	      if (typeof set === "function") {
-	        set(this, value);
-	      }
-	      this.emit("change:" + name, value);
-	      if (name === "x" || name === "y") {
-	        this.emit("change:point", value);
-	      }
-	      if (name === "width" || name === "height") {
-	        this.emit("change:size", value);
-	      }
-	      if (name === "x" || name === "y" || name === "width" || name === "height") {
-	        this.emit("change:frame", value);
-	      }
-	      if (name === "rotationZ") {
-	        return this.emit("change:rotation", value);
-	      }
-	    }
-	  };
-	  return result = _.extend(result, options);
-	};
-	
-	exports.Layer = (function(superClass) {
-	  extend(Layer, superClass);
-	
-	  function Layer(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this.addListener = bind(this.addListener, this);
-	    this._properties = {};
-	    this._style = {};
-	    this._prefer2d = false;
-	    this._alwaysUseImageCache = false;
-	    this._createElement();
-	    if (options.hasOwnProperty("frame")) {
-	      options = _.extend(options, options.frame);
-	    }
-	    options = Defaults.getDefaults("Layer", options);
-	    Layer.__super__.constructor.call(this, options);
-	    this._context.addLayer(this);
-	    this._id = this._context.nextLayerId();
-	    if (!options.superLayer) {
-	      if (!options.shadow) {
-	        this._insertElement();
-	      }
-	    } else {
-	      this.superLayer = options.superLayer;
-	    }
-	    if (options.hasOwnProperty("index")) {
-	      this.index = options.index;
-	    }
-	    this._subLayers = [];
-	    this._context.emit("layer:create", this);
-	  }
-	
-	  Layer.define("custom", Layer.simpleProperty("custom", void 0));
-	
-	  Layer.define("width", layerProperty(Layer, "width", "width", 100, _.isNumber));
-	
-	  Layer.define("height", layerProperty(Layer, "height", "height", 100, _.isNumber));
-	
-	  Layer.define("visible", layerProperty(Layer, "visible", "display", true, _.isBoolean));
-	
-	  Layer.define("opacity", layerProperty(Layer, "opacity", "opacity", 1, _.isNumber));
-	
-	  Layer.define("index", layerProperty(Layer, "index", "zIndex", 0, _.isNumber, {
-	    importable: false,
-	    exportable: false
-	  }));
-	
-	  Layer.define("clip", layerProperty(Layer, "clip", "overflow", true, _.isBoolean));
-	
-	  Layer.define("scrollHorizontal", layerProperty(Layer, "scrollHorizontal", "overflowX", false, _.isBoolean, {}, function(layer, value) {
-	    if (value === true) {
-	      return layer.ignoreEvents = false;
-	    }
-	  }));
-	
-	  Layer.define("scrollVertical", layerProperty(Layer, "scrollVertical", "overflowY", false, _.isBoolean, {}, function(layer, value) {
-	    if (value === true) {
-	      return layer.ignoreEvents = false;
-	    }
-	  }));
-	
-	  Layer.define("scroll", {
-	    get: function() {
-	      return this.scrollHorizontal === true || this.scrollVertical === true;
-	    },
-	    set: function(value) {
-	      return this.scrollHorizontal = this.scrollVertical = value;
-	    }
-	  });
-	
-	  Layer.define("ignoreEvents", layerProperty(Layer, "ignoreEvents", "pointerEvents", true, _.isBoolean));
-	
-	  Layer.define("x", layerProperty(Layer, "x", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("y", layerProperty(Layer, "y", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("z", layerProperty(Layer, "z", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("scaleX", layerProperty(Layer, "scaleX", "webkitTransform", 1, _.isNumber));
-	
-	  Layer.define("scaleY", layerProperty(Layer, "scaleY", "webkitTransform", 1, _.isNumber));
-	
-	  Layer.define("scaleZ", layerProperty(Layer, "scaleZ", "webkitTransform", 1, _.isNumber));
-	
-	  Layer.define("scale", layerProperty(Layer, "scale", "webkitTransform", 1, _.isNumber));
-	
-	  Layer.define("skewX", layerProperty(Layer, "skewX", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("skewY", layerProperty(Layer, "skewY", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("skew", layerProperty(Layer, "skew", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("originX", layerProperty(Layer, "originX", "webkitTransformOrigin", 0.5, _.isNumber));
-	
-	  Layer.define("originY", layerProperty(Layer, "originY", "webkitTransformOrigin", 0.5, _.isNumber));
-	
-	  Layer.define("perspective", layerProperty(Layer, "perspective", "webkitPerspective", 0, _.isNumber));
-	
-	  Layer.define("rotationX", layerProperty(Layer, "rotationX", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("rotationY", layerProperty(Layer, "rotationY", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("rotationZ", layerProperty(Layer, "rotationZ", "webkitTransform", 0, _.isNumber));
-	
-	  Layer.define("rotation", {
-	    get: function() {
-	      return this.rotationZ;
-	    },
-	    set: function(value) {
-	      return this.rotationZ = value;
-	    }
-	  });
-	
-	  Layer.define("blur", layerProperty(Layer, "blur", "webkitFilter", 0, _.isNumber));
-	
-	  Layer.define("brightness", layerProperty(Layer, "brightness", "webkitFilter", 100, _.isNumber));
-	
-	  Layer.define("saturate", layerProperty(Layer, "saturate", "webkitFilter", 100, _.isNumber));
-	
-	  Layer.define("hueRotate", layerProperty(Layer, "hueRotate", "webkitFilter", 0, _.isNumber));
-	
-	  Layer.define("contrast", layerProperty(Layer, "contrast", "webkitFilter", 100, _.isNumber));
-	
-	  Layer.define("invert", layerProperty(Layer, "invert", "webkitFilter", 0, _.isNumber));
-	
-	  Layer.define("grayscale", layerProperty(Layer, "grayscale", "webkitFilter", 0, _.isNumber));
-	
-	  Layer.define("sepia", layerProperty(Layer, "sepia", "webkitFilter", 0, _.isNumber));
-	
-	  Layer.define("shadowX", layerProperty(Layer, "shadowX", "boxShadow", 0, _.isNumber));
-	
-	  Layer.define("shadowY", layerProperty(Layer, "shadowY", "boxShadow", 0, _.isNumber));
-	
-	  Layer.define("shadowBlur", layerProperty(Layer, "shadowBlur", "boxShadow", 0, _.isNumber));
-	
-	  Layer.define("shadowSpread", layerProperty(Layer, "shadowSpread", "boxShadow", 0, _.isNumber));
-	
-	  Layer.define("shadowColor", layerProperty(Layer, "shadowColor", "boxShadow", ""));
-	
-	  Layer.define("backgroundColor", layerProperty(Layer, "backgroundColor", "backgroundColor", null, _.isString));
-	
-	  Layer.define("color", layerProperty(Layer, "color", "color", null, _.isString));
-	
-	  Layer.define("borderColor", layerProperty(Layer, "borderColor", "border", null, _.isString));
-	
-	  Layer.define("borderWidth", layerProperty(Layer, "borderWidth", "border", 0, _.isNumber));
-	
-	  Layer.define("force2d", layerProperty(Layer, "force2d", "webkitTransform", false, _.isBoolean));
-	
-	  Layer.define("name", {
-	    "default": "",
-	    get: function() {
-	      return this._getPropertyValue("name");
-	    },
-	    set: function(value) {
-	      this._setPropertyValue("name", value);
-	      return this._element.setAttribute("name", value);
-	    }
-	  });
-	
-	  Layer.define("borderRadius", {
-	    "default": 0,
-	    get: function() {
-	      return this._properties["borderRadius"];
-	    },
-	    set: function(value) {
-	      if (value && !_.isNumber(value)) {
-	        console.warn("Layer.borderRadius should be a numeric property, not type " + (typeof value));
-	      }
-	      this._properties["borderRadius"] = value;
-	      this._element.style["borderRadius"] = LayerStyle["borderRadius"](this);
-	      return this.emit("change:borderRadius", value);
-	    }
-	  });
-	
-	  Layer.define("cornerRadius", {
-	    importable: true,
-	    get: function() {
-	      return this.borderRadius;
-	    },
-	    set: function(value) {
-	      return this.borderRadius = value;
-	    }
-	  });
-	
-	  Layer.define("point", {
-	    get: function() {
-	      return _.pick(this, ["x", "y"]);
-	    },
-	    set: function(point) {
-	      var i, k, len, ref, results;
-	      if (!point) {
-	        return;
-	      }
-	      ref = ["x", "y"];
-	      results = [];
-	      for (i = 0, len = ref.length; i < len; i++) {
-	        k = ref[i];
-	        if (point.hasOwnProperty(k)) {
-	          results.push(this[k] = point[k]);
-	        } else {
-	          results.push(void 0);
-	        }
-	      }
-	      return results;
-	    }
-	  });
-	
-	  Layer.define("size", {
-	    get: function() {
-	      return _.pick(this, ["width", "height"]);
-	    },
-	    set: function(size) {
-	      var i, k, len, ref, results;
-	      if (!size) {
-	        return;
-	      }
-	      ref = ["width", "height"];
-	      results = [];
-	      for (i = 0, len = ref.length; i < len; i++) {
-	        k = ref[i];
-	        if (size.hasOwnProperty(k)) {
-	          results.push(this[k] = size[k]);
-	        } else {
-	          results.push(void 0);
-	        }
-	      }
-	      return results;
-	    }
-	  });
-	
-	  Layer.define("frame", {
-	    get: function() {
-	      return _.pick(this, ["x", "y", "width", "height"]);
-	    },
-	    set: function(frame) {
-	      var i, k, len, ref, results;
-	      if (!frame) {
-	        return;
-	      }
-	      ref = ["x", "y", "width", "height"];
-	      results = [];
-	      for (i = 0, len = ref.length; i < len; i++) {
-	        k = ref[i];
-	        if (frame.hasOwnProperty(k)) {
-	          results.push(this[k] = frame[k]);
-	        } else {
-	          results.push(void 0);
-	        }
-	      }
-	      return results;
-	    }
-	  });
-	
-	  Layer.define("minX", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return this.x;
-	    },
-	    set: function(value) {
-	      return this.x = value;
-	    }
-	  });
-	
-	  Layer.define("midX", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return Utils.frameGetMidX(this);
-	    },
-	    set: function(value) {
-	      return Utils.frameSetMidX(this, value);
-	    }
-	  });
-	
-	  Layer.define("maxX", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return Utils.frameGetMaxX(this);
-	    },
-	    set: function(value) {
-	      return Utils.frameSetMaxX(this, value);
-	    }
-	  });
-	
-	  Layer.define("minY", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return this.y;
-	    },
-	    set: function(value) {
-	      return this.y = value;
-	    }
-	  });
-	
-	  Layer.define("midY", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return Utils.frameGetMidY(this);
-	    },
-	    set: function(value) {
-	      return Utils.frameSetMidY(this, value);
-	    }
-	  });
-	
-	  Layer.define("maxY", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return Utils.frameGetMaxY(this);
-	    },
-	    set: function(value) {
-	      return Utils.frameSetMaxY(this, value);
-	    }
-	  });
-	
-	  Layer.prototype.convertPoint = function(point) {
-	    return Utils.convertPoint(point, null, this);
-	  };
-	
-	  Layer.define("canvasFrame", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      var context;
-	      return Utils.convertPoint(this.frame, this, null, context = true);
-	    },
-	    set: function(frame) {
-	      var context;
-	      if (!this.superLayer) {
-	        return this.frame = frame;
-	      } else {
-	        return this.frame = Utils.convertPoint(frame, null, this.superLayer, context = true);
-	      }
-	    }
-	  });
-	
-	  Layer.define("screenFrame", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      var context;
-	      return Utils.convertPoint(this.frame, this, null, context = false);
-	    },
-	    set: function(frame) {
-	      var context;
-	      if (!this.superLayer) {
-	        return this.frame = frame;
-	      } else {
-	        return this.frame = Utils.convertPoint(frame, null, this.superLayer, context = false);
-	      }
-	    }
-	  });
-	
-	  Layer.prototype.contentFrame = function() {
-	    if (!this.subLayers.length) {
-	      return {
-	        x: 0,
-	        y: 0,
-	        width: 0,
-	        height: 0
-	      };
-	    }
-	    return Utils.frameMerge(_.pluck(this.subLayers, "frame"));
-	  };
-	
-	  Layer.prototype.centerFrame = function() {
-	    var frame;
-	    if (this.superLayer) {
-	      frame = this.frame;
-	      Utils.frameSetMidX(frame, parseInt(this.superLayer.width / 2.0));
-	      Utils.frameSetMidY(frame, parseInt(this.superLayer.height / 2.0));
-	      return frame;
-	    } else {
-	      frame = this.frame;
-	      Utils.frameSetMidX(frame, parseInt(this._context.width / 2.0));
-	      Utils.frameSetMidY(frame, parseInt(this._context.height / 2.0));
-	      return frame;
-	    }
-	  };
-	
-	  Layer.prototype.center = function() {
-	    this.frame = this.centerFrame();
-	    return this;
-	  };
-	
-	  Layer.prototype.centerX = function(offset) {
-	    if (offset == null) {
-	      offset = 0;
-	    }
-	    this.x = this.centerFrame().x + offset;
-	    return this;
-	  };
-	
-	  Layer.prototype.centerY = function(offset) {
-	    if (offset == null) {
-	      offset = 0;
-	    }
-	    this.y = this.centerFrame().y + offset;
-	    return this;
-	  };
-	
-	  Layer.prototype.pixelAlign = function() {
-	    this.x = parseInt(this.x);
-	    return this.y = parseInt(this.y);
-	  };
-	
-	  Layer.prototype.canvasScaleX = function() {
-	    var context, i, len, ref, scale, superLayer;
-	    scale = this.scale * this.scaleX;
-	    ref = this.superLayers(context = true);
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      superLayer = ref[i];
-	      scale = scale * superLayer.scale * superLayer.scaleX;
-	    }
-	    return scale;
-	  };
-	
-	  Layer.prototype.canvasScaleY = function() {
-	    var context, i, len, ref, scale, superLayer;
-	    scale = this.scale * this.scaleY;
-	    ref = this.superLayers(context = true);
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      superLayer = ref[i];
-	      scale = scale * superLayer.scale * superLayer.scaleY;
-	    }
-	    return scale;
-	  };
-	
-	  Layer.prototype.screenScaleX = function() {
-	    var context, i, len, ref, scale, superLayer;
-	    scale = this.scale * this.scaleX;
-	    ref = this.superLayers(context = false);
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      superLayer = ref[i];
-	      scale = scale * superLayer.scale * superLayer.scaleX;
-	    }
-	    return scale;
-	  };
-	
-	  Layer.prototype.screenScaleY = function() {
-	    var context, i, len, ref, scale, superLayer;
-	    scale = this.scale * this.scaleY;
-	    ref = this.superLayers(context = false);
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      superLayer = ref[i];
-	      scale = scale * superLayer.scale * superLayer.scaleY;
-	    }
-	    return scale;
-	  };
-	
-	  Layer.prototype.screenScaledFrame = function() {
-	    var context, factorX, factorY, frame, i, layerScaledFrame, layers, len, superLayer;
-	    frame = {
-	      x: 0,
-	      y: 0,
-	      width: this.width * this.screenScaleX(),
-	      height: this.height * this.screenScaleY()
-	    };
-	    layers = this.superLayers(context = true);
-	    layers.push(this);
-	    layers.reverse();
-	    for (i = 0, len = layers.length; i < len; i++) {
-	      superLayer = layers[i];
-	      factorX = superLayer._superOrParentLayer() ? superLayer._superOrParentLayer().screenScaleX() : 1;
-	      factorY = superLayer._superOrParentLayer() ? superLayer._superOrParentLayer().screenScaleY() : 1;
-	      layerScaledFrame = superLayer.scaledFrame();
-	      frame.x += layerScaledFrame.x * factorX;
-	      frame.y += layerScaledFrame.y * factorY;
-	    }
-	    return frame;
-	  };
-	
-	  Layer.prototype.scaledFrame = function() {
-	    var frame, scaleX, scaleY;
-	    frame = this.frame;
-	    scaleX = this.scale * this.scaleX;
-	    scaleY = this.scale * this.scaleY;
-	    frame.width *= scaleX;
-	    frame.height *= scaleY;
-	    frame.x += (1 - scaleX) * this.originX * this.width;
-	    frame.y += (1 - scaleY) * this.originY * this.height;
-	    return frame;
-	  };
-	
-	  Layer.define("style", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return this._element.style;
-	    },
-	    set: function(value) {
-	      _.extend(this._element.style, value);
-	      return this.emit("change:style");
-	    }
-	  });
-	
-	  Layer.prototype.computedStyle = function() {
-	    var getComputedStyle;
-	    getComputedStyle = document.defaultView.getComputedStyle;
-	    if (getComputedStyle == null) {
-	      getComputedStyle = window.getComputedStyle;
-	    }
-	    return getComputedStyle(this._element);
-	  };
-	
-	  Layer.define("classList", {
-	    importable: true,
-	    exportable: false,
-	    get: function() {
-	      return this._element.classList;
-	    }
-	  });
-	
-	  Layer.prototype._createElement = function() {
-	    if (this._element != null) {
-	      return;
-	    }
-	    this._element = document.createElement("div");
-	    return this._element.classList.add("framerLayer");
-	  };
-	
-	  Layer.prototype._insertElement = function() {
-	    this.bringToFront();
-	    return this._context.getRootElement().appendChild(this._element);
-	  };
-	
-	  Layer.define("html", {
-	    get: function() {
-	      var ref;
-	      return ((ref = this._elementHTML) != null ? ref.innerHTML : void 0) || "";
-	    },
-	    set: function(value) {
-	      if (!this._elementHTML) {
-	        this._elementHTML = document.createElement("div");
-	        this._element.appendChild(this._elementHTML);
-	      }
-	      this._elementHTML.innerHTML = value;
-	      return this.emit("change:html");
-	    }
-	  });
-	
-	  Layer.prototype.querySelector = function(query) {
-	    return this._element.querySelector(query);
-	  };
-	
-	  Layer.prototype.querySelectorAll = function(query) {
-	    return this._element.querySelectorAll(query);
-	  };
-	
-	  Layer.prototype.destroy = function() {
-	    var ref;
-	    if (this.superLayer) {
-	      this.superLayer._subLayers = _.without(this.superLayer._subLayers, this);
-	    }
-	    if ((ref = this._element.parentNode) != null) {
-	      ref.removeChild(this._element);
-	    }
-	    this.removeAllListeners();
-	    this._context.removeLayer(this);
-	    return this._context.emit("layer:destroy", this);
-	  };
-	
-	  Layer.prototype.copy = function() {
-	    var copiedSublayer, i, layer, len, ref, subLayer;
-	    layer = this.copySingle();
-	    ref = this.subLayers;
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      subLayer = ref[i];
-	      copiedSublayer = subLayer.copy();
-	      copiedSublayer.superLayer = layer;
-	    }
-	    return layer;
-	  };
-	
-	  Layer.prototype.copySingle = function() {
-	    return new this.constructor(this.props);
-	  };
-	
-	  Layer.define("image", {
-	    "default": "",
-	    get: function() {
-	      return this._getPropertyValue("image");
-	    },
-	    set: function(value) {
-	      var currentValue, imageUrl, loader, ref, ref1;
-	      if (!(_.isString(value) || value === null)) {
-	        layerValueTypeError("image", value);
-	      }
-	      currentValue = this._getPropertyValue("image");
-	      if (currentValue === value) {
-	        return this.emit("load");
-	      }
-	      this.backgroundColor = null;
-	      this._setPropertyValue("image", value);
-	      if (value === null || value === "") {
-	        this.style["background-image"] = null;
-	        return;
-	      }
-	      imageUrl = value;
-	      if (this._alwaysUseImageCache === false && Utils.isLocalAssetUrl(imageUrl)) {
-	        imageUrl += "?nocache=" + NoCacheDateKey;
-	      }
-	      if ((ref = this._eventListeners) != null ? ref.hasOwnProperty("load" || ((ref1 = this._eventListeners) != null ? ref1.hasOwnProperty("error") : void 0)) : void 0) {
-	        loader = new Image();
-	        loader.name = imageUrl;
-	        loader.src = imageUrl;
-	        loader.onload = (function(_this) {
-	          return function() {
-	            _this.style["background-image"] = "url('" + imageUrl + "')";
-	            return _this.emit("load", loader);
-	          };
-	        })(this);
-	        return loader.onerror = (function(_this) {
-	          return function() {
-	            return _this.emit("error", loader);
-	          };
-	        })(this);
-	      } else {
-	        return this.style["background-image"] = "url('" + imageUrl + "')";
-	      }
-	    }
-	  });
-	
-	  Layer.define("superLayer", {
-	    enumerable: false,
-	    exportable: false,
-	    importable: true,
-	    get: function() {
-	      return this._superLayer || null;
-	    },
-	    set: function(layer) {
-	      if (layer === this._superLayer) {
-	        return;
-	      }
-	      if (!layer instanceof Layer) {
-	        throw Error("Layer.superLayer needs to be a Layer object");
-	      }
-	      Utils.domCompleteCancel(this.__insertElement);
-	      if (this._superLayer) {
-	        this._superLayer._subLayers = _.without(this._superLayer._subLayers, this);
-	        this._superLayer._element.removeChild(this._element);
-	        this._superLayer.emit("change:subLayers", {
-	          added: [],
-	          removed: [this]
-	        });
-	      }
-	      if (layer) {
-	        layer._element.appendChild(this._element);
-	        layer._subLayers.push(this);
-	        layer.emit("change:subLayers", {
-	          added: [this],
-	          removed: []
-	        });
-	      } else {
-	        this._insertElement();
-	      }
-	      this._superLayer = layer;
-	      this.bringToFront();
-	      return this.emit("change:superLayer");
-	    }
-	  });
-	
-	  Layer.define("subLayers", {
-	    enumerable: false,
-	    exportable: false,
-	    importable: false,
-	    get: function() {
-	      return _.clone(this._subLayers);
-	    }
-	  });
-	
-	  Layer.define("siblingLayers", {
-	    enumerable: false,
-	    exportable: false,
-	    importable: false,
-	    get: function() {
-	      if (this.superLayer === null) {
-	        return _.filter(this._context.getLayers(), (function(_this) {
-	          return function(layer) {
-	            return layer !== _this && layer.superLayer === null;
-	          };
-	        })(this));
-	      }
-	      return _.without(this.superLayer.subLayers, this);
-	    }
-	  });
-	
-	  Layer.prototype.addSubLayer = function(layer) {
-	    return layer.superLayer = this;
-	  };
-	
-	  Layer.prototype.removeSubLayer = function(layer) {
-	    if (indexOf.call(this.subLayers, layer) < 0) {
-	      return;
-	    }
-	    return layer.superLayer = null;
-	  };
-	
-	  Layer.prototype.subLayersByName = function(name) {
-	    return _.filter(this.subLayers, function(layer) {
-	      return layer.name === name;
-	    });
-	  };
-	
-	  Layer.prototype.siblingLayersByName = function(name) {
-	    return _.filter(this.siblingLayers, function(layer) {
-	      return layer.name === name;
-	    });
-	  };
-	
-	  Layer.prototype.superLayers = function(context) {
-	    var currentLayer, superLayers;
-	    if (context == null) {
-	      context = false;
-	    }
-	    superLayers = [];
-	    currentLayer = this;
-	    if (context === false) {
-	      while (currentLayer.superLayer) {
-	        superLayers.push(currentLayer.superLayer);
-	        currentLayer = currentLayer.superLayer;
-	      }
-	    } else {
-	      while (currentLayer._superOrParentLayer()) {
-	        superLayers.push(currentLayer._superOrParentLayer());
-	        currentLayer = currentLayer._superOrParentLayer();
-	      }
-	    }
-	    return superLayers;
-	  };
-	
-	  Layer.prototype._superOrParentLayer = function() {
-	    if (this.superLayer) {
-	      return this.superLayer;
-	    }
-	    if (this._context._parentLayer) {
-	      return this._context._parentLayer;
-	    }
-	  };
-	
-	  Layer.prototype.subLayersAbove = function(point, originX, originY) {
-	    if (originX == null) {
-	      originX = 0;
-	    }
-	    if (originY == null) {
-	      originY = 0;
-	    }
-	    return _.filter(this.subLayers, function(layer) {
-	      return Utils.framePointForOrigin(layer.frame, originX, originY).y < point.y;
-	    });
-	  };
-	
-	  Layer.prototype.subLayersBelow = function(point, originX, originY) {
-	    if (originX == null) {
-	      originX = 0;
-	    }
-	    if (originY == null) {
-	      originY = 0;
-	    }
-	    return _.filter(this.subLayers, function(layer) {
-	      return Utils.framePointForOrigin(layer.frame, originX, originY).y > point.y;
-	    });
-	  };
-	
-	  Layer.prototype.subLayersLeft = function(point, originX, originY) {
-	    if (originX == null) {
-	      originX = 0;
-	    }
-	    if (originY == null) {
-	      originY = 0;
-	    }
-	    return _.filter(this.subLayers, function(layer) {
-	      return Utils.framePointForOrigin(layer.frame, originX, originY).x < point.x;
-	    });
-	  };
-	
-	  Layer.prototype.subLayersRight = function(point, originX, originY) {
-	    if (originX == null) {
-	      originX = 0;
-	    }
-	    if (originY == null) {
-	      originY = 0;
-	    }
-	    return _.filter(this.subLayers, function(layer) {
-	      return Utils.framePointForOrigin(layer.frame, originX, originY).x > point.x;
-	    });
-	  };
-	
-	  Layer.prototype.animate = function(options) {
-	    var animation, start;
-	    start = options.start;
-	    if (start == null) {
-	      start = true;
-	    }
-	    delete options.start;
-	    options.layer = this;
-	    animation = new Animation(options);
-	    if (start) {
-	      animation.start();
-	    }
-	    return animation;
-	  };
-	
-	  Layer.prototype.animations = function() {
-	    return _.filter(this._context._animationList, (function(_this) {
-	      return function(animation) {
-	        return animation.options.layer === _this;
-	      };
-	    })(this));
-	  };
-	
-	  Layer.prototype.animatingProperties = function() {
-	    var animation, i, j, len, len1, properties, propertyName, ref, ref1;
-	    properties = {};
-	    ref = this.animations();
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      animation = ref[i];
-	      ref1 = animation.animatingProperties();
-	      for (j = 0, len1 = ref1.length; j < len1; j++) {
-	        propertyName = ref1[j];
-	        properties[propertyName] = animation;
-	      }
-	    }
-	    return properties;
-	  };
-	
-	  Layer.define("isAnimating", {
-	    enumerable: false,
-	    exportable: false,
-	    get: function() {
-	      return this.animations().length !== 0;
-	    }
-	  });
-	
-	  Layer.prototype.animateStop = function() {
-	    var ref;
-	    _.invoke(this.animations(), "stop");
-	    return (ref = this._draggable) != null ? ref.animateStop() : void 0;
-	  };
-	
-	  Layer.prototype.bringToFront = function() {
-	    return this.index = _.max(_.union([0], this.siblingLayers.map(function(layer) {
-	      return layer.index;
-	    }))) + 1;
-	  };
-	
-	  Layer.prototype.sendToBack = function() {
-	    return this.index = _.min(_.union([0], this.siblingLayers.map(function(layer) {
-	      return layer.index;
-	    }))) - 1;
-	  };
-	
-	  Layer.prototype.placeBefore = function(layer) {
-	    var i, l, len, ref;
-	    if (indexOf.call(this.siblingLayers, layer) < 0) {
-	      return;
-	    }
-	    ref = this.siblingLayers;
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      l = ref[i];
-	      if (l.index <= layer.index) {
-	        l.index -= 1;
-	      }
-	    }
-	    return this.index = layer.index + 1;
-	  };
-	
-	  Layer.prototype.placeBehind = function(layer) {
-	    var i, l, len, ref;
-	    if (indexOf.call(this.siblingLayers, layer) < 0) {
-	      return;
-	    }
-	    ref = this.siblingLayers;
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      l = ref[i];
-	      if (l.index >= layer.index) {
-	        l.index += 1;
-	      }
-	    }
-	    return this.index = layer.index - 1;
-	  };
-	
-	  Layer.define("states", {
-	    enumerable: false,
-	    exportable: false,
-	    importable: false,
-	    get: function() {
-	      return this._states != null ? this._states : this._states = new LayerStates(this);
-	    }
-	  });
-	
-	  Layer.define("draggable", {
-	    importable: false,
-	    exportable: false,
-	    get: function() {
-	      return this._draggable != null ? this._draggable : this._draggable = new LayerDraggable(this);
-	    },
-	    set: function(value) {
-	      if (_.isBoolean(value)) {
-	        return this.draggable.enabled = value;
-	      }
-	    }
-	  });
-	
-	  Layer.define("scrollFrame", {
-	    importable: false,
-	    get: function() {
-	      var frame;
-	      return frame = {
-	        x: this.scrollX,
-	        y: this.scrollY,
-	        width: this.width,
-	        height: this.height
-	      };
-	    },
-	    set: function(frame) {
-	      this.scrollX = frame.x;
-	      return this.scrollY = frame.y;
-	    }
-	  });
-	
-	  Layer.define("scrollX", {
-	    get: function() {
-	      return this._element.scrollLeft;
-	    },
-	    set: function(value) {
-	      if (!_.isNumber(value)) {
-	        layerValueTypeError("scrollX", value);
-	      }
-	      return this._element.scrollLeft = value;
-	    }
-	  });
-	
-	  Layer.define("scrollY", {
-	    get: function() {
-	      return this._element.scrollTop;
-	    },
-	    set: function(value) {
-	      if (!_.isNumber(value)) {
-	        layerValueTypeError("scrollY", value);
-	      }
-	      return this._element.scrollTop = value;
-	    }
-	  });
-	
-	  Layer.prototype.addListener = function() {
-	    var eventName, eventNames, i, j, len, listener, originalListener, results;
-	    eventNames = 2 <= arguments.length ? slice.call(arguments, 0, i = arguments.length - 1) : (i = 0, []), originalListener = arguments[i++];
-	    if (!originalListener) {
-	      return;
-	    }
-	    listener = (function(_this) {
-	      return function() {
-	        var args;
-	        args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-	        return originalListener.call.apply(originalListener, [_this].concat(slice.call(args), [_this]));
-	      };
-	    })(this);
-	    originalListener.modifiedListener = listener;
-	    if (typeof eventNames === 'string') {
-	      eventNames = [eventNames];
-	    }
-	    results = [];
-	    for (j = 0, len = eventNames.length; j < len; j++) {
-	      eventName = eventNames[j];
-	      results.push((function(_this) {
-	        return function(eventName) {
-	          var base;
-	          Layer.__super__.addListener.call(_this, eventName, listener);
-	          _this._context.eventManager.wrap(_this._element).addEventListener(eventName, listener);
-	          if (_this._eventListeners == null) {
-	            _this._eventListeners = {};
-	          }
-	          if ((base = _this._eventListeners)[eventName] == null) {
-	            base[eventName] = [];
-	          }
-	          _this._eventListeners[eventName].push(listener);
-	          if (!_.startsWith(eventName, "change:")) {
-	            return _this.ignoreEvents = false;
-	          }
-	        };
-	      })(this)(eventName));
-	    }
-	    return results;
-	  };
-	
-	  Layer.prototype.removeListener = function() {
-	    var eventName, eventNames, i, j, len, listener, results;
-	    eventNames = 2 <= arguments.length ? slice.call(arguments, 0, i = arguments.length - 1) : (i = 0, []), listener = arguments[i++];
-	    if (listener.modifiedListener) {
-	      listener = listener.modifiedListener;
-	    }
-	    if (typeof eventNames === 'string') {
-	      eventNames = [eventNames];
-	    }
-	    results = [];
-	    for (j = 0, len = eventNames.length; j < len; j++) {
-	      eventName = eventNames[j];
-	      results.push((function(_this) {
-	        return function(eventName) {
-	          Layer.__super__.removeListener.call(_this, eventName, listener);
-	          _this._context.eventManager.wrap(_this._element).removeEventListener(eventName, listener);
-	          if (_this._eventListeners) {
-	            return _this._eventListeners[eventName] = _.without(_this._eventListeners[eventName], listener);
-	          }
-	        };
-	      })(this)(eventName));
-	    }
-	    return results;
-	  };
-	
-	  Layer.prototype.once = function(eventName, listener) {
-	    var originalListener;
-	    originalListener = listener;
-	    listener = (function(_this) {
-	      return function() {
-	        var args;
-	        args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-	        originalListener.call.apply(originalListener, [_this].concat(slice.call(args), [_this]));
-	        return _this.removeListener(eventName, listener);
-	      };
-	    })(this);
-	    return this.addListener(eventName, listener);
-	  };
-	
-	  Layer.prototype.removeAllListeners = function() {
-	    var eventName, listener, listeners, ref, results;
-	    if (!this._eventListeners) {
-	      return;
-	    }
-	    ref = this._eventListeners;
-	    results = [];
-	    for (eventName in ref) {
-	      listeners = ref[eventName];
-	      results.push((function() {
-	        var i, len, results1;
-	        results1 = [];
-	        for (i = 0, len = listeners.length; i < len; i++) {
-	          listener = listeners[i];
-	          results1.push(this.removeListener(eventName, listener));
-	        }
-	        return results1;
-	      }).call(this));
-	    }
-	    return results;
-	  };
-	
-	  Layer.prototype.on = Layer.prototype.addListener;
-	
-	  Layer.prototype.off = Layer.prototype.removeListener;
-	
-	  Layer.prototype.toInspect = function() {
-	    var round;
-	    round = function(value) {
-	      if (parseInt(value) === value) {
-	        return parseInt(value);
-	      }
-	      return Utils.round(value, 1);
-	    };
-	    if (this.name) {
-	      return "<" + this.constructor.name + " id:" + this.id + " name:" + this.name + " (" + (round(this.x)) + "," + (round(this.y)) + ") " + (round(this.width)) + "x" + (round(this.height)) + ">";
-	    }
-	    return "<" + this.constructor.name + " id:" + this.id + " (" + (round(this.x)) + "," + (round(this.y)) + ") " + (round(this.width)) + "x" + (round(this.height)) + ">";
-	  };
-	
-	  return Layer;
-	
-	})(BaseClass);
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Originals, Utils, _;
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	Originals = {
-	  Layer: {
-	    backgroundColor: "rgba(0,124,255,.5)",
-	    width: 100,
-	    height: 100
-	  },
-	  Animation: {
-	    curve: "ease",
-	    time: 1
-	  },
-	  DeviceComponent: {
-	    fullScreen: false,
-	    padding: 50,
-	    deviceType: "iphone-5s-spacegray",
-	    deviceZoom: "fit",
-	    contentZoom: 1,
-	    orientation: "portrait",
-	    keyboard: false,
-	    animationOptions: {
-	      curve: "spring(400,40,0)"
-	    }
-	  },
-	  LayerDraggable: {
-	    momentum: true,
-	    momentumOptions: {
-	      friction: 2.1,
-	      tolerance: 1
-	    },
-	    bounce: true,
-	    bounceOptions: {
-	      friction: 40,
-	      tension: 200,
-	      tolerance: 1
-	    },
-	    directionLock: false,
-	    directionLockThreshold: {
-	      x: 10,
-	      y: 10
-	    },
-	    overdrag: true,
-	    overdragScale: 0.5,
-	    pixelAlign: true,
-	    velocityTimeout: 100,
-	    velocityScale: 890
-	  },
-	  FrictionSimulator: {
-	    friction: 2,
-	    tolerance: 1 / 10
-	  },
-	  SpringSimulator: {
-	    tension: 500,
-	    friction: 10,
-	    tolerance: 1 / 10000
-	  },
-	  MomentumBounceSimulator: {
-	    momentum: {
-	      friction: 2,
-	      tolerance: 10
-	    },
-	    bounce: {
-	      tension: 500,
-	      friction: 10,
-	      tolerance: 1
-	    }
-	  }
-	};
-	
-	exports.Defaults = {
-	  getDefaults: function(className, options) {
-	    var defaults, k, ref, v;
-	    if (!Originals.hasOwnProperty(className)) {
-	      return {};
-	    }
-	    if (!Framer.Defaults.hasOwnProperty(className)) {
-	      return {};
-	    }
-	    defaults = _.clone(Originals[className]);
-	    ref = Framer.Defaults[className];
-	    for (k in ref) {
-	      v = ref[k];
-	      defaults[k] = _.isFunction(v) ? v() : v;
-	    }
-	    for (k in defaults) {
-	      v = defaults[k];
-	      if (!options.hasOwnProperty(k)) {
-	        options[k] = v;
-	      }
-	    }
-	    return options;
-	  },
-	  setup: function() {
-	    var className, classValues, k, ref, v;
-	    if (window.FramerDefaults) {
-	      ref = window.FramerDefaults;
-	      for (className in ref) {
-	        classValues = ref[className];
-	        for (k in classValues) {
-	          v = classValues[k];
-	          Originals[className][k] = v;
-	        }
-	      }
-	    }
-	    return exports.Defaults.reset();
-	  },
-	  reset: function() {
-	    return window.Framer.Defaults = _.clone(Originals);
-	  }
-	};
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AnimatorClassBezierPresets, AnimatorClasses, BezierCurveAnimator, Config, Defaults, EventEmitter, LinearAnimator, SpringDHOAnimator, SpringRK4Animator, Utils, _, evaluateRelativeProperty, isRelativeProperty, numberRE, relativePropertyRE,
-	  slice = [].slice,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	Config = __webpack_require__(10).Config;
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	EventEmitter = __webpack_require__(8).EventEmitter;
-	
-	LinearAnimator = __webpack_require__(18).LinearAnimator;
-	
-	BezierCurveAnimator = __webpack_require__(20).BezierCurveAnimator;
-	
-	SpringRK4Animator = __webpack_require__(21).SpringRK4Animator;
-	
-	SpringDHOAnimator = __webpack_require__(23).SpringDHOAnimator;
-	
-	AnimatorClasses = {
-	  "linear": LinearAnimator,
-	  "bezier-curve": BezierCurveAnimator,
-	  "spring-rk4": SpringRK4Animator,
-	  "spring-dho": SpringDHOAnimator
-	};
-	
-	AnimatorClasses["spring"] = AnimatorClasses["spring-rk4"];
-	
-	AnimatorClasses["cubic-bezier"] = AnimatorClasses["bezier-curve"];
-	
-	AnimatorClassBezierPresets = ["ease", "ease-in", "ease-out", "ease-in-out"];
-	
-	numberRE = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/;
-	
-	relativePropertyRE = new RegExp('^(?:([+-])=|)(' + numberRE.source + ')([a-z%]*)$', 'i');
-	
-	isRelativeProperty = function(v) {
-	  return _.isString(v) && relativePropertyRE.test(v);
-	};
-	
-	evaluateRelativeProperty = function(target, k, v) {
-	  var match, number, ref, rest, sign, unit;
-	  ref = relativePropertyRE.exec(v), match = ref[0], sign = ref[1], number = ref[2], unit = ref[3], rest = 5 <= ref.length ? slice.call(ref, 4) : [];
-	  if (sign) {
-	    return target[k] + (sign + 1) * number;
-	  }
-	  return +number;
-	};
-	
-	exports.Animation = (function(superClass) {
-	  extend(Animation, superClass);
-	
-	  function Animation(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this._updateValue = bind(this._updateValue, this);
-	    this._update = bind(this._update, this);
-	    this._start = bind(this._start, this);
-	    this.start = bind(this.start, this);
-	    options = Defaults.getDefaults("Animation", options);
-	    Animation.__super__.constructor.call(this, options);
-	    this.options = _.clone(_.defaults(options, {
-	      layer: null,
-	      properties: {},
-	      curve: "linear",
-	      curveOptions: {},
-	      time: 1,
-	      repeat: 0,
-	      delay: 0,
-	      debug: false
-	    }));
-	    if (options.origin) {
-	      console.warn("Animation.origin: please use layer.originX and layer.originY");
-	    }
-	    this.options.properties = Animation.filterAnimatableProperties(this.options.properties);
-	    this._parseAnimatorOptions();
-	    this._originalState = this._currentState();
-	    this._repeatCounter = this.options.repeat;
-	  }
-	
-	  Animation.prototype.start = function() {
-	    var AnimatorClass, animation, k, property, ref, ref1, ref2, v;
-	    if (this.options.layer === null) {
-	      console.error("Animation: missing layer");
-	    }
-	    AnimatorClass = this._animatorClass();
-	    if (this.options.debug) {
-	      console.log("Animation.start " + AnimatorClass.name, this.options.curveOptions);
-	    }
-	    this._animator = new AnimatorClass(this.options.curveOptions);
-	    this._target = this.options.layer;
-	    this._stateA = this._currentState();
-	    this._stateB = {};
-	    ref = this.options.properties;
-	    for (k in ref) {
-	      v = ref[k];
-	      if (_.isFunction(v)) {
-	        v = v();
-	      } else if (isRelativeProperty(v)) {
-	        v = evaluateRelativeProperty(this._target, k, v);
-	      }
-	      if (this._stateA[k] !== v) {
-	        this._stateB[k] = v;
-	      }
-	    }
-	    if (_.keys(this._stateA).length === 0) {
-	      console.warn("Animation: nothing to animate, no animatable properties");
-	      return false;
-	    }
-	    if (_.isEqual(this._stateA, this._stateB)) {
-	      console.warn("Animation: nothing to animate, all properties are equal to what it is now");
-	      return false;
-	    }
-	    ref1 = this._target.animatingProperties();
-	    for (property in ref1) {
-	      animation = ref1[property];
-	      if (this._stateA.hasOwnProperty(property)) {
-	        animation.stop();
-	      }
-	    }
-	    if (this.options.debug) {
-	      console.log("Animation.start");
-	      ref2 = this._stateB;
-	      for (k in ref2) {
-	        v = ref2[k];
-	        console.log("\t" + k + ": " + this._stateA[k] + " -> " + this._stateB[k]);
-	      }
-	    }
-	    if (this._repeatCounter > 0) {
-	      this.once("end", (function(_this) {
-	        return function() {
-	          var ref3;
-	          ref3 = _this._stateA;
-	          for (k in ref3) {
-	            v = ref3[k];
-	            _this._target[k] = v;
-	          }
-	          _this._repeatCounter--;
-	          return _this.start();
-	        };
-	      })(this));
-	    }
-	    if (this.options.delay) {
-	      Utils.delay(this.options.delay, this._start);
-	    } else {
-	      this._start();
-	    }
-	    return true;
-	  };
-	
-	  Animation.prototype.stop = function(emit) {
-	    if (emit == null) {
-	      emit = true;
-	    }
-	    this.options.layer._context._animationList = _.without(this.options.layer._context._animationList, this);
-	    if (emit) {
-	      this.emit("stop");
-	    }
-	    return Framer.Loop.off("update", this._update);
-	  };
-	
-	  Animation.prototype.reverse = function() {
-	    var animation, options;
-	    options = _.clone(this.options);
-	    options.properties = this._originalState;
-	    animation = new Animation(options);
-	    return animation;
-	  };
-	
-	  Animation.prototype.copy = function() {
-	    return new Animation(_.clone(this.options));
-	  };
-	
-	  Animation.prototype.revert = function() {
-	    return this.reverse();
-	  };
-	
-	  Animation.prototype.inverse = function() {
-	    return this.reverse();
-	  };
-	
-	  Animation.prototype.invert = function() {
-	    return this.reverse();
-	  };
-	
-	  Animation.prototype.emit = function(event) {
-	    Animation.__super__.emit.apply(this, arguments);
-	    return this.options.layer.emit(event, this);
-	  };
-	
-	  Animation.prototype.animatingProperties = function() {
-	    return _.keys(this._stateA);
-	  };
-	
-	  Animation.prototype._start = function() {
-	    this.options.layer._context._animationList.push(this);
-	    this.emit("start");
-	    return Framer.Loop.on("update", this._update);
-	  };
-	
-	  Animation.prototype._update = function(delta) {
-	    var emit;
-	    if (this._animator.finished()) {
-	      this._updateValue(1);
-	      this.stop(emit = false);
-	      this.emit("end");
-	      return this.emit("stop");
-	    } else {
-	      return this._updateValue(this._animator.next(delta));
-	    }
-	  };
-	
-	  Animation.prototype._updateValue = function(value) {
-	    var k, ref, v;
-	    ref = this._stateB;
-	    for (k in ref) {
-	      v = ref[k];
-	      this._target[k] = Utils.mapRange(value, 0, 1, this._stateA[k], this._stateB[k]);
-	    }
-	  };
-	
-	  Animation.prototype._currentState = function() {
-	    return _.pick(this.options.layer, _.keys(this.options.properties));
-	  };
-	
-	  Animation.prototype._animatorClass = function() {
-	    var animatorClassName, parsedCurve;
-	    parsedCurve = Utils.parseFunction(this.options.curve);
-	    animatorClassName = parsedCurve.name.toLowerCase();
-	    if (AnimatorClasses.hasOwnProperty(animatorClassName)) {
-	      return AnimatorClasses[animatorClassName];
-	    }
-	    if (indexOf.call(AnimatorClassBezierPresets, animatorClassName) >= 0) {
-	      return BezierCurveAnimator;
-	    }
-	    return LinearAnimator;
-	  };
-	
-	  Animation.prototype._parseAnimatorOptions = function() {
-	    var animatorClass, animatorClassName, base, base1, i, j, k, l, len, len1, parsedCurve, ref, ref1, results, value;
-	    animatorClass = this._animatorClass();
-	    parsedCurve = Utils.parseFunction(this.options.curve);
-	    animatorClassName = parsedCurve.name.toLowerCase();
-	    if (animatorClass === LinearAnimator || animatorClass === BezierCurveAnimator) {
-	      if (_.isString(this.options.curveOptions) || _.isArray(this.options.curveOptions)) {
-	        this.options.curveOptions = {
-	          values: this.options.curveOptions
-	        };
-	      }
-	      if ((base = this.options.curveOptions).time == null) {
-	        base.time = this.options.time;
-	      }
-	    }
-	    if ((animatorClass === BezierCurveAnimator) && indexOf.call(AnimatorClassBezierPresets, animatorClassName) >= 0) {
-	      this.options.curveOptions.values = animatorClassName;
-	      if ((base1 = this.options.curveOptions).time == null) {
-	        base1.time = this.options.time;
-	      }
-	    }
-	    if (parsedCurve.args.length) {
-	      if (animatorClass === BezierCurveAnimator) {
-	        this.options.curveOptions.values = parsedCurve.args.map(function(v) {
-	          return parseFloat(v) || 0;
-	        });
-	      }
-	      if (animatorClass === SpringRK4Animator) {
-	        ref = ["tension", "friction", "velocity", "tolerance"];
-	        for (i = j = 0, len = ref.length; j < len; i = ++j) {
-	          k = ref[i];
-	          value = parseFloat(parsedCurve.args[i]);
-	          if (value) {
-	            this.options.curveOptions[k] = value;
-	          }
-	        }
-	      }
-	      if (animatorClass === SpringDHOAnimator) {
-	        ref1 = ["stiffness", "damping", "mass", "tolerance"];
-	        results = [];
-	        for (i = l = 0, len1 = ref1.length; l < len1; i = ++l) {
-	          k = ref1[i];
-	          value = parseFloat(parsedCurve.args[i]);
-	          if (value) {
-	            results.push(this.options.curveOptions[k] = value);
-	          } else {
-	            results.push(void 0);
-	          }
-	        }
-	        return results;
-	      }
-	    }
-	  };
-	
-	  Animation.filterAnimatableProperties = function(properties) {
-	    var animatableProperties, k, v;
-	    animatableProperties = {};
-	    for (k in properties) {
-	      v = properties[k];
-	      if (_.isNumber(v) || _.isFunction(v) || isRelativeProperty(v)) {
-	        animatableProperties[k] = v;
-	      }
-	    }
-	    return animatableProperties;
-	  };
-	
-	  return Animation;
-	
-	})(EventEmitter);
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Animator, Utils,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	Animator = __webpack_require__(19).Animator;
-	
-	exports.LinearAnimator = (function(superClass) {
-	  extend(LinearAnimator, superClass);
-	
-	  function LinearAnimator() {
-	    return LinearAnimator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  LinearAnimator.prototype.setup = function(options) {
-	    this.options = _.defaults(options, {
-	      time: 1,
-	      precision: 1 / 1000
-	    });
-	    return this._time = 0;
-	  };
-	
-	  LinearAnimator.prototype.next = function(delta) {
-	    this._time += delta;
-	    if (this.finished()) {
-	      return 1;
-	    }
-	    return this._time / this.options.time;
-	  };
-	
-	  LinearAnimator.prototype.finished = function() {
-	    return this._time >= this.options.time - this.options.precision;
-	  };
-	
-	  return LinearAnimator;
-	
-	})(Animator);
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Config, Utils;
-	
-	Utils = __webpack_require__(2);
-	
-	Config = __webpack_require__(10).Config;
-	
-	exports.Animator = (function() {
-	  "The animator class is a very simple class that\n	- Takes a set of input values at setup({input values})\n	- Emits an output value for progress (0 -> 1) in value(progress)";
-	  function Animator(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this.setup(options);
-	  }
-	
-	  Animator.prototype.setup = function(options) {
-	    throw Error("Not implemented");
-	  };
-	
-	  Animator.prototype.next = function(delta) {
-	    throw Error("Not implemented");
-	  };
-	
-	  Animator.prototype.finished = function() {
-	    throw Error("Not implemented");
-	  };
-	
-	  return Animator;
-
-	})();
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Animator, BezierCurveDefaults, UnitBezier, Utils, _,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	Animator = __webpack_require__(19).Animator;
-	
-	BezierCurveDefaults = {
-	  "linear": [0, 0, 1, 1],
-	  "ease": [.25, .1, .25, 1],
-	  "ease-in": [.42, 0, 1, 1],
-	  "ease-out": [0, 0, .58, 1],
-	  "ease-in-out": [.42, 0, .58, 1]
-	};
-	
-	exports.BezierCurveAnimator = (function(superClass) {
-	  extend(BezierCurveAnimator, superClass);
-	
-	  function BezierCurveAnimator() {
-	    return BezierCurveAnimator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  BezierCurveAnimator.prototype.setup = function(options) {
-	    if (_.isString(options) && BezierCurveDefaults.hasOwnProperty(options.toLowerCase())) {
-	      options = {
-	        values: BezierCurveDefaults[options.toLowerCase()]
-	      };
-	    }
-	    if (options.values && _.isString(options.values) && BezierCurveDefaults.hasOwnProperty(options.values.toLowerCase())) {
-	      options = {
-	        values: BezierCurveDefaults[options.values.toLowerCase()],
-	        time: options.time
-	      };
-	    }
-	    if (_.isArray(options) && options.length === 4) {
-	      options = {
-	        values: options
-	      };
-	    }
-	    this.options = _.defaults(options, {
-	      values: BezierCurveDefaults["ease-in-out"],
-	      time: 1,
-	      precision: 1 / 1000
-	    });
-	    return this._unitBezier = new UnitBezier(this.options.values[0], this.options.values[1], this.options.values[2], this.options.values[3], this._time = 0);
-	  };
-	
-	  BezierCurveAnimator.prototype.next = function(delta) {
-	    this._time += delta;
-	    if (this.finished()) {
-	      return 1;
-	    }
-	    return this._unitBezier.solve(this._time / this.options.time);
-	  };
-	
-	  BezierCurveAnimator.prototype.finished = function() {
-	    return this._time >= this.options.time - this.options.precision;
-	  };
-	
-	  return BezierCurveAnimator;
-	
-	})(Animator);
-	
-	UnitBezier = (function() {
-	  UnitBezier.prototype.epsilon = 1e-6;
-	
-	  function UnitBezier(p1x, p1y, p2x, p2y) {
-	    this.cx = 3.0 * p1x;
-	    this.bx = 3.0 * (p2x - p1x) - this.cx;
-	    this.ax = 1.0 - this.cx - this.bx;
-	    this.cy = 3.0 * p1y;
-	    this.by = 3.0 * (p2y - p1y) - this.cy;
-	    this.ay = 1.0 - this.cy - this.by;
-	  }
-	
-	  UnitBezier.prototype.sampleCurveX = function(t) {
-	    return ((this.ax * t + this.bx) * t + this.cx) * t;
-	  };
-	
-	  UnitBezier.prototype.sampleCurveY = function(t) {
-	    return ((this.ay * t + this.by) * t + this.cy) * t;
-	  };
-	
-	  UnitBezier.prototype.sampleCurveDerivativeX = function(t) {
-	    return (3.0 * this.ax * t + 2.0 * this.bx) * t + this.cx;
-	  };
-	
-	  UnitBezier.prototype.solveCurveX = function(x) {
-	    var d2, i, t0, t1, t2, x2;
-	    t2 = x;
-	    i = 0;
-	    while (i < 8) {
-	      x2 = this.sampleCurveX(t2) - x;
-	      if (Math.abs(x2) < this.epsilon) {
-	        return t2;
-	      }
-	      d2 = this.sampleCurveDerivativeX(t2);
-	      if (Math.abs(d2) < this.epsilon) {
-	        break;
-	      }
-	      t2 = t2 - x2 / d2;
-	      i++;
-	    }
-	    t0 = 0.0;
-	    t1 = 1.0;
-	    t2 = x;
-	    if (t2 < t0) {
-	      return t0;
-	    }
-	    if (t2 > t1) {
-	      return t1;
-	    }
-	    while (t0 < t1) {
-	      x2 = this.sampleCurveX(t2);
-	      if (Math.abs(x2 - x) < this.epsilon) {
-	        return t2;
-	      }
-	      if (x > x2) {
-	        t0 = t2;
-	      } else {
-	        t1 = t2;
-	      }
-	      t2 = (t1 - t0) * .5 + t0;
-	    }
-	    return t2;
-	  };
-	
-	  UnitBezier.prototype.solve = function(x) {
-	    return this.sampleCurveY(this.solveCurveX(x));
-	  };
-	
-	  return UnitBezier;
-
-	})();
-
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Animator, Integrator, Utils,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	Animator = __webpack_require__(19).Animator;
-	
-	Integrator = __webpack_require__(22).Integrator;
-	
-	exports.SpringRK4Animator = (function(superClass) {
-	  extend(SpringRK4Animator, superClass);
-	
-	  function SpringRK4Animator() {
-	    this.finished = bind(this.finished, this);
-	    return SpringRK4Animator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  SpringRK4Animator.prototype.setup = function(options) {
-	    this.options = _.defaults(options, {
-	      tension: 500,
-	      friction: 10,
-	      velocity: 0,
-	      tolerance: 1 / 10000,
-	      time: null
-	    });
-	    this._time = 0;
-	    this._value = 0;
-	    this._velocity = this.options.velocity;
-	    this._stopSpring = false;
-	    return this._integrator = new Integrator((function(_this) {
-	      return function(state) {
-	        return -_this.options.tension * state.x - _this.options.friction * state.v;
-	      };
-	    })(this));
-	  };
-	
-	  SpringRK4Animator.prototype.next = function(delta) {
-	    var finalVelocity, net1DVelocity, netFloat, netValueIsLow, netVelocityIsLow, stateAfter, stateBefore;
-	    if (this.finished()) {
-	      return 1;
-	    }
-	    this._time += delta;
-	    stateBefore = {};
-	    stateAfter = {};
-	    stateBefore.x = this._value - 1;
-	    stateBefore.v = this._velocity;
-	    stateAfter = this._integrator.integrateState(stateBefore, delta);
-	    this._value = 1 + stateAfter.x;
-	    finalVelocity = stateAfter.v;
-	    netFloat = stateAfter.x;
-	    net1DVelocity = stateAfter.v;
-	    netValueIsLow = Math.abs(netFloat) < this.options.tolerance;
-	    netVelocityIsLow = Math.abs(net1DVelocity) < this.options.tolerance;
-	    this._stopSpring = netValueIsLow && netVelocityIsLow;
-	    this._velocity = finalVelocity;
-	    return this._value;
-	  };
-	
-	  SpringRK4Animator.prototype.finished = function() {
-	    return this._stopSpring;
-	  };
-	
-	  return SpringRK4Animator;
-	
-	})(Animator);
-
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Config, Utils;
-	
-	Utils = __webpack_require__(2);
-	
-	Config = __webpack_require__(10).Config;
-	
-	exports.Integrator = (function() {
-	  "Usage:\n	- Instantiate with a function that takes (state) -> acceleration\n	- Call integrateState with state={x, v} and delta";
-	  function Integrator(_accelerationForState) {
-	    this._accelerationForState = _accelerationForState;
-	    if (!_.isFunction(this._accelerationForState)) {
-	      console.warn("Integrator: an integrator must be constructed with an acceleration function");
-	      this._accelerationForState = function() {
-	        return 0;
-	      };
-	    }
-	  }
-	
-	  Integrator.prototype.integrateState = function(state, dt) {
-	    var a, b, c, d, dvdt, dxdt;
-	    a = this._evaluateState(state);
-	    b = this._evaluateStateWithDerivative(state, dt * 0.5, a);
-	    c = this._evaluateStateWithDerivative(state, dt * 0.5, b);
-	    d = this._evaluateStateWithDerivative(state, dt, c);
-	    dxdt = 1.0 / 6.0 * (a.dx + 2.0 * (b.dx + c.dx) + d.dx);
-	    dvdt = 1.0 / 6.0 * (a.dv + 2.0 * (b.dv + c.dv) + d.dv);
-	    state.x = state.x + dxdt * dt;
-	    state.v = state.v + dvdt * dt;
-	    return state;
-	  };
-	
-	  Integrator.prototype._evaluateState = function(initialState) {
-	    var output;
-	    output = {};
-	    output.dx = initialState.v;
-	    output.dv = this._accelerationForState(initialState);
-	    return output;
-	  };
-	
-	  Integrator.prototype._evaluateStateWithDerivative = function(initialState, dt, derivative) {
-	    var output, state;
-	    state = {};
-	    state.x = initialState.x + derivative.dx * dt;
-	    state.v = initialState.v + derivative.dv * dt;
-	    output = {};
-	    output.dx = state.v;
-	    output.dv = this._accelerationForState(state);
-	    return output;
-	  };
-	
-	  return Integrator;
-
-	})();
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Animator, Utils,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	Animator = __webpack_require__(19).Animator;
-	
-	exports.SpringDHOAnimator = (function(superClass) {
-	  extend(SpringDHOAnimator, superClass);
-	
-	  function SpringDHOAnimator() {
-	    this.finished = bind(this.finished, this);
-	    return SpringDHOAnimator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  SpringDHOAnimator.prototype.setup = function(options) {
-	    this.options = _.defaults(options, {
-	      velocity: 0,
-	      tolerance: 1 / 10000,
-	      stiffness: 50,
-	      damping: 2,
-	      mass: 0.2,
-	      time: null
-	    });
-	    console.log("SpringDHOAnimator.options", this.options, options);
-	    this._time = 0;
-	    this._value = 0;
-	    return this._velocity = this.options.velocity;
-	  };
-	
-	  SpringDHOAnimator.prototype.next = function(delta) {
-	    var F_damper, F_spring, b, k;
-	    if (this.finished()) {
-	      return 1;
-	    }
-	    this._time += delta;
-	    k = 0 - this.options.stiffness;
-	    b = 0 - this.options.damping;
-	    F_spring = k * (this._value - 1);
-	    F_damper = b * this._velocity;
-	    this._velocity += ((F_spring + F_damper) / this.options.mass) * delta;
-	    this._value += this._velocity * delta;
-	    return this._value;
-	  };
-	
-	  SpringDHOAnimator.prototype.finished = function() {
-	    return this._time > 0 && Math.abs(this._velocity) < this.options.tolerance;
-	  };
-	
-	  return SpringDHOAnimator;
-	
-	})(Animator);
-
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var _Force2DProperties, _WebkitProperties, filterFormat;
-	
-	filterFormat = function(value, unit) {
-	  return "" + (Utils.round(value, 2)) + unit;
-	};
-	
-	_WebkitProperties = [["blur", "blur", 0, "px"], ["brightness", "brightness", 100, "%"], ["saturate", "saturate", 100, "%"], ["hue-rotate", "hueRotate", 0, "deg"], ["contrast", "contrast", 100, "%"], ["invert", "invert", 0, "%"], ["grayscale", "grayscale", 0, "%"], ["sepia", "sepia", 0, "%"]];
-	
-	_Force2DProperties = {
-	  "z": 0,
-	  "scaleX": 1,
-	  "scaleY": 1,
-	  "scaleZ": 1,
-	  "skewX": 0,
-	  "skewY": 0,
-	  "rotationX": 0,
-	  "rotationY": 0
-	};
-	
-	exports.LayerStyle = {
-	  width: function(layer) {
-	    return layer._properties.width + "px";
-	  },
-	  height: function(layer) {
-	    return layer._properties.height + "px";
-	  },
-	  display: function(layer) {
-	    if (layer._properties.visible === true) {
-	      return "block";
-	    }
-	    return "none";
-	  },
-	  opacity: function(layer) {
-	    return layer._properties.opacity;
-	  },
-	  overflow: function(layer) {
-	    if (layer._properties.scrollHorizontal === true || layer._properties.scrollVertical === true) {
-	      return "auto";
-	    }
-	    if (layer._properties.clip === true) {
-	      return "hidden";
-	    }
-	    return "visible";
-	  },
-	  overflowX: function(layer) {
-	    if (layer._properties.scrollHorizontal === true) {
-	      return "scroll";
-	    }
-	    if (layer._properties.clip === true) {
-	      return "hidden";
-	    }
-	    return "visible";
-	  },
-	  overflowY: function(layer) {
-	    if (layer._properties.scrollVertical === true) {
-	      return "scroll";
-	    }
-	    if (layer._properties.clip === true) {
-	      return "hidden";
-	    }
-	    return "visible";
-	  },
-	  zIndex: function(layer) {
-	    return layer._properties.index;
-	  },
-	  webkitFilter: function(layer) {
-	    var css, cssName, fallback, i, layerName, len, ref, unit;
-	    css = [];
-	    for (i = 0, len = _WebkitProperties.length; i < len; i++) {
-	      ref = _WebkitProperties[i], cssName = ref[0], layerName = ref[1], fallback = ref[2], unit = ref[3];
-	      if (layer._properties.hasOwnProperty(layerName) && layer[layerName] !== fallback) {
-	        css.push(cssName + "(" + (filterFormat(layer[layerName], unit)) + ")");
-	      }
-	    }
-	    return css.join(" ");
-	  },
-	  webkitTransform: function(layer) {
-	    if (layer._prefer2d || layer._properties.force2d) {
-	      return exports.LayerStyle.webkitTransformForce2d(layer);
-	    }
-	    return "translate3d(" + layer._properties.x + "px," + layer._properties.y + "px," + layer._properties.z + "px) scale(" + layer._properties.scale + ") scale3d(" + layer._properties.scaleX + "," + layer._properties.scaleY + "," + layer._properties.scaleZ + ") skew(" + layer._properties.skew + "deg," + layer._properties.skew + "deg) skewX(" + layer._properties.skewX + "deg) skewY(" + layer._properties.skewY + "deg) rotateX(" + layer._properties.rotationX + "deg) rotateY(" + layer._properties.rotationY + "deg) rotateZ(" + layer._properties.rotationZ + "deg)";
-	  },
-	  webkitTransformForce2d: function(layer) {
-	    var css, p, v;
-	    css = [];
-	    for (p in _Force2DProperties) {
-	      v = _Force2DProperties[p];
-	      if (layer._properties[p] !== v) {
-	        console.warn("Layer property '" + p + "'' will be ignored with force2d enabled");
-	      }
-	    }
-	    css.push("translate(" + layer._properties.x + "px," + layer._properties.y + "px)");
-	    css.push("scale(" + layer._properties.scale + ")");
-	    css.push("skew(" + layer._properties.skew + "deg," + layer._properties.skew + "deg)");
-	    css.push("rotate(" + layer._properties.rotationZ + "deg)");
-	    return css.join(" ");
-	  },
-	  webkitTransformOrigin: function(layer) {
-	    return (layer._properties.originX * 100) + "% " + (layer._properties.originY * 100) + "%";
-	  },
-	  webkitPerspective: function(layer) {
-	    return "" + layer._properties.perspective;
-	  },
-	  pointerEvents: function(layer) {
-	    if (layer._properties.ignoreEvents) {
-	      return "none";
-	    } else {
-	      return "auto";
-	    }
-	  },
-	  boxShadow: function(layer) {
-	    if (!layer._properties.shadowColor) {
-	      return "";
-	    }
-	    return layer._properties.shadowX + "px " + layer._properties.shadowY + "px " + layer._properties.shadowBlur + "px " + layer._properties.shadowSpread + "px " + layer._properties.shadowColor;
-	  },
-	  backgroundColor: function(layer) {
-	    return layer._properties.backgroundColor;
-	  },
-	  color: function(layer) {
-	    return layer._properties.color;
-	  },
-	  borderRadius: function(layer) {
-	    if (!_.isNumber(layer._properties.borderRadius)) {
-	      return layer._properties.borderRadius;
-	    }
-	    return layer._properties.borderRadius + "px";
-	  },
-	  border: function(layer) {
-	    return layer._properties.borderWidth + "px solid " + layer._properties.borderColor;
-	  }
-	};
-
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var BaseClass, Defaults, Events, LayerStatesIgnoredKeys, _,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-	  slice = [].slice;
-	
-	_ = __webpack_require__(3)._;
-	
-	Events = __webpack_require__(26).Events;
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	LayerStatesIgnoredKeys = ["ignoreEvents"];
-	
-	Events.StateWillSwitch = "willSwitch";
-	
-	Events.StateDidSwitch = "didSwitch";
-	
-	exports.LayerStates = (function(superClass) {
-	  extend(LayerStates, superClass);
-	
-	  function LayerStates(layer) {
-	    this.layer = layer;
-	    this._states = {};
-	    this._orderedStates = [];
-	    this.animationOptions = {};
-	    this.add("default", this.layer.props);
-	    this._currentState = "default";
-	    this._previousStates = [];
-	    LayerStates.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  LayerStates.prototype.add = function(stateName, properties) {
-	    var error, k, v;
-	    if (_.isObject(stateName)) {
-	      for (k in stateName) {
-	        v = stateName[k];
-	        this.add(k, v);
-	      }
-	      return;
-	    }
-	    error = function() {
-	      throw Error("Usage example: layer.states.add(\"someName\", {x:500})");
-	    };
-	    if (!_.isString(stateName)) {
-	      error();
-	    }
-	    if (!_.isObject(properties)) {
-	      error();
-	    }
-	    this._orderedStates.push(stateName);
-	    return this._states[stateName] = LayerStates.filterStateProperties(properties);
-	  };
-	
-	  LayerStates.prototype.remove = function(stateName) {
-	    if (!this._states.hasOwnProperty(stateName)) {
-	      return;
-	    }
-	    delete this._states[stateName];
-	    return this._orderedStates = _.without(this._orderedStates, stateName);
-	  };
-	
-	  LayerStates.prototype["switch"] = function(stateName, animationOptions, instant) {
-	    var animatablePropertyKeys, animatingKeys, k, properties, propertyName, ref, ref1, v, value;
-	    if (instant == null) {
-	      instant = false;
-	    }
-	    if (!this._states.hasOwnProperty(stateName)) {
-	      throw Error("No such state: '" + stateName + "'");
-	    }
-	    this.emit(Events.StateWillSwitch, this._currentState, stateName, this);
-	    this._previousStates.push(this._currentState);
-	    this._currentState = stateName;
-	    properties = {};
-	    animatingKeys = this.animatingKeys();
-	    ref = this._states[stateName];
-	    for (propertyName in ref) {
-	      value = ref[propertyName];
-	      if (indexOf.call(LayerStatesIgnoredKeys, propertyName) >= 0) {
-	        continue;
-	      }
-	      if (indexOf.call(animatingKeys, propertyName) < 0) {
-	        continue;
-	      }
-	      if (_.isFunction(value)) {
-	        value = value.call(this.layer, this.layer, stateName);
-	      }
-	      properties[propertyName] = value;
-	    }
-	    animatablePropertyKeys = [];
-	    for (k in properties) {
-	      v = properties[k];
-	      if (_.isNumber(v)) {
-	        animatablePropertyKeys.push(k);
-	      }
-	    }
-	    if (animatablePropertyKeys.length === 0) {
-	      instant = true;
-	    }
-	    if (instant === true) {
-	      this.layer.props = properties;
-	      return this.emit(Events.StateDidSwitch, _.last(this._previousStates), stateName, this);
-	    } else {
-	      if (animationOptions == null) {
-	        animationOptions = this.animationOptions;
-	      }
-	      animationOptions.properties = properties;
-	      if ((ref1 = this._animation) != null) {
-	        ref1.stop();
-	      }
-	      this._animation = this.layer.animate(animationOptions);
-	      return this._animation.on("stop", (function(_this) {
-	        return function() {
-	          for (k in properties) {
-	            v = properties[k];
-	            if (!_.isNumber(v)) {
-	              _this.layer[k] = v;
-	            }
-	          }
-	          return _this.emit(Events.StateDidSwitch, _.last(_this._previousStates), stateName, _this);
-	        };
-	      })(this));
-	    }
-	  };
-	
-	  LayerStates.prototype.switchInstant = function(stateName) {
-	    return this["switch"](stateName, null, true);
-	  };
-	
-	  LayerStates.define("state", {
-	    get: function() {
-	      return this._currentState;
-	    }
-	  });
-	
-	  LayerStates.define("current", {
-	    get: function() {
-	      return this._currentState;
-	    }
-	  });
-	
-	  LayerStates.prototype.states = function() {
-	    return _.clone(this._orderedStates);
-	  };
-	
-	  LayerStates.prototype.animatingKeys = function() {
-	    var keys, ref, state, stateName;
-	    keys = [];
-	    ref = this._states;
-	    for (stateName in ref) {
-	      state = ref[stateName];
-	      keys = _.union(keys, _.keys(state));
-	    }
-	    return keys;
-	  };
-	
-	  LayerStates.prototype.previous = function(states, animationOptions) {
-	    if (states == null) {
-	      states = this.states();
-	    }
-	    return this["switch"](Utils.arrayPrev(states, this._currentState), animationOptions);
-	  };
-	
-	  LayerStates.prototype.next = function() {
-	    var states;
-	    states = Utils.arrayFromArguments(arguments);
-	    if (!states.length) {
-	      states = this.states();
-	    }
-	    return this["switch"](Utils.arrayNext(states, this._currentState));
-	  };
-	
-	  LayerStates.prototype.last = function(animationOptions) {
-	    return this["switch"](_.last(this._previousStates), animationOptions);
-	  };
-	
-	  LayerStates.prototype.emit = function() {
-	    var args, ref;
-	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-	    LayerStates.__super__.emit.apply(this, arguments);
-	    return (ref = this.layer).emit.apply(ref, args);
-	  };
-	
-	  LayerStates.filterStateProperties = function(properties) {
-	    var k, stateProperties, v;
-	    stateProperties = {};
-	    for (k in properties) {
-	      v = properties[k];
-	      if (_.isNumber(v) || _.isFunction(v) || _.isBoolean(v) || _.isString(v)) {
-	        stateProperties[k] = v;
-	      }
-	    }
-	    return stateProperties;
-	  };
-	
-	  return LayerStates;
-	
-	})(BaseClass);
-
-
-/***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Events, Utils, _, _gestures,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	Events = {};
-	
-	Events.TouchStart = "touchstart";
-	
-	Events.TouchEnd = "touchend";
-	
-	Events.TouchMove = "touchmove";
-	
-	Events.MouseUp = "mouseup";
-	
-	Events.MouseDown = "mousedown";
-	
-	Events.MouseOver = "mouseover";
-	
-	Events.MouseOut = "mouseout";
-	
-	Events.MouseMove = "mousemove";
-	
-	Events.MouseWheel = "mousewheel";
-	
-	if (!Utils.isTouch()) {
-	  Events.TouchStart = Events.MouseDown;
-	  Events.TouchEnd = Events.MouseUp;
-	  Events.TouchMove = Events.MouseMove;
-	}
-	
-	Events.Click = Events.TouchEnd;
-	
-	Events.AnimationStart = "start";
-	
-	Events.AnimationStop = "stop";
-	
-	Events.AnimationEnd = "end";
-	
-	Events.AnimationDidStart = "start";
-	
-	Events.AnimationDidStop = "stop";
-	
-	Events.AnimationDidEnd = "end";
-	
-	_gestures = [];
-	
-	_gestures.push(Events.Pan = "pan");
-	
-	_gestures.push(Events.PanStart = "panstart");
-	
-	_gestures.push(Events.PanMove = "panmove");
-	
-	_gestures.push(Events.PanEnd = "panend");
-	
-	_gestures.push(Events.PanCancel = "pancancel");
-	
-	_gestures.push(Events.PanLeft = "panleft");
-	
-	_gestures.push(Events.PanRight = "panright");
-	
-	_gestures.push(Events.PanUp = "panup");
-	
-	_gestures.push(Events.PanDown = "pandown");
-	
-	_gestures.push(Events.Pinch = "pinch");
-	
-	_gestures.push(Events.PinchStart = "pinchstart");
-	
-	_gestures.push(Events.PinchMove = "pinchmove");
-	
-	_gestures.push(Events.PinchEnd = "pinchend");
-	
-	_gestures.push(Events.PinchCancel = "pinchcancel");
-	
-	_gestures.push(Events.PinchIn = "pinchin");
-	
-	_gestures.push(Events.PinchOut = "pinchout");
-	
-	_gestures.push(Events.Press = "press");
-	
-	_gestures.push(Events.PressUp = "pressup");
-	
-	_gestures.push(Events.Rotate = "rotate");
-	
-	_gestures.push(Events.RotateStart = "rotatestart");
-	
-	_gestures.push(Events.RotateMove = "rotatemove");
-	
-	_gestures.push(Events.RotateEnd = "rotateend");
-	
-	_gestures.push(Events.RotateCancel = "rotatecancel");
-	
-	_gestures.push(Events.Swipe = "swipe");
-	
-	_gestures.push(Events.SwipeLeft = "swipeleft");
-	
-	_gestures.push(Events.SwipeRight = "swiperight");
-	
-	_gestures.push(Events.SwipeUp = "swipeup");
-	
-	_gestures.push(Events.SwipeDown = "swipedown");
-	
-	_gestures.push(Events.Tap = "tap");
-	
-	_gestures.push(Events.SingleTap = "singletap");
-	
-	_gestures.push(Events.DoubleTap = "doubletap");
-	
-	Events.Scroll = "scroll";
-	
-	Events.ImageLoaded = "load";
-	
-	Events.ImageLoadError = "error";
-	
-	Events.isGestureEvent = function(eventName) {
-	  return indexOf.call(_gestures, eventName) >= 0;
-	};
-	
-	Events.touchEvent = function(event) {
-	  var ref, ref1, touchEvent;
-	  touchEvent = (ref = event.touches) != null ? ref[0] : void 0;
-	  if (touchEvent == null) {
-	    touchEvent = (ref1 = event.changedTouches) != null ? ref1[0] : void 0;
-	  }
-	  if (touchEvent == null) {
-	    touchEvent = event;
-	  }
-	  return touchEvent;
-	};
-	
-	Events.wrap = function(element) {
-	  return Framer.CurrentContext.eventManager.wrap(element);
-	};
-	
-	exports.Events = Events;
-
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var BaseClass, Defaults, EventBuffer, Events, Simulation, Utils, _,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	Events = __webpack_require__(26).Events;
-	
-	Simulation = __webpack_require__(28).Simulation;
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	EventBuffer = __webpack_require__(33).EventBuffer;
-	
-	Events.Move = "move";
-	
-	Events.DragStart = "dragstart";
-	
-	Events.DragWillMove = "dragwillmove";
-	
-	Events.DragMove = "dragmove";
-	
-	Events.DragDidMove = "dragmove";
-	
-	Events.Drag = "dragmove";
-	
-	Events.DragEnd = "dragend";
-	
-	Events.DragAnimationDidStart = "draganimationdidstart";
-	
-	Events.DragAnimationDidEnd = "draganimationdidend";
-	
-	Events.DirectionLockDidStart = "directionlockdidstart";
-	
-	"         \n┌──────┐                   │         \n│      │                             \n│      │  ───────────────▶ │ ◀────▶  \n│      │                             \n└──────┘                   │         \n                                     \n════════  ═════════════════ ═══════  \n                                     \n  Drag         Momentum      Bounce  \n                                         ";
-	
-	exports.LayerDraggable = (function(superClass) {
-	  extend(LayerDraggable, superClass);
-	
-	  LayerDraggable.define("speedX", LayerDraggable.simpleProperty("speedX", 1));
-	
-	  LayerDraggable.define("speedY", LayerDraggable.simpleProperty("speedY", 1));
-	
-	  LayerDraggable.define("horizontal", LayerDraggable.simpleProperty("horizontal", true));
-	
-	  LayerDraggable.define("vertical", LayerDraggable.simpleProperty("vertical", true));
-	
-	  LayerDraggable.define("momentumVelocityMultiplier", LayerDraggable.simpleProperty("momentumVelocityMultiplier", 800));
-	
-	  LayerDraggable.define("directionLock", LayerDraggable.simpleProperty("directionLock", true));
-	
-	  LayerDraggable.define("directionLockThreshold", LayerDraggable.simpleProperty("directionLockThreshold", {
-	    x: 10,
-	    y: 10
-	  }));
-	
-	  LayerDraggable.define("propagateEvents", LayerDraggable.simpleProperty("propagateEvents", true));
-	
-	  LayerDraggable.define("constraints", {
-	    get: function() {
-	      return this._constraints;
-	    },
-	    set: function(value) {
-	      if (value && _.isObject(value)) {
-	        this._constraints = _.defaults(value, {
-	          x: 0,
-	          y: 0,
-	          width: 0,
-	          height: 0
-	        });
-	      } else {
-	        this._constraints = {
-	          x: 0,
-	          y: 0,
-	          width: 0,
-	          height: 0
-	        };
-	      }
-	      if (this._constraints) {
-	        return this._updateSimulationConstraints(this._constraints);
-	      }
-	    }
-	  });
-	
-	  LayerDraggable.define("isDragging", {
-	    get: function() {
-	      return this._isDragging || false;
-	    }
-	  });
-	
-	  LayerDraggable.define("isAnimating", {
-	    get: function() {
-	      return this._isAnimating || false;
-	    }
-	  });
-	
-	  LayerDraggable.define("isMoving", {
-	    get: function() {
-	      return this._isMoving || false;
-	    }
-	  });
-	
-	  LayerDraggable.define("layerStartPoint", {
-	    get: function() {
-	      return this._layerStartPoint || this.layer.point;
-	    }
-	  });
-	
-	  LayerDraggable.define("cursorStartPoint", {
-	    get: function() {
-	      return this._cursorStartPoint || {
-	        x: 0,
-	        y: 0
-	      };
-	    }
-	  });
-	
-	  LayerDraggable.define("layerCursorOffset", {
-	    get: function() {
-	      return this._layerCursorOffset || {
-	        x: 0,
-	        y: 0
-	      };
-	    }
-	  });
-	
-	  LayerDraggable.define("offset", {
-	    get: function() {
-	      var offset;
-	      if (!this._correctedLayerStartPoint) {
-	        return {
-	          x: 0,
-	          y: 0
-	        };
-	      }
-	      return offset = {
-	        x: this.layer.x - this._correctedLayerStartPoint.x,
-	        y: this.layer.y - this._correctedLayerStartPoint.y
-	      };
-	    }
-	  });
-	
-	  function LayerDraggable(layer) {
-	    var options;
-	    this.layer = layer;
-	    this._stopSimulation = bind(this._stopSimulation, this);
-	    this._onSimulationStop = bind(this._onSimulationStop, this);
-	    this._onSimulationStep = bind(this._onSimulationStep, this);
-	    this._touchEnd = bind(this._touchEnd, this);
-	    this._touchMove = bind(this._touchMove, this);
-	    this._touchStart = bind(this._touchStart, this);
-	    this.touchStart = bind(this.touchStart, this);
-	    options = Defaults.getDefaults("LayerDraggable", {});
-	    LayerDraggable.__super__.constructor.call(this, options);
-	    _.extend(this, options);
-	    this.enabled = true;
-	    this._eventBuffer = new EventBuffer;
-	    this._constraints = null;
-	    this.attach();
-	  }
-	
-	  LayerDraggable.prototype.attach = function() {
-	    return this.layer.on(Events.TouchStart, this._touchStart);
-	  };
-	
-	  LayerDraggable.prototype.remove = function() {
-	    return this.layer.off(Events.TouchStart, this._touchStart);
-	  };
-	
-	  LayerDraggable.prototype.updatePosition = function(point) {
-	    return point;
-	  };
-	
-	  LayerDraggable.prototype.touchStart = function(event) {
-	    return this._touchStart(event);
-	  };
-	
-	  LayerDraggable.prototype._touchStart = function(event) {
-	    var touchEvent;
-	    this._isMoving = this.isAnimating;
-	    this.layer.animateStop();
-	    this._stopSimulation();
-	    this._resetdirectionLock();
-	    event.preventDefault();
-	    if (!this.propagateEvents) {
-	      event.stopPropagation();
-	    }
-	    touchEvent = Events.touchEvent(event);
-	    this._eventBuffer.push({
-	      x: touchEvent.clientX,
-	      y: touchEvent.clientY,
-	      t: Date.now()
-	    });
-	    this._layerStartPoint = this.layer.point;
-	    this._correctedLayerStartPoint = this.layer.point;
-	    if (this.constraints && this.bounce) {
-	      this._correctedLayerStartPoint = this._constrainPosition(this._correctedLayerStartPoint, this.constraints, 1 / this.overdragScale);
-	    }
-	    this._cursorStartPoint = {
-	      x: touchEvent.clientX,
-	      y: touchEvent.clientY
-	    };
-	    this._layerCursorOffset = {
-	      x: touchEvent.clientX - this._correctedLayerStartPoint.x,
-	      y: touchEvent.clientY - this._correctedLayerStartPoint.y
-	    };
-	    document.addEventListener(Events.TouchMove, this._touchMove);
-	    document.addEventListener(Events.TouchEnd, this._touchEnd);
-	    return this.emit(Events.DragStart, event);
-	  };
-	
-	  LayerDraggable.prototype._touchMove = function(event) {
-	    var offset, point, touchEvent;
-	    if (!this.enabled) {
-	      return;
-	    }
-	    event.preventDefault();
-	    if (!this.propagateEvents) {
-	      event.stopPropagation();
-	    }
-	    touchEvent = Events.touchEvent(event);
-	    this._eventBuffer.push({
-	      x: touchEvent.clientX,
-	      y: touchEvent.clientY,
-	      t: Date.now()
-	    });
-	    offset = {
-	      x: touchEvent.clientX - this._correctedLayerStartPoint.x - this._layerCursorOffset.x,
-	      y: touchEvent.clientY - this._correctedLayerStartPoint.y - this._layerCursorOffset.y
-	    };
-	    offset.x = offset.x * this.speedX * (1 / this.layer.canvasScaleX()) * this.layer.scaleX * this.layer.scale;
-	    offset.y = offset.y * this.speedY * (1 / this.layer.canvasScaleY()) * this.layer.scaleY * this.layer.scale;
-	    point = this.layer.point;
-	    if (this.horizontal) {
-	      point.x = this._correctedLayerStartPoint.x + offset.x;
-	    }
-	    if (this.vertical) {
-	      point.y = this._correctedLayerStartPoint.y + offset.y;
-	    }
-	    if (this._constraints) {
-	      point = this._constrainPosition(point, this._constraints, this.overdragScale);
-	    }
-	    if (this.directionLock) {
-	      if (!this._directionLockEnabledX && !this._directionLockEnabledY) {
-	        this._updatedirectionLock(offset);
-	        return;
-	      } else {
-	        if (this._directionLockEnabledX) {
-	          point.x = this._layerStartPoint.x;
-	        }
-	        if (this._directionLockEnabledY) {
-	          point.y = this._layerStartPoint.y;
-	        }
-	      }
-	    }
-	    if (this.pixelAlign) {
-	      point.x = parseInt(point.x);
-	      point.y = parseInt(point.y);
-	    }
-	    if (point.x !== this._layerStartPoint.x || point.y !== this._layerStartPoint.y) {
-	      this._isDragging = true;
-	      this._isMoving = true;
-	    }
-	    if (this.isDragging) {
-	      this.emit(Events.DragWillMove, event);
-	    }
-	    this.layer.point = this.updatePosition(point);
-	    if (this.isDragging) {
-	      this.emit(Events.Move, this.layer.point);
-	      return this.emit(Events.DragDidMove, event);
-	    }
-	  };
-	
-	  LayerDraggable.prototype._touchEnd = function(event) {
-	    if (!this.propagateEvents) {
-	      event.stopPropagation();
-	    }
-	    document.removeEventListener(Events.TouchMove, this._touchMove);
-	    document.removeEventListener(Events.TouchEnd, this._touchEnd);
-	    this._startSimulation();
-	    this.emit(Events.DragEnd, event);
-	    return this._isDragging = false;
-	  };
-	
-	  LayerDraggable.define("constraintsOffset", {
-	    get: function() {
-	      var constrainedPoint, maxX, maxY, minX, minY, offset, point, ref;
-	      if (!this.constraints) {
-	        return {
-	          x: 0,
-	          y: 0
-	        };
-	      }
-	      ref = this._calculateConstraints(this.constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
-	      point = this.layer.point;
-	      constrainedPoint = {
-	        x: Utils.clamp(point.x, minX, maxX),
-	        y: Utils.clamp(point.y, minY, maxY)
-	      };
-	      offset = {
-	        x: point.x - constrainedPoint.x,
-	        y: point.y - constrainedPoint.y
-	      };
-	      return offset;
-	    }
-	  });
-	
-	  LayerDraggable.define("isBeyondConstraints", {
-	    get: function() {
-	      var constraintsOffset;
-	      constraintsOffset = this.constraintsOffset;
-	      if (constraintsOffset.x !== 0) {
-	        return true;
-	      }
-	      if (constraintsOffset.y !== 0) {
-	        return true;
-	      }
-	      return false;
-	    }
-	  });
-	
-	  LayerDraggable.prototype._clampAndScale = function(value, min, max, scale) {
-	    if (value < min) {
-	      value = min + (value - min) * scale;
-	    }
-	    if (value > max) {
-	      value = max + (value - max) * scale;
-	    }
-	    return value;
-	  };
-	
-	  LayerDraggable.prototype._calculateConstraints = function(bounds) {
-	    var constraints;
-	    if (!bounds) {
-	      return constraints = {
-	        minX: Infinity,
-	        maxX: Infinity,
-	        minY: Infinity,
-	        maxY: Infinity
-	      };
-	    }
-	    constraints = {
-	      minX: Utils.frameGetMinX(bounds),
-	      maxX: Utils.frameGetMaxX(bounds),
-	      minY: Utils.frameGetMinY(bounds),
-	      maxY: Utils.frameGetMaxY(bounds)
-	    };
-	    constraints.maxX -= this.layer.width;
-	    constraints.maxY -= this.layer.height;
-	    return constraints;
-	  };
-	
-	  LayerDraggable.prototype._constrainPosition = function(proposedPoint, bounds, scale) {
-	    var maxX, maxY, minX, minY, point, ref;
-	    ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
-	    if (this.overdrag) {
-	      point = {
-	        x: this._clampAndScale(proposedPoint.x, minX, maxX, scale),
-	        y: this._clampAndScale(proposedPoint.y, minY, maxY, scale)
-	      };
-	    } else {
-	      point = {
-	        x: Utils.clamp(proposedPoint.x, minX, maxX),
-	        y: Utils.clamp(proposedPoint.y, minY, maxY)
-	      };
-	    }
-	    if (this.speedX === 0 || this.horizontal === false) {
-	      point.x = proposedPoint.x;
-	    }
-	    if (this.speedY === 0 || this.vertical === false) {
-	      point.y = proposedPoint.y;
-	    }
-	    return point;
-	  };
-	
-	  LayerDraggable.define("velocity", {
-	    get: function() {
-	      if (this.isAnimating) {
-	        return this._calculateSimulationVelocity();
-	      }
-	      return this._eventBuffer.velocity;
-	      return {
-	        x: 0,
-	        y: 0
-	      };
-	    }
-	  });
-	
-	  LayerDraggable.define("angle", {
-	    get: function() {
-	      return this._eventBuffer.angle;
-	    }
-	  });
-	
-	  LayerDraggable.define("direction", {
-	    get: function() {
-	      var velocity;
-	      velocity = this.velocity;
-	      if (Math.abs(velocity.x) > Math.abs(velocity.y)) {
-	        if (velocity.x > 0) {
-	          return "right";
-	        }
-	        return "left";
-	      } else {
-	        if (velocity.y > 0) {
-	          return "down";
-	        }
-	        return "up";
-	      }
-	    }
-	  });
-	
-	  LayerDraggable.prototype.calculateVelocity = function() {
-	    return this.velocity;
-	  };
-	
-	  LayerDraggable.prototype._calculateSimulationVelocity = function() {
-	    var velocity, xFinished, yFinished;
-	    xFinished = this._simulation.x.finished();
-	    yFinished = this._simulation.y.finished();
-	    velocity = {
-	      x: 0,
-	      y: 0
-	    };
-	    if (!xFinished) {
-	      velocity.x = this._simulation.x.simulator.state.v / this.momentumVelocityMultiplier;
-	    }
-	    if (!yFinished) {
-	      velocity.y = this._simulation.y.simulator.state.v / this.momentumVelocityMultiplier;
-	    }
-	    return velocity;
-	  };
-	
-	  LayerDraggable.prototype.emit = function(eventName, event) {
-	    this.layer.emit(eventName, event, this);
-	    return LayerDraggable.__super__.emit.call(this, eventName, event, this);
-	  };
-	
-	  LayerDraggable.prototype._updatedirectionLock = function(correctedDelta) {
-	    this._directionLockEnabledX = Math.abs(correctedDelta.y) > this.directionLockThreshold.y;
-	    this._directionLockEnabledY = Math.abs(correctedDelta.x) > this.directionLockThreshold.x;
-	    if (this._directionLockEnabledX || this._directionLockEnabledY) {
-	      return this.emit(Events.DirectionLockDidStart, {
-	        x: this._directionLockEnabledX,
-	        y: this._directionLockEnabledY
-	      });
-	    }
-	  };
-	
-	  LayerDraggable.prototype._resetdirectionLock = function() {
-	    this._directionLockEnabledX = false;
-	    return this._directionLockEnabledY = false;
-	  };
-	
-	  LayerDraggable.prototype._setupSimulation = function() {
-	    if (this._simulation) {
-	      return;
-	    }
-	    this._simulation = {
-	      x: this._setupSimulationForAxis("x"),
-	      y: this._setupSimulationForAxis("y")
-	    };
-	    return this._updateSimulationConstraints(this.constraints);
-	  };
-	
-	  LayerDraggable.prototype._setupSimulationForAxis = function(axis) {
-	    var properties, simulation;
-	    properties = {};
-	    properties[axis] = true;
-	    simulation = new Simulation({
-	      layer: this.layer,
-	      properties: properties,
-	      model: "inertial-scroll",
-	      modelOptions: {
-	        momentum: this.momentumOptions,
-	        bounce: this.bounceOptions
-	      }
-	    });
-	    simulation.on(Events.SimulationStep, (function(_this) {
-	      return function(state) {
-	        return _this._onSimulationStep(axis, state);
-	      };
-	    })(this));
-	    simulation.on(Events.SimulationStop, (function(_this) {
-	      return function(state) {
-	        return _this._onSimulationStop(axis, state);
-	      };
-	    })(this));
-	    return simulation;
-	  };
-	
-	  LayerDraggable.prototype._updateSimulationConstraints = function(constraints) {
-	    var maxX, maxY, minX, minY, ref;
-	    if (!this._simulation) {
-	      return;
-	    }
-	    if (constraints) {
-	      ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
-	      this._simulation.x.simulator.options = {
-	        min: minX,
-	        max: maxX
-	      };
-	      return this._simulation.y.simulator.options = {
-	        min: minY,
-	        max: maxY
-	      };
-	    } else {
-	      this._simulation.x.simulator.options = {
-	        min: -Infinity,
-	        max: +Infinity
-	      };
-	      return this._simulation.y.simulator.options = {
-	        min: -Infinity,
-	        max: +Infinity
-	      };
-	    }
-	  };
-	
-	  LayerDraggable.prototype._onSimulationStep = function(axis, state) {
-	    var delta, maxX, maxY, minX, minY, ref, updatePoint;
-	    if (axis === "x" && this.horizontal === false) {
-	      return;
-	    }
-	    if (axis === "y" && this.vertical === false) {
-	      return;
-	    }
-	    if (this.constraints) {
-	      if (this.bounce) {
-	        delta = state.x - this.layer[axis];
-	      } else {
-	        ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
-	        if (axis === "x") {
-	          delta = Utils.clamp(state.x, minX, maxX) - this.layer[axis];
-	        }
-	        if (axis === "y") {
-	          delta = Utils.clamp(state.x, minY, maxY) - this.layer[axis];
-	        }
-	      }
-	    } else {
-	      delta = state.x - this.layer[axis];
-	    }
-	    updatePoint = this.layer.point;
-	    if (axis === "x") {
-	      updatePoint[axis] = updatePoint[axis] + (delta * this.speedX);
-	    }
-	    if (axis === "y") {
-	      updatePoint[axis] = updatePoint[axis] + (delta * this.speedY);
-	    }
-	    this.updatePosition(updatePoint);
-	    this.layer[axis] = this.updatePosition(updatePoint)[axis];
-	    return this.emit(Events.Move, this.layer.point);
-	  };
-	
-	  LayerDraggable.prototype._onSimulationStop = function(axis, state) {
-	    if (!this._simulation) {
-	      return;
-	    }
-	    if (this.pixelAlign) {
-	      this.layer[axis] = parseInt(this.layer[axis]);
-	    }
-	    if (this._simulation.x.finished() && this._simulation.y.finished()) {
-	      return this._stopSimulation();
-	    }
-	  };
-	
-	  LayerDraggable.prototype._startSimulation = function() {
-	    var maxX, maxY, minX, minY, ref, startSimulationX, startSimulationY, velocity, velocityX, velocityY;
-	    if (!(this.momentum || this.bounce)) {
-	      return;
-	    }
-	    if (this.isBeyondConstraints === false && this.momentum === false) {
-	      return;
-	    }
-	    if (this.isBeyondConstraints === false && this.isDragging === false) {
-	      return;
-	    }
-	    ref = this._calculateConstraints(this._constraints), minX = ref.minX, maxX = ref.maxX, minY = ref.minY, maxY = ref.maxY;
-	    startSimulationX = this.overdrag === true || (this.layer.x > minX && this.layer.x < maxX);
-	    startSimulationY = this.overdrag === true || (this.layer.y > minY && this.layer.y < maxY);
-	    if ((startSimulationX === startSimulationY && startSimulationY === false)) {
-	      return;
-	    }
-	    velocity = this.velocity;
-	    velocityX = velocity.x * this.momentumVelocityMultiplier * this.speedX * (1 / this.layer.canvasScaleX()) * this.layer.scaleX * this.layer.scale;
-	    velocityY = velocity.y * this.momentumVelocityMultiplier * this.speedY * (1 / this.layer.canvasScaleY()) * this.layer.scaleY * this.layer.scale;
-	    this._setupSimulation();
-	    this._isAnimating = true;
-	    this._isMoving = true;
-	    this._simulation.x.simulator.setState({
-	      x: this.layer.x,
-	      v: velocityX
-	    });
-	    if (startSimulationX) {
-	      this._simulation.x.start();
-	    }
-	    this._simulation.y.simulator.setState({
-	      x: this.layer.y,
-	      v: velocityY
-	    });
-	    if (startSimulationY) {
-	      this._simulation.y.start();
-	    }
-	    return this.emit(Events.DragAnimationDidStart);
-	  };
-	
-	  LayerDraggable.prototype._stopSimulation = function() {
-	    var ref, ref1;
-	    this._isAnimating = false;
-	    if (!this._simulation) {
-	      return;
-	    }
-	    if ((ref = this._simulation) != null) {
-	      ref.x.stop();
-	    }
-	    if ((ref1 = this._simulation) != null) {
-	      ref1.y.stop();
-	    }
-	    this._simulation = null;
-	    this.emit(Events.Move, this.layer.point);
-	    return this.emit(Events.DragAnimationDidEnd);
-	  };
-	
-	  LayerDraggable.prototype.animateStop = function() {
-	    return this._stopSimulation();
-	  };
-	
-	  return LayerDraggable;
-	
-	})(BaseClass);
-
-
-/***/ },
-/* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var BaseClass, Config, Defaults, Events, FrictionSimulator, MomentumBounceSimulator, SimulatorClasses, SpringSimulator, Utils, _,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	Config = __webpack_require__(10).Config;
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	Events = __webpack_require__(26).Events;
-	
-	SpringSimulator = __webpack_require__(29).SpringSimulator;
-	
-	FrictionSimulator = __webpack_require__(31).FrictionSimulator;
-	
-	MomentumBounceSimulator = __webpack_require__(32).MomentumBounceSimulator;
-	
-	Events.SimulationStart = 'simulationStart';
-	
-	Events.SimulationStep = 'simulationStep';
-	
-	Events.SimulationStop = 'simulationStop';
-	
-	SimulatorClasses = {
-	  "spring": SpringSimulator,
-	  "friction": FrictionSimulator,
-	  "inertial-scroll": MomentumBounceSimulator
-	};
-	
-	exports.Simulation = (function(superClass) {
-	  extend(Simulation, superClass);
-	
-	  function Simulation(options) {
-	    var SimulatorClass;
-	    if (options == null) {
-	      options = {};
-	    }
-	    this._update = bind(this._update, this);
-	    this._start = bind(this._start, this);
-	    this.start = bind(this.start, this);
-	    Simulation.__super__.constructor.call(this, options);
-	    this.options = _.defaults(options, {
-	      layer: null,
-	      properties: {},
-	      model: "spring",
-	      modelOptions: {},
-	      delay: 0,
-	      debug: false
-	    });
-	    this._running = false;
-	    SimulatorClass = SimulatorClasses[this.options.model] || SpringSimulator;
-	    this._simulator = new SimulatorClass(this.options.modelOptions);
-	  }
-	
-	  Simulation.prototype.animatingProperties = function() {
-	    return _.keys(this.options.properties);
-	  };
-	
-	  Simulation.prototype.start = function() {
-	    var animatingProperties, animation, property, ref;
-	    if (this.options.layer === null) {
-	      console.error("Simulation: missing layer");
-	    }
-	    if (this.options.debug) {
-	      console.log("Simulation.start " + this._simulator.constructor.name, this.options.modelOptions);
-	    }
-	    animatingProperties = this.animatingProperties();
-	    ref = this.options.layer.animatingProperties();
-	    for (property in ref) {
-	      animation = ref[property];
-	      if (indexOf.call(animatingProperties, property) >= 0) {
-	        animation.stop();
-	      }
-	    }
-	    if (this.options.delay) {
-	      Utils.delay(this.options.delay, this._start);
-	    } else {
-	      this._start();
-	    }
-	    return true;
-	  };
-	
-	  Simulation.prototype.stop = function(emit) {
-	    if (emit == null) {
-	      emit = true;
-	    }
-	    if (!this._running) {
-	      return;
-	    }
-	    this._running = false;
-	    this.options.layer._context._animationList = _.without(this.options.layer._context._animationList, this);
-	    if (emit) {
-	      this.emit(Events.SimulationStop);
-	    }
-	    return Framer.Loop.off("update", this._update);
-	  };
-	
-	  Simulation.prototype.emit = function(event) {
-	    Simulation.__super__.emit.apply(this, arguments);
-	    return this.options.layer.emit(event, this);
-	  };
-	
-	  Simulation.prototype._start = function() {
-	    if (this._running) {
-	      return;
-	    }
-	    this._running = true;
-	    this.options.layer._context._animationList.push(this);
-	    this.emit(Events.SimulationStart);
-	    return Framer.Loop.on("update", this._update);
-	  };
-	
-	  Simulation.prototype._update = function(delta) {
-	    var emit, result;
-	    if (this._simulator.finished()) {
-	      this.stop(emit = false);
-	      this.emit("end");
-	      return this.emit(Events.SimulationStop);
-	    } else {
-	      result = this._simulator.next(delta);
-	      return this.emit(Events.SimulationStep, result, delta);
-	    }
-	  };
-	
-	  Simulation.define("simulator", {
-	    get: function() {
-	      return this._simulator;
-	    }
-	  });
-	
-	  Simulation.prototype.finished = function() {
-	    return this._simulator.finished();
-	  };
-	
-	  return Simulation;
-	
-	})(BaseClass);
-
-
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Defaults, Integrator, Simulator, Utils,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	Simulator = __webpack_require__(30).Simulator;
-	
-	Integrator = __webpack_require__(22).Integrator;
-	
-	exports.SpringSimulator = (function(superClass) {
-	  extend(SpringSimulator, superClass);
-	
-	  function SpringSimulator() {
-	    this.finished = bind(this.finished, this);
-	    return SpringSimulator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  SpringSimulator.prototype.setup = function(options) {
-	    this.options = Defaults.getDefaults("SpringSimulator", options);
-	    this.options = _.defaults(options, {
-	      velocity: 0,
-	      position: 0,
-	      offset: 0
-	    });
-	    this._state = {
-	      x: this.options.position,
-	      v: this.options.velocity
-	    };
-	    return this._integrator = new Integrator((function(_this) {
-	      return function(state) {
-	        return -_this.options.tension * state.x - _this.options.friction * state.v;
-	      };
-	    })(this));
-	  };
-	
-	  SpringSimulator.prototype.next = function(delta) {
-	    this._state = this._integrator.integrateState(this._state, delta);
-	    return this.getState();
-	  };
-	
-	  SpringSimulator.prototype.finished = function() {
-	    var positionNearZero, velocityNearZero;
-	    positionNearZero = Math.abs(this._state.x) < this.options.tolerance;
-	    velocityNearZero = Math.abs(this._state.v) < this.options.tolerance;
-	    return positionNearZero && velocityNearZero;
-	  };
-	
-	  SpringSimulator.prototype.setState = function(state) {
-	    return this._state = {
-	      x: state.x - this.options.offset,
-	      v: state.v
-	    };
-	  };
-	
-	  SpringSimulator.prototype.getState = function() {
-	    var state;
-	    return state = {
-	      x: this._state.x + this.options.offset,
-	      v: this._state.v
-	    };
-	  };
-	
-	  return SpringSimulator;
-	
-	})(Simulator);
-
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var BaseClass, Config, Utils, _,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	_ = __webpack_require__(3)._;
-	
-	Config = __webpack_require__(10).Config;
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	exports.Simulator = (function(superClass) {
-	  "The simulator class runs a physics simulation based on a set of input values \nat setup({input values}), and emits an output state {x, v}";
-	  extend(Simulator, superClass);
-	
-	  Simulator.define("state", {
-	    get: function() {
-	      return _.clone(this._state);
-	    },
-	    set: function(state) {
-	      return this._state = _.clone(state);
-	    }
-	  });
-	
-	  function Simulator(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this._state = {
-	      x: 0,
-	      v: 0
-	    };
-	    this.options = null;
-	    this.setup(options);
-	  }
-	
-	  Simulator.prototype.setup = function(options) {
-	    throw Error("Not implemented");
-	  };
-	
-	  Simulator.prototype.next = function(delta) {
-	    throw Error("Not implemented");
-	  };
-	
-	  Simulator.prototype.finished = function() {
-	    throw Error("Not implemented");
-	  };
-	
-	  return Simulator;
-	
-	})(BaseClass);
-
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Defaults, Integrator, Simulator, Utils,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	Simulator = __webpack_require__(30).Simulator;
-	
-	Integrator = __webpack_require__(22).Integrator;
-	
-	exports.FrictionSimulator = (function(superClass) {
-	  extend(FrictionSimulator, superClass);
-	
-	  function FrictionSimulator() {
-	    this.finished = bind(this.finished, this);
-	    return FrictionSimulator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  FrictionSimulator.prototype.setup = function(options) {
-	    this.options = Defaults.getDefaults("FrictionSimulator", options);
-	    this.options = _.defaults(options, {
-	      velocity: 0,
-	      position: 0
-	    });
-	    this._state = {
-	      x: this.options.position,
-	      v: this.options.velocity
-	    };
-	    return this._integrator = new Integrator((function(_this) {
-	      return function(state) {
-	        return -(_this.options.friction * state.v);
-	      };
-	    })(this));
-	  };
-	
-	  FrictionSimulator.prototype.next = function(delta) {
-	    this._state = this._integrator.integrateState(this._state, delta);
-	    return this._state;
-	  };
-	
-	  FrictionSimulator.prototype.finished = function() {
-	    return Math.abs(this._state.v) < this.options.tolerance;
-	  };
-	
-	  return FrictionSimulator;
-	
-	})(Simulator);
-
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Defaults, FrictionSimulator, Simulator, SpringSimulator, Utils,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Utils = __webpack_require__(2);
-	
-	Defaults = __webpack_require__(16).Defaults;
-	
-	Simulator = __webpack_require__(30).Simulator;
-	
-	SpringSimulator = __webpack_require__(29).SpringSimulator;
-	
-	FrictionSimulator = __webpack_require__(31).FrictionSimulator;
-	
-	exports.MomentumBounceSimulator = (function(superClass) {
-	  extend(MomentumBounceSimulator, superClass);
-	
-	  function MomentumBounceSimulator() {
-	    this.finished = bind(this.finished, this);
-	    return MomentumBounceSimulator.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  MomentumBounceSimulator.prototype.setup = function(options) {
-	    this.options = Defaults.getDefaults("MomentumBounceSimulator", options);
-	    this.options = _.defaults(options, {
-	      velocity: 0,
-	      position: 0,
-	      min: 0,
-	      max: 0
-	    });
-	    this._frictionSimulator = new FrictionSimulator({
-	      friction: this.options.momentum.friction,
-	      tolerance: this.options.momentum.tolerance,
-	      velocity: this.options.velocity,
-	      position: this.options.position
-	    });
-	    this._springSimulator = new SpringSimulator({
-	      tension: this.options.bounce.tension,
-	      friction: this.options.bounce.friction,
-	      tolerance: this.options.bounce.tolerance,
-	      velocity: this.options.velocity,
-	      position: this.options.position
-	    });
-	    this._state = {
-	      x: this.options.position,
-	      v: this.options.velocity
-	    };
-	    return this._useSpring = false;
-	  };
-	
-	  MomentumBounceSimulator.prototype.next = function(delta) {
-	    if (this._useSpring) {
-	      this._state = this._springSimulator.next(delta);
-	    } else {
-	      this._state = this._frictionSimulator.next(delta);
-	      this._tryTransitionToSpring(this._state);
-	    }
-	    return this._state;
-	  };
-	
-	  MomentumBounceSimulator.prototype.finished = function() {
-	    if (this._useSpring) {
-	      return this._springSimulator.finished();
-	    }
-	    return this._frictionSimulator.finished();
-	  };
-	
-	  MomentumBounceSimulator.prototype.setState = function(state) {
-	    var bound;
-	    this._state = {
-	      x: state.x,
-	      v: state.v
-	    };
-	    this._frictionSimulator.setState(this._state);
-	    if (this._isValidState()) {
-	      return this._tryTransitionToSpring();
-	    } else {
-	      if (this._state.x <= this.options.min) {
-	        bound = this.options.min;
-	      }
-	      if (this._state.x >= this.options.max) {
-	        bound = this.options.max;
-	      }
-	      return this._transitionToSpring(bound);
-	    }
-	  };
-	
-	  MomentumBounceSimulator.prototype._tryTransitionToSpring = function(force) {
-	    var aboveMaxWithVelocity, belowMinWithVelocity, bound;
-	    belowMinWithVelocity = this._state.x < this.options.min && this._state.v <= 0;
-	    aboveMaxWithVelocity = this._state.x > this.options.max && this._state.v >= 0;
-	    if (belowMinWithVelocity || aboveMaxWithVelocity) {
-	      if (belowMinWithVelocity) {
-	        bound = this.options.min;
-	      }
-	      if (aboveMaxWithVelocity) {
-	        bound = this.options.max;
-	      }
-	      return this._transitionToSpring(bound);
-	    } else {
-	      return this._useSpring = false;
-	    }
-	  };
-	
-	  MomentumBounceSimulator.prototype._transitionToSpring = function(bound) {
-	    this._useSpring = true;
-	    this._springSimulator.options.offset = bound;
-	    return this._springSimulator.setState(this._state);
-	  };
-	
-	  MomentumBounceSimulator.prototype._isValidState = function() {
-	    var aboveMaxTravelingBack, belowMinTravelingBack, bound, check, friction, solution;
-	    belowMinTravelingBack = this._state.x < this.options.min && this._state.v > 0;
-	    aboveMaxTravelingBack = this._state.x > this.options.max && this._state.v < 0;
-	    check = false;
-	    if (belowMinTravelingBack) {
-	      bound = this.options.min;
-	      check = true;
-	    } else if (aboveMaxTravelingBack) {
-	      bound = this.options.max;
-	      check = true;
-	    }
-	    if (check) {
-	      friction = this._frictionSimulator.options.friction;
-	      solution = 1 - (friction * (bound - this._state.x)) / this._state.v;
-	      return solution > 0;
-	    }
-	    return true;
-	  };
-	
-	  return MomentumBounceSimulator;
-	
-	})(Simulator);
-
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var BaseClass, Events, Utils, _,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	_ = __webpack_require__(3)._;
-	
-	Utils = __webpack_require__(2);
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	Events = __webpack_require__(26).Events;
-	
-	Events.EventBufferReset = "eventbufferreset";
-	
-	Events.EventBufferUpdated = "eventbufferupdated";
-	
-	exports.EventBuffer = (function(superClass) {
-	  extend(EventBuffer, superClass);
-	
-	  function EventBuffer(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this.options = _.defaults(options, {
-	      velocityTimeout: 100
-	    });
-	    this._events = [];
-	  }
-	
-	  EventBuffer.prototype.push = function(event) {
-	    this._events.push(event);
-	    return this.emit(Events.EventBufferUpdated, event);
-	  };
-	
-	  EventBuffer.prototype.reset = function() {
-	    this._events.length = 0;
-	    return this.emit(Events.EventBufferReset);
-	  };
-	
-	  EventBuffer.define("length", {
-	    get: function() {
-	      return this._events.length;
-	    }
-	  });
-	
-	  EventBuffer.define("first", {
-	    get: function() {
-	      return this._events[0];
-	    }
-	  });
-	
-	  EventBuffer.define("offset", {
-	    get: function() {
-	      var current, first, offset;
-	      if (events.length < 2) {
-	        return {
-	          x: 0,
-	          y: 0
-	        };
-	      }
-	      current = events[events.length - 1];
-	      first = events[0];
-	      return offset = {
-	        x: current.x - first.x,
-	        y: current.y - first.y
-	      };
-	    }
-	  });
-	
-	  EventBuffer.define("events", {
-	    get: function() {
-	      var timeout;
-	      timeout = Date.now() - this.options.velocityTimeout;
-	      return _.filter(this._events, (function(_this) {
-	        return function(event) {
-	          return event.t > timeout;
-	        };
-	      })(this));
-	    }
-	  });
-	
-	  EventBuffer.define("angle", {
-	    get: function() {
-	      var events, p1, p2;
-	      events = this.events;
-	      if (events.length < 2) {
-	        return 0;
-	      }
-	      p1 = events[0];
-	      p2 = events[1];
-	      return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
-	    }
-	  });
-	
-	  EventBuffer.define("velocity", {
-	    get: function() {
-	      var current, events, first, time, velocity;
-	      events = this.events;
-	      if (events.length < 2) {
-	        return {
-	          x: 0,
-	          y: 0
-	        };
-	      }
-	      current = events[events.length - 1];
-	      first = events[0];
-	      time = current.t - first.t;
-	      velocity = {
-	        x: (current.x - first.x) / time,
-	        y: (current.y - first.y) / time
-	      };
-	      if (velocity.x === Infinity) {
-	        velocity.x = 0;
-	      }
-	      if (velocity.y === Infinity) {
-	        velocity.y = 0;
-	      }
-	      return velocity;
-	    }
-	  });
-	
-	  return EventBuffer;
-	
-	})(BaseClass);
-
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Layer,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Layer = __webpack_require__(15).Layer;
-	
-	"Todo: make it work in a parent layer";
-	
-	exports.BackgroundLayer = (function(superClass) {
-	  extend(BackgroundLayer, superClass);
-	
-	  function BackgroundLayer(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this.layout = bind(this.layout, this);
-	    if (options.backgroundColor == null) {
-	      options.backgroundColor = "#fff";
-	    }
-	    BackgroundLayer.__super__.constructor.call(this, options);
-	    this.sendToBack();
-	    this.layout();
-	    this._context.eventManager.wrap(window).addEventListener("resize", this.layout);
-	  }
-	
-	  BackgroundLayer.prototype.layout = function() {
-	    if (this.superLayer) {
-	      return this.frame = {
-	        x: 0,
-	        y: 0,
-	        width: this.superLayer.width,
-	        height: this.superLayer.height
-	      };
-	    } else if (this._context._parentLayer) {
-	      return this.frame = {
-	        x: 0,
-	        y: 0,
-	        width: this._context._parentLayer.width,
-	        height: this._context._parentLayer.height
-	      };
-	    } else {
-	      return this.frame = {
-	        x: 0,
-	        y: 0,
-	        width: window.innerWidth,
-	        height: window.innerHeight
-	      };
-	    }
-	  };
-	
-	  return BackgroundLayer;
-	
-	})(Layer);
-
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Layer,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	Layer = __webpack_require__(15).Layer;
-	
-	exports.VideoLayer = (function(superClass) {
-	  extend(VideoLayer, superClass);
-	
-	  function VideoLayer(options) {
-	    if (options == null) {
-	      options = {};
-	    }
-	    this.player = document.createElement("video");
-	    this.player.setAttribute("webkit-playsinline", "true");
-	    this.player.style.width = "100%";
-	    this.player.style.height = "100%";
-	    VideoLayer.__super__.constructor.call(this, options);
-	    this.player.on = this.player.addEventListener;
-	    this.player.off = this.player.removeEventListener;
-	    this.video = options.video;
-	    this._element.appendChild(this.player);
-	  }
-	
-	  VideoLayer.define("video", {
-	    get: function() {
-	      return this.player.src;
-	    },
-	    set: function(video) {
-	      return this.player.src = video;
-	    }
-	  });
-	
-	  return VideoLayer;
-	
-	})(Layer);
-
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AnimationGroup, EventEmitter, _,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	_ = __webpack_require__(3)._;
-	
-	EventEmitter = __webpack_require__(8).EventEmitter;
-	
-	AnimationGroup = (function(superClass) {
-	  extend(AnimationGroup, superClass);
-	
-	  function AnimationGroup(animations) {
-	    if (animations == null) {
-	      animations = [];
-	    }
-	    this.setAnimations(animations);
-	    this._currentAnimation = null;
-	  }
-	
-	  AnimationGroup.prototype.setAnimations = function(animations) {
-	    return this._animations = _.map(animations, function(animation) {
-	      return animation.copy();
-	    });
-	  };
-	
-	  AnimationGroup.prototype.start = function() {
-	    this.emit("start");
-	    _.map(this._animations, (function(_this) {
-	      return function(animation, index) {
-	        var nextAnimation;
-	        nextAnimation = _this._animations[index + 1];
-	        if (nextAnimation) {
-	          return animation.on(Events.AnimationEnd, function() {
-	            nextAnimation.start();
-	            return _this._currentAnimation = animation;
-	          });
-	        } else {
-	          return animation.on(Events.AnimationEnd, function() {
-	            _this.emit("end");
-	            return _this._currentAnimation = null;
-	          });
-	        }
-	      };
-	    })(this));
-	    return this._animations[0].start();
-	  };
-	
-	  AnimationGroup.prototype.stop = function() {
-	    var ref;
-	    return (ref = this._currentAnimation) != null ? ref.stop() : void 0;
-	  };
-	
-	  return AnimationGroup;
-	
-	})(EventEmitter);
-
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var BaseClass, CanvasClass, Events,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-	
-	BaseClass = __webpack_require__(7).BaseClass;
-	
-	Events = __webpack_require__(26).Events;
-	
-	CanvasClass = (function(superClass) {
-	  extend(CanvasClass, superClass);
-	
-	  function CanvasClass() {
-	    this.addListener = bind(this.addListener, this);
-	    return CanvasClass.__super__.constructor.apply(this, arguments);
-	  }
-	
-	  CanvasClass.define("width", {
-	    get: function() {
-	      return window.innerWidth;
-	    }
-	  });
-	
-	  CanvasClass.define("height", {
-	    get: function() {
-	      return window.innerHeight;
-	    }
-	  });
-	
-	  CanvasClass.define("size", {
-	    get: function() {
-	      return {
-	        width: this.width,
-	        height: this.height
-	      };
-	    }
-	  });
-	
-	  CanvasClass.define("frame", {
-	    get: function() {
-	      return {
-	        x: 0,
-	        y: 0,
-	        width: this.width,
-	        height: this.height
-	      };
-	    }
-	  });
-	
-	  CanvasClass.prototype.addListener = function(eventName, listener) {
-	    if (eventName === "resize") {
-	      Events.wrap(window).addEventListener("resize", (function(_this) {
-	        return function() {
-	          return _this.emit("resize");
-	        };
-	      })(this));
-	    }
-	    return CanvasClass.__super__.addListener.call(this, eventName, listener);
-	  };
-	
-	  CanvasClass.prototype.on = CanvasClass.prototype.addListener;
-	
-	  return CanvasClass;
-	
-	})(BaseClass);
-	
-	exports.Canvas = new CanvasClass;
-
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Context, Utils, printContext, printLayer,
-	  slice = [].slice;
-	
-	Utils = __webpack_require__(2);
-	
-	Context = __webpack_require__(1).Context;
-	
-	"\nTodo:\n- Better looks\n- Resizable\n- Live in own space on top of all Framer stuff\n";
-	
-	printContext = null;
-	
-	printLayer = null;
-	
-	exports.print = function() {
-	  var args;
-	  args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-	  if (!printContext) {
-	    printContext = new Context({
-	      name: "Print"
-	    });
-	  }
-	  printContext.run(function() {
-	    var printNode, printPrefix, update;
-	    if (!printLayer) {
-	      printLayer = new Layer;
-	      printLayer.scrollVertical = true;
-	      printLayer.ignoreEvents = false;
-	      printLayer.html = "";
-	      printLayer.style = {
-	        "font": "12px/1.35em Menlo",
-	        "color": "rgba(0,0,0,.7)",
-	        "padding": "8px",
-	        "padding-bottom": "30px",
-	        "border-top": "1px solid #d9d9d9"
-	      };
-	      printLayer.opacity = 0.9;
-	      printLayer.style.zIndex = 999;
-	      printLayer.visible = true;
-	      printLayer.backgroundColor = "white";
-	      update = function() {
-	        printLayer.width = window.innerWidth;
-	        printLayer.height = 160;
-	        return printLayer.maxY = window.innerHeight;
-	      };
-	      update();
-	      printContext.eventManager.wrap(window).addEventListener("resize", update);
-	    }
-	    printPrefix = "» ";
-	    printNode = document.createElement("div");
-	    printNode.innerHTML = _.escape(printPrefix + args.map(Utils.inspect).join(", ")) + "<br>";
-	    printNode.style["-webkit-user-select"] = "text";
-	    printNode.style["cursor"] = "auto";
-	    return printLayer._element.appendChild(printNode);
-	  });
-	  return Utils.delay(0, function() {
-	    return printLayer._element.scrollTop = printLayer._element.scrollHeight;
-	  });
-	};
-
-
-/***/ },
-/* 39 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var EventMappers, Events, Layer, Utils, _, wrapComponent,
@@ -21077,13 +22850,13 @@
 	  slice = [].slice,
 	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 	
-	_ = __webpack_require__(3)._;
+	_ = __webpack_require__(1)._;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
-	Layer = __webpack_require__(15).Layer;
+	Layer = __webpack_require__(12).Layer;
 	
-	Events = __webpack_require__(26).Events;
+	Events = __webpack_require__(14).Events;
 	
 	"ScrollComponent\n\ncontent <Layer>\ncontentSize <{width:n, height:n}>\ncontentInset <{top:n, right:n, bottom:n, left:n}> TODO\ncontentOffset <{x:n, y:n}> TODO\nscrollFrame <{x:n, y:n, width:n, height:n}>\nscrollPoint <{x:n, y:n}>\nscrollHorizontal <bool>\nscrollVertical <bool>\nspeedX <number>\nspeedY <number>\ndelaysContentTouches <bool> TODO\nloadPreset(<\"ios\"|\"android\">) TODO\nscrollToPoint(<{x:n, y:n}>, animate=true, animationOptions={})\nscrollToLayer(contentLayer, originX=0, originY=0)\nscrollFrameForContentLayer(<x:n, y:n>) <{x:n, y:n, width:n, height:n}> TODO\nclosestContentLayer(<x:n, y:n>) <Layer> TODO\n\nScrollComponent Events\n\n(all of the draggable events)\nScrollStart -> DragStart\nScrollWillMove -> DragWillMove\nScrollDidMove -> DragDidMove\nscroll -> DragMove (html compat)\nScrollEnd -> DragEnd";
 	
@@ -21196,7 +22969,7 @@
 	    }
 	    this._content = layer;
 	    this._content.superLayer = this;
-	    this._content.name = (this.constructor.name.replace("Component", "")) + "Content";
+	    this._content.name = "content";
 	    this._content.clip = false;
 	    this._content.draggable.enabled = true;
 	    this._content.draggable.momentum = true;
@@ -21229,7 +23002,7 @@
 	    };
 	    this.content.draggable.constraints = constraintsFrame;
 	    if (this.content.subLayers.length) {
-	      if (this.content.backgroundColor === Framer.Defaults.Layer.backgroundColor) {
+	      if (this.content.backgroundColor.isEqual(Framer.Defaults.Layer.backgroundColor)) {
 	        return this.content.backgroundColor = null;
 	      }
 	    }
@@ -21683,7 +23456,7 @@
 
 
 /***/ },
-/* 40 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Events, ScrollComponent,
@@ -21692,9 +23465,9 @@
 	  hasProp = {}.hasOwnProperty,
 	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 	
-	Events = __webpack_require__(26).Events;
+	Events = __webpack_require__(14).Events;
 	
-	ScrollComponent = __webpack_require__(39).ScrollComponent;
+	ScrollComponent = __webpack_require__(42).ScrollComponent;
 	
 	"PageComponent\n\noriginX <number>\noriginY <number>\n\nvelocityThreshold <number>\nanimationOptions <animationOptions={}>\ncurrentPage <Layer>\nclosestPage(<originX:n, originY:n>) <Layer>\n\nnextPage(direction=\"\", currentPage)\nsnapToNextPage(direction=\"\", animate, animationOptions={})\n";
 	
@@ -21960,7 +23733,7 @@
 
 
 /***/ },
-/* 41 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Events, Layer, Utils,
@@ -21968,11 +23741,11 @@
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
-	Layer = __webpack_require__(15).Layer;
+	Layer = __webpack_require__(12).Layer;
 	
-	Events = __webpack_require__(26).Events;
+	Events = __webpack_require__(14).Events;
 	
 	"SliderComponent\n\nknob <layer>\nknobSize <width, height>\nfill <layer>\nmin <number>\nmax <number>\n\npointForValue(<n>)\nvalueForPoint(<n>)\n\nanimateToValue(value, animationOptions={})";
 	
@@ -22011,12 +23784,14 @@
 	      backgroundColor: "#fff",
 	      shadowY: 1,
 	      shadowBlur: 3,
-	      shadowColor: "rgba(0,0,0,0.35)"
+	      shadowColor: "rgba(0,0,0,0.35)",
+	      name: "knob"
 	    });
 	    this.fill = new Layer({
 	      backgroundColor: "#333",
 	      width: 0,
-	      force2d: true
+	      force2d: true,
+	      name: "fill"
 	    });
 	    SliderComponent.__super__.constructor.call(this, options);
 	    this.knobSize = options.knobSize || 30;
@@ -22036,7 +23811,6 @@
 	    };
 	    this.knob.draggable.bounce = false;
 	    this.knob.draggable.propagateEvents = false;
-	    this.knob.borderRadius = "50%";
 	    this._updateFrame();
 	    this._updateKnob();
 	    this._updateFill();
@@ -22122,6 +23896,7 @@
 	      this._knobSize = value;
 	      this.knob.width = this._knobSize;
 	      this.knob.height = this._knobSize;
+	      this.knob.borderRadius = this.knobSize / 2;
 	      return this._updateFrame();
 	    }
 	  });
@@ -22209,27 +23984,28 @@
 
 
 /***/ },
-/* 42 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppleWatch38Device, AppleWatch42Device, BaseClass, Defaults, DeviceComponentDefaultDevice, Devices, Events, Layer, Nexus5BaseDevice, Nexus5BaseDeviceHand, Nexus9BaseDevice, Utils, _, iPadAirBaseDevice, iPadAirBaseDeviceHand, iPadMiniBaseDevice, iPadMiniBaseDeviceHand, iPhone5BaseDevice, iPhone5BaseDeviceHand, iPhone5CBaseDevice, iPhone5CBaseDeviceHand, iPhone6BaseDevice, iPhone6BaseDeviceHand, iPhone6PlusBaseDevice, iPhone6PlusBaseDeviceHand,
+	var AppleWatch38Device, AppleWatch42Device, BaseClass, BuiltInDevices, Defaults, DeviceComponentDefaultDevice, Devices, Events, Layer, Nexus5BaseDevice, Nexus5BaseDeviceHand, Nexus9BaseDevice, Utils, _, iPadAirBaseDevice, iPadAirBaseDeviceHand, iPadMiniBaseDevice, iPadMiniBaseDeviceHand, iPhone5BaseDevice, iPhone5BaseDeviceHand, iPhone5CBaseDevice, iPhone5CBaseDeviceHand, iPhone6BaseDevice, iPhone6BaseDeviceHand, iPhone6PlusBaseDevice, iPhone6PlusBaseDeviceHand,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
+	  hasProp = {}.hasOwnProperty,
+	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
-	_ = __webpack_require__(3)._;
+	_ = __webpack_require__(1)._;
 	
 	DeviceComponentDefaultDevice = "iphone-6-silver";
 	
-	BaseClass = __webpack_require__(7).BaseClass;
+	BaseClass = __webpack_require__(6).BaseClass;
 	
-	Layer = __webpack_require__(15).Layer;
+	Layer = __webpack_require__(12).Layer;
 	
-	Defaults = __webpack_require__(16).Defaults;
+	Defaults = __webpack_require__(15).Defaults;
 	
-	Events = __webpack_require__(26).Events;
+	Events = __webpack_require__(14).Events;
 	
 	
 	/*
@@ -22331,7 +24107,7 @@
 	    })(this));
 	    this.keyboardLayer.classList.add("DeviceKeyboard");
 	    this.keyboardLayer.backgroundColor = "transparent";
-	    Framer.CurrentContext.eventManager.wrap(window).addEventListener("resize", this._update);
+	    Framer.CurrentContext.domEventManager.wrap(window).addEventListener("resize", this._update);
 	    ref = [this.background, this.phone, this.viewport, this.content, this.screen];
 	    for (i = 0, len = ref.length; i < len; i++) {
 	      layer = ref[i];
@@ -22340,7 +24116,7 @@
 	      });
 	    }
 	    return this._context = new Framer.Context({
-	      parentLayer: this.content,
+	      parent: this.content,
 	      name: "Device"
 	    });
 	  };
@@ -22494,23 +24270,24 @@
 	  };
 	
 	  DeviceComponent.prototype._deviceImageUrl = function(name) {
-	    var resourceUrl;
+	    var ref, resourceUrl;
 	    if (!name) {
 	      return null;
 	    }
 	    if (_.startsWith(name, "http://") || _.startsWith(name, "https://")) {
 	      return name;
 	    }
+	    if (ref = this._deviceType, indexOf.call(BuiltInDevices, ref) < 0) {
+	      return name;
+	    }
+	    resourceUrl = "//resources.framerjs.com/static/DeviceResources";
 	    if (Utils.isFramerStudio() && window.FramerStudioInfo) {
 	      resourceUrl = window.FramerStudioInfo.deviceImagesUrl;
-	    } else {
-	      resourceUrl = "//resources.framerjs.com/static/DeviceResources";
 	    }
-	    if (Utils.isJP2Supported() && this._device.deviceImageJP2 !== false) {
+	    if (Utils.isJP2Supported() && this._device.deviceImageJP2 === true) {
 	      return resourceUrl + "/" + (name.replace(".png", ".jp2"));
-	    } else {
-	      return resourceUrl + "/" + name;
 	    }
+	    return resourceUrl + "/" + name;
 	  };
 	
 	  DeviceComponent.define("deviceScale", {
@@ -23091,10 +24868,12 @@
 	};
 	
 	exports.DeviceComponent.Devices = Devices;
+	
+	BuiltInDevices = _.keys(Devices);
 
 
 /***/ },
-/* 43 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Config, EventEmitter, Utils, _, getTime,
@@ -23102,13 +24881,13 @@
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	_ = __webpack_require__(3)._;
+	_ = __webpack_require__(1)._;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
-	Config = __webpack_require__(10).Config;
+	Config = __webpack_require__(13).Config;
 	
-	EventEmitter = __webpack_require__(8).EventEmitter;
+	EventEmitter = __webpack_require__(7).EventEmitter;
 	
 	getTime = function() {
 	  return Utils.getTime() * 1000;
@@ -23127,6 +24906,7 @@
 	    if (Utils.webkitVersion() > 600 && Utils.isFramerStudio()) {
 	      this.raf = false;
 	    }
+	    this.maximumListeners = Infinity;
 	  }
 	
 	  AnimationLoop.prototype.start = function() {
@@ -23165,21 +24945,53 @@
 
 
 /***/ },
-/* 44 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ChromeAlert, Utils, _,
-	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+	var ChromeAlert, Utils, _, getScaleFromName, resizeFrame, startsWithNumber;
 	
-	_ = __webpack_require__(3)._;
+	_ = __webpack_require__(1)._;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
 	ChromeAlert = "Importing layers is currently only supported on Safari. If you really want it to work with Chrome quit it, open a terminal and run:\nopen -a Google\ Chrome -–allow-file-access-from-files";
 	
+	resizeFrame = function(scale, frame) {
+	  var i, key, len, ref, result;
+	  if (scale === 1) {
+	    return frame;
+	  }
+	  result = {};
+	  ref = ["x", "y", "width", "height"];
+	  for (i = 0, len = ref.length; i < len; i++) {
+	    key = ref[i];
+	    if (frame.hasOwnProperty(key)) {
+	      result[key] = frame[key] * scale;
+	    }
+	  }
+	  return result;
+	};
+	
+	getScaleFromName = function(str) {
+	  var m, re;
+	  re = /@([\d]+|[\d]+.[\d]+)x/;
+	  m = void 0;
+	  if ((m = re.exec(str)) !== null) {
+	    if (m[1]) {
+	      return parseFloat(m[1]);
+	    }
+	  }
+	  return null;
+	};
+	
+	startsWithNumber = function(str) {
+	  return (new RegExp("^[0-9]")).test(str);
+	};
+	
 	exports.Importer = (function() {
-	  function Importer(path1, extraLayerProperties) {
+	  function Importer(path1, scale1, extraLayerProperties) {
 	    this.path = path1;
+	    this.scale = scale1 != null ? scale1 : 1;
 	    this.extraLayerProperties = extraLayerProperties != null ? extraLayerProperties : {};
 	    this.paths = {
 	      layerInfo: Utils.pathJoin(this.path, "layers.json"),
@@ -23194,6 +25006,9 @@
 	    var i, j, layer, layerInfo, layersByName, len, len1, ref, ref1;
 	    layersByName = {};
 	    layerInfo = this._loadlayerInfo();
+	    if (layerInfo.length === 0) {
+	      throw new Error("Importer: no layers. Do you have at least one layer group?");
+	    }
 	    layerInfo.map((function(_this) {
 	      return function(layerItemInfo) {
 	        return _this._createLayer(layerItemInfo);
@@ -23204,6 +25019,7 @@
 	      layer = ref[i];
 	      this._correctLayer(layer);
 	    }
+	    this._correctArtboards(this._createdLayers);
 	    ref1 = this._createdLayers;
 	    for (j = 0, len1 = ref1.length; j < len1; j++) {
 	      layer = ref1[j];
@@ -23218,13 +25034,25 @@
 	    var importedKey, ref;
 	    importedKey = this.paths.documentName + "/layers.json.js";
 	    if ((ref = window.__imported__) != null ? ref.hasOwnProperty(importedKey) : void 0) {
-	      return window.__imported__[importedKey];
+	      return _.cloneDeep(window.__imported__[importedKey]);
 	    }
 	    return Framer.Utils.domLoadJSONSync(this.paths.layerInfo);
 	  };
 	
 	  Importer.prototype._createLayer = function(info, superLayer) {
-	    var LayerClass, layer, layerInfo, ref;
+	    var LayerClass, layer, layerInfo, ref, ref1;
+	    if (info.layerFrame) {
+	      info.layerFrame = resizeFrame(this.scale, info.layerFrame);
+	    }
+	    if (info.maskFrame) {
+	      info.maskFrame = resizeFrame(this.scale, info.maskFrame);
+	    }
+	    if (((ref = info.image) != null ? ref.frame : void 0) != null) {
+	      info.image.frame = resizeFrame(this.scale, info.image.frame);
+	    }
+	    if (!info.children) {
+	      info.children = [];
+	    }
 	    LayerClass = Layer;
 	    layerInfo = {
 	      shadow: true,
@@ -23232,7 +25060,7 @@
 	      frame: info.layerFrame,
 	      clip: false,
 	      backgroundColor: null,
-	      visible: (ref = info.visible) != null ? ref : true
+	      visible: (ref1 = info.visible) != null ? ref1 : true
 	    };
 	    _.extend(layerInfo, this.extraLayerProperties);
 	    if (info.image) {
@@ -23240,20 +25068,23 @@
 	      layerInfo.image = Utils.pathJoin(this.path, info.image.path);
 	    }
 	    if (info.maskFrame) {
-	      layerInfo.frame = info.maskFrame;
 	      layerInfo.clip = true;
 	    }
-	    if (info.children.length === 0 && indexOf.call(_.pluck(superLayer != null ? superLayer.superLayers() : void 0, "clip"), true) >= 0) {
-	      layerInfo.frame = info.image.frame;
-	      layerInfo.clip = false;
+	    if (layerInfo.kind === "artboard") {
+	      layerInfo.frame.x = 0;
+	      layerInfo.frame.y = 0;
 	    }
 	    if (superLayer != null ? superLayer.contentLayer : void 0) {
 	      layerInfo.superLayer = superLayer.contentLayer;
 	    } else if (superLayer) {
 	      layerInfo.superLayer = superLayer;
 	    }
+	    if (startsWithNumber(layerInfo.name)) {
+	      throw new Error("(" + layerInfo.name + ") Layer or Artboard names can not start with a number");
+	    }
 	    layer = new LayerClass(layerInfo);
 	    layer.name = layerInfo.name;
+	    layer.__framerImportedFromPath = this.path;
 	    if (layerInfo.name.toLowerCase().indexOf("scroll") !== -1) {
 	      layer.scroll = true;
 	    }
@@ -23268,12 +25099,47 @@
 	        return _this._createLayer(info, layer);
 	      };
 	    })(this));
-	    if (!layer.image && !info.maskFrame) {
+	    if (info.kind === "artboard") {
+	      layer.point = {
+	        x: 0,
+	        y: 0
+	      };
+	    } else if (!layer.image && !info.maskFrame) {
 	      layer.frame = layer.contentFrame();
 	    }
 	    layer._info = info;
 	    this._createdLayers.push(layer);
 	    return this._createdLayersByName[layer.name] = layer;
+	  };
+	
+	  Importer.prototype._correctArtboards = function(layers) {
+	    var i, j, layer, leftMostLayer, len, len1, pointOffset, results;
+	    leftMostLayer = null;
+	    for (i = 0, len = layers.length; i < len; i++) {
+	      layer = layers[i];
+	      if (layer._info.kind === "artboard") {
+	        layer.point = layer._info.layerFrame;
+	        layer.visible = true;
+	        if (leftMostLayer === null || layer.x < leftMostLayer.x) {
+	          leftMostLayer = layer;
+	        }
+	      }
+	    }
+	    if (!leftMostLayer) {
+	      return;
+	    }
+	    pointOffset = leftMostLayer.point;
+	    results = [];
+	    for (j = 0, len1 = layers.length; j < len1; j++) {
+	      layer = layers[j];
+	      if (layer._info.kind === "artboard") {
+	        layer.x -= pointOffset.x;
+	        results.push(layer.y -= pointOffset.y);
+	      } else {
+	        results.push(void 0);
+	      }
+	    }
+	    return results;
 	  };
 	
 	  Importer.prototype._correctLayer = function(layer) {
@@ -23300,22 +25166,28 @@
 	
 	})();
 	
-	exports.Importer.load = function(path) {
+	exports.Importer.load = function(path, scale) {
 	  var importer;
-	  importer = new exports.Importer(path);
+	  if (scale == null) {
+	    scale = getScaleFromName(path);
+	  }
+	  if (scale == null) {
+	    scale = 1;
+	  }
+	  importer = new exports.Importer(path, scale);
 	  return importer.load();
 	};
 
 
 /***/ },
-/* 45 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Context, Utils, _errorContext, _errorShown, errorWarning;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
-	Context = __webpack_require__(1).Context;
+	Context = __webpack_require__(37).Context;
 	
 	_errorContext = null;
 	
@@ -23373,16 +25245,16 @@
 
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.MobileScrollFix = __webpack_require__(47);
+	exports.MobileScrollFix = __webpack_require__(50);
 	
-	exports.OmitNew = __webpack_require__(48);
+	exports.OmitNew = __webpack_require__(51);
 
 
 /***/ },
-/* 47 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Utils,
@@ -23390,7 +25262,7 @@
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	Utils = __webpack_require__(2);
+	Utils = __webpack_require__(4);
 	
 	exports.enable = function() {
 	  var MobileScrollFixLayer, handleScrollingLayerTouchMove, handleScrollingLayerTouchStart;
@@ -23443,8 +25315,8 @@
 
 
 /***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
+/* 51 */
+/***/ function(module, exports) {
 
 	var slice = [].slice;
 	
@@ -23470,6 +25342,21 @@
 	  module.VideoLayer = ClassWrapper(Framer.VideoLayer);
 	  return module.Animation = ClassWrapper(Framer.Animation);
 	};
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports) {
+
+	exports.date = 1450549449;
+	
+	exports.branch = "gestures";
+	
+	exports.hash = "1461203-dirty";
+	
+	exports.build = 1189;
+	
+	exports.version = exports.branch + "/" + exports.hash;
 
 
 /***/ }
